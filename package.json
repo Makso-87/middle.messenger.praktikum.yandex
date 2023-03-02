@@ -1,0 +1,29 @@
+{
+  "name": "messenger",
+  "version": "1.0.0",
+  "description": "This web messenger",
+  "scripts": {
+    "test": "test",
+    "dev": "parcel src/index.hbs",
+    "build": "parcel build src/index.hbs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Makso-87/messenger.git"
+  },
+  "author": "Maksim Popov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Makso-87/messenger/issues"
+  },
+  "homepage": "https://github.com/Makso-87/messenger#readme",
+  "devDependencies": {
+    "@anikin/parcel-transformer-handlebars": "^1.0.9",
+    "@parcel/transformer-sass": "^2.8.3",
+    "parcel": "^2.8.3",
+    "sass": "^1.58.3"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.7"
+  }
+}
