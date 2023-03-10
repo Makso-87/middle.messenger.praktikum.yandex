@@ -25,3 +25,5 @@ npm run build
 [Развернутый проект](https://legendary-kashata-460bb6.netlify.app/) {:target="\_blank"} 
 
 
+Click [here](https://www.geeksforgeeks.org/){:target="_blank"}
+  to visit GeeksForGeeks website.
