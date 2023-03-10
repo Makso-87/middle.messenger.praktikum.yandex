@@ -20,8 +20,8 @@ npm run build
 
 ## Ссылки проекта
 
-<a href="https://www.figma.com/file/HbxCUDgmlXcHRv4eewUSBw/Messanger?node-id=0%3A1&t=FbrKM9oKM4RK6Pmu-1">Макет</a>
+<a href="https://www.figma.com/file/HbxCUDgmlXcHRv4eewUSBw/Messanger?node-id=0%3A1&t=FbrKM9oKM4RK6Pmu-1" target="_blank">Макет</a>
 
-<a href="https://legendary-kashata-460bb6.netlify.app/">Развернутый проект</a>
+<a href="https://legendary-kashata-460bb6.netlify.app/" target="_blank">Развернутый проект</a>
 
 
