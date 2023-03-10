@@ -1,0 +1,58 @@
+@import "../../constants";
+
+.profile {
+  background: $main_bg;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile__data-container {
+  display: flex;
+  width: 800px;
+  background: $main_light;
+  border-radius: 20px;
+  padding: 17px 0 30px;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile__title {
+  @include title_h1;
+}
+
+.profile__current-name {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: $text_black;
+  margin: 0 0 20px;
+}
+
+.profile__data {
+  width: 400px;
+  margin: 0 0 20px;
+}
+
+.profile__inputs {
+  width: 400px;
+  margin: 0 0 25px;
+}
+
+.profile__buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 400px;
+}
+
+.profile__buttons-edit-group {
+  width: 100%;
+  display: flex;
+  margin: 0 0 20px;
+  justify-content: space-between;
+}

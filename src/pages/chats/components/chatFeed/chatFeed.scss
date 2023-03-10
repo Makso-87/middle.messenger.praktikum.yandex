@@ -1,0 +1,61 @@
+@import "../../../../constants";
+
+.chat-feed {
+  width: 345px;
+  background: $main_bg;
+  border-right: 1px solid $border;
+  padding: 16px 0 0 0;
+  flex-shrink: 0;
+}
+
+.chat-feed__profile-button {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 28px 0 0;
+
+  a {
+    display: inline-block;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    text-decoration: none;
+    color: $text_gray;
+    padding: 0 16px 0 0;
+    position: relative;
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      right: -7px;
+      top: -2px;
+      width: 24px;
+      height: 24px;
+      background: url(../../../../../static/images/icons/chevron-right.svg) no-repeat center / contain;
+    }
+  }
+}
+
+.chat-feed__search {
+  padding: 0 28px 0 24px;
+  margin: 16px 0 21px;
+}
+
+.feed__search-input {
+  width: 100%;
+  height: 34px;
+  border: 1px solid $border;
+  border-radius: 3px;
+  background: $text_light_gray_3;
+  padding: 0 20px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  outline: none;
+}
+
+.chat-feed__chats-list {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
