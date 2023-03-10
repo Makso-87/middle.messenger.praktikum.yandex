@@ -1,0 +1,28 @@
+@import "../../../../constants";
+
+.profile__data-line-item {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  border-bottom: 1px solid $border;
+  padding: 0 0 3px;
+  margin: 0 0 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.profile__data-line-item-key {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: $text_black;
+}
+
+.profile__data-line-item-value {
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 19px;
+  color: $text_light_gray_2;
+}

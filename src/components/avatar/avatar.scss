@@ -1,0 +1,55 @@
+@import "../../constants";
+
+.avatar {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: url("../../../static/images/icons/avatar-plug.svg");
+  position: relative;
+  margin: 0 0 13px;
+}
+
+.avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+}
+
+.avatar__change-button {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 40px;
+  height: 40px;
+
+  input {
+    display: none;
+  }
+
+  label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid $main_light;
+    background: $main_bg;
+    cursor: pointer;
+    @include transition;
+
+    &:after {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 24px;
+      background: url("../../../static/images/icons/camera.svg") no-repeat center / contain;
+    }
+
+    &:hover {
+      background: lighten($main_bg, 10%);
+    }
+  }
+}
