@@ -1,7 +1,27 @@
-# messenger
+# Web messenger [![Netlify Status](https://api.netlify.com/api/v1/badges/54acb51b-5193-4074-9663-d4e6658c880c/deploy-status)](https://app.netlify.com/sites/legendary-kashata-460bb6/deploys)
+***
+**Это учебный проект курса "Middle frontend разработчик" от Яндекс.практикум**
 
-https://www.figma.com/file/HbxCUDgmlXcHRv4eewUSBw/Messanger?node-id=0%3A1&t=FbrKM9oKM4RK6Pmu-1
+## Команды проекта
+### Запуск в режиме разработчика
+```
+npm run dev
+```
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/54acb51b-5193-4074-9663-d4e6658c880c/deploy-status)](https://app.netlify.com/sites/legendary-kashata-460bb6/deploys)
+### Запуск локального сервера
+```
+npm run start
+```
 
-https://legendary-kashata-460bb6.netlify.app/
+### Запуск продуктовой сборки проекта
+```
+npm run build
+```
+
+## Ссылки проекта
+
+<a href="https://www.figma.com/file/HbxCUDgmlXcHRv4eewUSBw/Messanger?node-id=0%3A1&t=FbrKM9oKM4RK6Pmu-1">Макет</a>
+
+<a href="https://legendary-kashata-460bb6.netlify.app/">Развернутый проект</a>
+
+
