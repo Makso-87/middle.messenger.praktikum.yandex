@@ -1,5 +1,5 @@
 # Web messenger [![Netlify Status](https://api.netlify.com/api/v1/badges/54acb51b-5193-4074-9663-d4e6658c880c/deploy-status)](https://app.netlify.com/sites/legendary-kashata-460bb6/deploys)
-***
+
 **Это учебный проект курса "Middle frontend разработчик" от Яндекс.практикум**
 
 ## Команды проекта
