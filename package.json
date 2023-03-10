@@ -10,6 +10,9 @@
   },
   "author": "Maksim Popov",
   "license": "ISC",
+  "engine" : {
+    "node" : "v16.12.0"
+  },
   "devDependencies": {
     "@anikin/parcel-transformer-handlebars": "^1.0.9",
     "@parcel/transformer-sass": "^2.8.3",
