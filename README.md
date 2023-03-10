@@ -20,10 +20,6 @@ npm run build
 
 ## Ссылки проекта
 
-[Макет](https://www.figma.com/file/HbxCUDgmlXcHRv4eewUSBw/Messanger?node-id=0%3A1&t=FbrKM9oKM4RK6Pmu-1){:target="\_blank"}
+[Макет](https://www.figma.com/file/HbxCUDgmlXcHRv4eewUSBw/Messanger?node-id=0%3A1&t=FbrKM9oKM4RK6Pmu-1)
 
-[Развернутый проект](https://legendary-kashata-460bb6.netlify.app/) {:target="\_blank"} 
-
-
-Click [here](https://www.geeksforgeeks.org/){:target="_blank"}
-  to visit GeeksForGeeks website.
+[Развернутый проект](https://legendary-kashata-460bb6.netlify.app/)
