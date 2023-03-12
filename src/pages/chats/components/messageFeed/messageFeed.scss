@@ -1,0 +1,10 @@
+@import "../../../../constants";
+
+.message-feed {
+  width: 100%;
+  height: 100%;
+  background: $main_light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

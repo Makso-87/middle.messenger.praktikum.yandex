@@ -1,0 +1,26 @@
+{
+  "name": "messenger",
+  "version": "1.0.0",
+  "description": "This web messenger",
+  "scripts": {
+    "test": "test",
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "start": "node src/server.js"
+  },
+  "author": "Maksim Popov",
+  "license": "ISC",
+  "engine" : {
+    "node" : "v16.12.0"
+  },
+  "devDependencies": {
+    "@anikin/parcel-transformer-handlebars": "^1.0.9",
+    "@parcel/transformer-sass": "^2.8.3",
+    "parcel": "^2.8.3",
+    "sass": "^1.58.3"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "handlebars": "^4.7.7"
+  }
+}

@@ -1,0 +1,21 @@
+@import "../../constants";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  font-family: 'Inter';
+}
+
+.app {
+  background: $main_bg;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}

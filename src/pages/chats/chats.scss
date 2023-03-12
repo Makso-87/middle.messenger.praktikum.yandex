@@ -1,0 +1,21 @@
+@import "../../constants";
+
+.chats {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.plug-text {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: $text_light_gray_2;
+}
+
+.plug-image {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  background: url("../../../static/images/chat-plug.png") no-repeat top center / cover;
+}
