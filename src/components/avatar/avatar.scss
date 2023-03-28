@@ -24,11 +24,11 @@
   width: 40px;
   height: 40px;
 
-  input {
+  .avatar__change-button-input {
     display: none;
   }
 
-  label {
+  .avatar__change-button-label {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,9 +38,10 @@
     border: 1px solid $main_light;
     background: $main_bg;
     cursor: pointer;
+
     @include transition;
 
-    &:after {
+    &::after {
       content: '';
       display: block;
       width: 24px;

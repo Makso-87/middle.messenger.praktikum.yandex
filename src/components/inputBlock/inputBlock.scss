@@ -1,0 +1,12 @@
+.input-item {
+  margin: 0 0 20px;
+  width: 100%;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.input-item_margin-bottom-7 {
+  margin-bottom: 7px;
+}
