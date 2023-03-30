@@ -4,8 +4,7 @@ const template = `
     </div>
 
     <div class="chat-feed__search">
-<!--        {{{input}}}-->
-        <input class="feed__search-input" type="text" placeholder="Поиск">
+        {{{input}}}
     </div>
     
     <ul class="chat-feed__chats-list">

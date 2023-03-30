@@ -5,9 +5,7 @@ export const formTemplate = `
     
     {{{inputs}}}
     
-    {{#with buttonEnter as | button | }}
-        {{{button}}}
-    {{/with}}
+    {{{button}}}
 
     <a href="{{formLink.link}}" class="form__link">{{formLink.text}}</a>  
 `;

@@ -4,7 +4,7 @@ export class Input extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `input-item__input ${props.className ?? ''}`,
+      className: `${props.initialClassName ?? 'input-item__input'} ${props.className ?? ''}`,
       attributes: {
         type: 'text',
         ...props.attributes || {},

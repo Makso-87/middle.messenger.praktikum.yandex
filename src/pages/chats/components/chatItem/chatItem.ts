@@ -5,7 +5,7 @@ export class ChatItem extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `chat-item ${props.className}`,
+      className: `chat-item ${props.className ?? ''}`,
     };
     super('li', newProps);
   }

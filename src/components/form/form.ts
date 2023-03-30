@@ -6,7 +6,7 @@ export class Form extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `form ${props.className ?? ''}`,
+      className: `${props.initialClassName ?? 'form'} ${props.className ?? ''}`,
     };
 
     super('form', newProps);

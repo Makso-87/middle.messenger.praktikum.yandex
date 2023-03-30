@@ -5,7 +5,7 @@ export class Error extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `error-page ${props.className}`,
+      className: `error-page ${props.className ?? ''}`,
     };
 
     super('div', newProps);

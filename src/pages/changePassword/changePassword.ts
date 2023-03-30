@@ -9,7 +9,7 @@ export class ChangePassword extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `profile ${props.className}`,
+      className: `profile ${props.className ?? ''}`,
     };
 
     super('div', newProps);

@@ -5,7 +5,7 @@ export class Button extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `button ${props.className ?? ''}`,
+      className: `${props.initialClassName ?? 'button'} ${props.className ?? ''}`,
       attributes: {
         href: props.link || '#',
         ...props.attributes || {},

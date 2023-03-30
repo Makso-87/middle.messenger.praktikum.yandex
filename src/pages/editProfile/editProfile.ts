@@ -10,7 +10,7 @@ export class EditProfile extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `profile ${props.className}`,
+      className: `profile ${props.className ?? ''}`,
     };
 
     super('div', newProps);
@@ -25,7 +25,18 @@ export const editProfileData = {
   form: new Form({
     className: 'form_edit-profile',
     template: formTemplate,
-    avatar: new Avatar({ url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg' }),
+    avatar: new Avatar({
+      url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
+      inputId: 'avatar',
+      input: new Input({
+        initialClassName: 'avatar__change-button-input',
+        attributes: {
+          type: 'file',
+          name: 'avatar',
+          id: 'avatar',
+        },
+      }),
+    }),
     firstName: 'Гендальф',
     buttonSave: new Button({
       text: 'Сохранить',

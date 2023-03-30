@@ -5,7 +5,7 @@ export class ProfileDataItem extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `profile__data-line-item ${props.className}`,
+      className: `profile__data-line-item ${props.className ?? ''}`,
     };
 
     super('div', newProps);

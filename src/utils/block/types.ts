@@ -3,6 +3,10 @@ import { isArray } from '../mydash/isArray';
 
 export type propsType = {
     className?: string;
+    initialClassName?: string;
+    attributes?: {
+        [key: string]: string;
+    };
     [key: string]: unknown | unknown[],
 };
 

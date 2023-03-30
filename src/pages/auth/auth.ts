@@ -30,7 +30,7 @@ export const authData = {
     template: formTemplate,
     className: 'form',
     title: 'Вход',
-    buttonEnter: new Button({
+    button: new Button({
       text: 'Войти',
       link: 'chats',
     }),

@@ -1,9 +1,11 @@
 const template = `
     {{#if chatItem }}
-        <div class="plug-image"></div>
+        {{{chatTop}}}
+        {{{chatMiddle}}}
+        {{{chatBottom}}}
+        {{else}}
+        <div class="plug-text">Выберите чат, чтобы отправить сообщение</div>
     {{/if}}
-    
-    <div class="plug-text">Выберите чат, чтобы отправить сообщение</div>
 `;
 
 export default template;

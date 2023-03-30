@@ -2,7 +2,7 @@ import './common_styles.scss';
 import './fonts.scss';
 import './layout/main/index';
 import { Auth, authData } from './pages/auth';
-import { Chats, getChatsData } from './pages/chats';
+import { Chats, getChatsData, chatsItemData } from './pages/chats';
 import { Error } from './pages/error';
 import { Profile, profileData } from './pages/profile';
 import { Registration, registrationData } from './pages/registration';
@@ -29,7 +29,7 @@ const routing = {
     page: new Chats(getChatsData()),
   },
   '/chat-item': {
-    page: new Chats({ ...getChatsData(), chatItem: true }),
+    page: new Chats({ ...chatsItemData }),
   },
   '/profile': {
     page: new Profile(profileData),

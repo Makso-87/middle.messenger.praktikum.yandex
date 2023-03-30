@@ -23,7 +23,7 @@ export const registrationData = {
   form: new Form({
     template: formTemplate,
     title: 'Регистрация',
-    buttonEnter: new Button({
+    button: new Button({
       text: 'Зарегистрироваться',
       link: '/',
     }),

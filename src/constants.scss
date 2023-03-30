@@ -8,8 +8,10 @@ $text_black: #000;
 $text_gray: #525252;
 $text_light_gray_1: #999;
 $text_light_gray_2: #919295;
+$light_gray: #e4e4e4;
 $text_light_gray_3: #d9d9d9;
 $text_blue: $blue;
+$light_blue: #c7ddff;
 $shadow_gray: rgb(119 119 119 / 25%);
 
 @mixin shadow($color) {

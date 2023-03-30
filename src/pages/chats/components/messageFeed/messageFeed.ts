@@ -8,6 +8,7 @@ export class MessageFeed extends Block {
       ...props,
       className: `message-feed ${props.className ?? ''}`,
     };
+
     super('div', newProps);
   }
 

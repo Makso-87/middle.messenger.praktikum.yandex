@@ -5,7 +5,7 @@ export class Avatar extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `avatar ${props.className}`,
+      className: `avatar ${props.className ?? ''}`,
     };
 
     super('div', newProps);

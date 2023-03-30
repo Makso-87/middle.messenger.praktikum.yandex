@@ -3,12 +3,13 @@ import Block from '../../utils/block/block';
 import { Button } from '../../components/button';
 import { ProfileDataItem } from './components/profileDataItem';
 import { Avatar } from '../../components/avatar';
+import { Input } from '../../components/input';
 
 export class Profile extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `profile ${props.className}`,
+      className: `profile ${props.className ?? ''}`,
     };
 
     super('div', newProps);
@@ -20,7 +21,18 @@ export class Profile extends Block {
 }
 
 export const profileData = {
-  avatar: new Avatar({ url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg' }),
+  avatar: new Avatar({
+    url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
+    inputId: 'avatar',
+    input: new Input({
+      initialClassName: 'avatar__change-button-input',
+      attributes: {
+        type: 'file',
+        name: 'avatar',
+        id: 'avatar',
+      },
+    }),
+  }),
   firstName: 'Гендальф',
   buttonEditProfile: new Button({
     link: 'edit-profile',
