@@ -19,6 +19,21 @@ export class Registration extends Block {
   }
 }
 
+const onSubmitForm = (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = {
+    login: formData.get('login'),
+    email: formData.get('email'),
+    first_name: formData.get('first_name'),
+    second_name: formData.get('second_name'),
+    phone: formData.get('phone'),
+    password: formData.get('password'),
+    password_check: formData.get('password_check'),
+  };
+  console.log(data);
+};
+
 export const registrationData = {
   form: new Form({
     template: formTemplate,
@@ -30,6 +45,9 @@ export const registrationData = {
     formLink: {
       text: 'Войти',
       link: '/',
+    },
+    events: {
+      submit: onSubmitForm,
     },
     inputs: [
       new InputBlock({

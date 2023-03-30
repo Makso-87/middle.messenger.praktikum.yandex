@@ -6,8 +6,9 @@ export class InputBlock extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `input-item ${props.className ?? ''}`,
+      className: `${props.initialClassName ?? 'input-item'} ${props.className ?? ''}`,
     };
+
     super('div', newProps);
   }
 

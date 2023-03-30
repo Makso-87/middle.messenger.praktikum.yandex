@@ -4,6 +4,7 @@ import { Button } from '../../components/button';
 import { ProfileDataItem } from './components/profileDataItem';
 import { Avatar } from '../../components/avatar';
 import { Input } from '../../components/input';
+import { Link } from '../../components/link';
 
 export class Profile extends Block {
   constructor(props) {
@@ -34,16 +35,18 @@ export const profileData = {
     }),
   }),
   firstName: 'Гендальф',
-  buttonEditProfile: new Button({
+  buttonEditProfile: new Link({
+    className: 'button',
     link: 'edit-profile',
     text: 'Изменить данные',
   }),
-  buttonChangePassword: new Button({
+  buttonChangePassword: new Link({
+    className: 'button',
     link: 'change-password',
     text: 'Изменить пароль',
   }),
-  buttonBack: new Button({
-    className: 'button_type_2',
+  buttonBack: new Link({
+    className: 'button button_type_2',
     link: '/',
     text: 'Выйти',
   }),

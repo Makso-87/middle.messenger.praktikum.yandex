@@ -4,6 +4,7 @@ import { InputBlock } from '../../components/inputBlock';
 import { Input } from '../../components/input';
 import { template, formTemplate } from './changePassword.tmpl';
 import { Form } from '../../components/form';
+import { Link } from '../../components/link';
 
 export class ChangePassword extends Block {
   constructor(props) {
@@ -20,6 +21,16 @@ export class ChangePassword extends Block {
   }
 }
 
+const onSubmitForm = (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = {
+    oldPassword: formData.get('oldPassword'),
+    newPassword: formData.get('newPassword'),
+  };
+  console.log(data);
+};
+
 export const changePasswordData = {
   form: new Form({
     className: 'form_edit-change-password',
@@ -28,11 +39,14 @@ export const changePasswordData = {
       text: 'Сохранить',
       link: 'chats',
     }),
-    buttonCancel: new Button({
+    buttonCancel: new Link({
       text: 'Отменить',
       link: 'chats',
-      className: 'button_type_2',
+      className: 'button button_type_2',
     }),
+    events: {
+      submit: onSubmitForm,
+    },
     inputs: [
       new InputBlock({
         label: 'Текущий пароль',

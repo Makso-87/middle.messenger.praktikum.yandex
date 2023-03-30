@@ -11,6 +11,8 @@ import { ChatMiddle } from './components/messageFeed/components/chatMiddle';
 import { Message } from './components/messageFeed/components/message';
 import { ChatBottom } from './components/messageFeed/components/chatBottom';
 import { Form } from '../../components/form';
+import { Link } from '../../components/link';
+import { InputBlock } from '../../components/inputBlock';
 
 export class Chats extends Block {
   constructor(props) {
@@ -26,6 +28,17 @@ export class Chats extends Block {
     return this.compile(template, this.props);
   }
 }
+
+const onSubmitForm = (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = {
+    message: formData.get('message'),
+    attach: formData.get('attach'),
+  };
+  console.log(data);
+};
+
 export const getChatsData = () => ({
   chatFeed: new ChatFeed({
     input: new Input({
@@ -87,8 +100,8 @@ export const chatsItemData = {
         url: 'https://i.pinimg.com/originals/b6/46/bd/b646bd99f792ac04c5d25a3bef085f5c.jpg',
       }),
       interlocutorName: 'Бильбо Беггинс',
-      settingsButton: new Button({
-        initialClassName: 'chat-top__settings-button',
+      settingsButton: new Link({
+        className: 'chat-top__settings-button',
       }),
     }),
     chatMiddle: new ChatMiddle({
@@ -172,8 +185,19 @@ export const chatsItemData = {
         sendButton: new Button({
           initialClassName: 'send-message-button',
         }),
-        attachButton: new Button({
+        events: { submit: onSubmitForm },
+        attachButton: new InputBlock({
           initialClassName: 'attach-button',
+          label: ' ',
+          id: 'attach',
+          input: new Input({
+            initialClassName: 'attach-button-input',
+            attributes: {
+              type: 'file',
+              name: 'attach',
+              id: 'attach',
+            },
+          }),
         }),
       }),
     }),

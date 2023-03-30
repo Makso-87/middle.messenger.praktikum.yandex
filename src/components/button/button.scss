@@ -13,9 +13,10 @@
   line-height: 19px;
   border-radius: 5px;
   border: none;
+
   @include transition;
+
   cursor: pointer;
-  text-decoration: none;
 
   &:hover {
     background: $blue_hover;

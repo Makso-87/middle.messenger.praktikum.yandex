@@ -22,7 +22,16 @@ export class Auth extends Block {
 
 const onLoginInput = (event) => {
   const { value } = event.target;
-  alert(value);
+};
+
+const onSubmitForm = (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = {
+    login: formData.get('login'),
+    password: formData.get('password'),
+  };
+  console.log(data);
 };
 
 export const authData = {
@@ -32,11 +41,13 @@ export const authData = {
     title: 'Вход',
     button: new Button({
       text: 'Войти',
-      link: 'chats',
     }),
     formLink: {
       text: 'Зарегистрироваться',
       link: 'registration',
+    },
+    events: {
+      submit: onSubmitForm,
     },
     inputs: [
       new InputBlock({

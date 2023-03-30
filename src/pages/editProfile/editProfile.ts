@@ -5,6 +5,7 @@ import { InputBlock } from '../../components/inputBlock';
 import { Input } from '../../components/input';
 import { formTemplate, template } from './editProfile.tmpl';
 import { Form } from '../../components/form';
+import { Link } from '../../components/link';
 
 export class EditProfile extends Block {
   constructor(props) {
@@ -20,6 +21,21 @@ export class EditProfile extends Block {
     return this.compile(template, this.props);
   }
 }
+
+const onSubmitForm = (event) => {
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = {
+    login: formData.get('login'),
+    email: formData.get('email'),
+    avatar: formData.get('avatar'),
+    first_name: formData.get('first_name'),
+    second_name: formData.get('second_name'),
+    display_name: formData.get('display_name'),
+    phone: formData.get('phone'),
+  };
+  console.log(data);
+};
 
 export const editProfileData = {
   form: new Form({
@@ -40,13 +56,15 @@ export const editProfileData = {
     firstName: 'Гендальф',
     buttonSave: new Button({
       text: 'Сохранить',
-      link: 'chats',
     }),
-    buttonCancel: new Button({
+    buttonCancel: new Link({
       text: 'Отменить',
       link: 'chats',
-      className: 'button_type_2',
+      className: 'button button_type_2',
     }),
+    events: {
+      submit: onSubmitForm,
+    },
     inputs: [
       new InputBlock({
         label: 'Почта',

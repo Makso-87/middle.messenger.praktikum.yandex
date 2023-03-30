@@ -1,17 +1,18 @@
-import template from './button.tmpl';
+import template from './link.tmpl';
 import Block from '../../utils/block/block';
 
-export class Button extends Block {
+export class Link extends Block {
   constructor(props) {
     const newProps = {
       ...props,
-      className: `${props.initialClassName ?? 'button'} ${props.className ?? ''}`,
+      className: `${props.initialClassName ?? 'link'} ${props.className ?? ''}`,
       attributes: {
+        href: props.link || '#',
         ...props.attributes || {},
       },
     };
 
-    super('button', newProps);
+    super('a', newProps);
   }
 
   render() {
