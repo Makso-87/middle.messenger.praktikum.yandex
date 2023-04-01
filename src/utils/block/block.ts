@@ -2,7 +2,9 @@ import * as handlebars from 'handlebars';
 import { v4 as uuid } from 'uuid';
 import EventBus from '../eventBus/eventBus';
 import { isArray } from '../mydash/isArray';
-import { BlockInterface, isBlockInterfaceArray, propsType } from './types';
+import {
+  BlockInterface, eventsType, isBlockInterfaceArray, propsType,
+} from './types';
 
 export default class Block implements BlockInterface {
   static EVENTS = {
@@ -76,10 +78,10 @@ export default class Block implements BlockInterface {
   private _componentDidMount() {
     this.componentDidMount();
 
-    const childrenValues: BlockInterface[] = Object.values(this.children);
-    const dispatchChildren = (children: BlockInterface | BlockInterface[]) => {
+    const childrenValues: Block[] = Object.values(this.children);
+    const dispatchChildren = (children: Block | Block[]) => {
       if (isBlockInterfaceArray(children)) {
-        children.forEach((child: BlockInterface | BlockInterface[]) => {
+        children.forEach((child: Block | Block[]) => {
           dispatchChildren(child);
         });
       } else {
@@ -198,7 +200,7 @@ export default class Block implements BlockInterface {
   }
 
   private _addEvents() {
-    const { events = {} } = this.props;
+    const { events = {} }: { events: eventsType} = this.props;
 
     Object.entries(events).forEach(([event, callback]) => {
       this._element.addEventListener(event, callback);
@@ -206,7 +208,7 @@ export default class Block implements BlockInterface {
   }
 
   private _removeEvents() {
-    const { events = {} } = this.props;
+    const { events = {} }: { events: eventsType} = this.props;
 
     Object.entries(events).forEach(([event, callback]) => {
       this._element.removeEventListener(event, callback);
@@ -216,7 +218,7 @@ export default class Block implements BlockInterface {
   compile(template: string, props: propsType = {}): HTMLElement {
     const propsAndStubs = { ...props };
 
-    Object.entries(this.children).forEach(([key, child]: [string, BlockInterface]) => {
+    Object.entries(this.children).forEach(([key, child]: [string, Block]) => {
       propsAndStubs[key] = isArray(child) ? this._getArrayChildren(child) : `<div data-id="${child._id}"></div>`;
     });
 
@@ -244,7 +246,7 @@ export default class Block implements BlockInterface {
     const children = {};
     const props = {};
 
-    Object.entries(propsAndChildren).forEach(([key, value]: [string, BlockInterface | BlockInterface[]]) => {
+    Object.entries(propsAndChildren).forEach(([key, value]: [string, Block | Block[]]) => {
       if (value instanceof Block || this._isChildrenArray(value)) {
         children[key] = value;
       } else {
@@ -255,13 +257,13 @@ export default class Block implements BlockInterface {
     return { children, props };
   }
 
-  private _getArrayChildren(array: BlockInterface[]) {
+  private _getArrayChildren(array: Block[]) {
     return array.map((child) => `
       <div data-id="${child._id}"></div>`).reduce((acc: string, item: string) => `${acc}${item}
     `, '');
   }
 
-  private _isChildrenArray(array: BlockInterface[] | unknown = []) {
+  private _isChildrenArray(array: Block[] | unknown = []) {
     if (!Array.isArray(array)) {
       return false;
     }

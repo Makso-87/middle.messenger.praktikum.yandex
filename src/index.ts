@@ -8,12 +8,12 @@ import { Profile, profileData } from './pages/profile';
 import { Registration, registrationData } from './pages/registration';
 import './components/form';
 import './components/input';
-import { Button } from './components/button';
 import './components/avatar';
 import { EditProfile, editProfileData } from './pages/editProfile';
 import { ChangePassword, changePasswordData } from './pages/changePassword';
 import { render } from './utils/render/render';
 import { ErrorDescription } from './pages/error/components/errorDescription';
+import { Link } from './components/link';
 
 // eslint-disable-next-line no-undef
 const { location: { pathname } } = window;
@@ -44,10 +44,11 @@ const routing = {
     page: new Error({
       errorCode: '404',
       errorDescription: [new ErrorDescription({ text: 'Кажется, сбились с пути' })],
-      errorButton: new Button({
+      errorButton: new Link({
+        initialClassName: 'button',
         text: 'Вернуться к чатам',
         link: 'chats',
-        className: 'button_margin-top-40',
+        className: 'link button_margin-top-40',
       }),
     }),
   },
@@ -62,10 +63,11 @@ const routing = {
           text: 'Но мы уже усиленно чиним',
         }),
       ],
-      errorButton: new Button({
+      errorButton: new Link({
+        initialClassName: 'button',
         text: 'Вернуться к чатам',
         link: 'chats',
-        className: 'button_margin-top-40',
+        className: 'link button_margin-top-40',
       }),
     }),
   },
