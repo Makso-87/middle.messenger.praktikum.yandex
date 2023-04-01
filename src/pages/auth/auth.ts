@@ -5,6 +5,7 @@ import { Input } from '../../components/input';
 import { formTemplate, template } from './auth.tmpl';
 import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
+import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 
 export class Auth extends Block {
   constructor(props) {
@@ -21,17 +22,30 @@ export class Auth extends Block {
   }
 }
 
-const onSubmitForm = (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = {
-    login: formData.get('login'),
-    password: formData.get('password'),
-  };
-
-  // eslint-disable-next-line no-console
-  console.log(data);
-};
+// const onSubmitForm = (form) => (event) => {
+//   event.preventDefault();
+//   const formData = new FormData(event.target);
+//   const data = {
+//     login: formData.get('login'),
+//     password: formData.get('password'),
+//   };
+//
+//   const isLoginValid = isValidInputValue(data.login, 'login');
+//   const isPasswordValid = isValidInputValue(data.password, 'password');
+//
+//   if (isLoginValid && isPasswordValid) {
+//     form.setProps({
+//       error: false,
+//     });
+//
+//     // eslint-disable-next-line no-console
+//     console.log(data);
+//   } else {
+//     form.setProps({
+//       error: true,
+//     });
+//   }
+// };
 
 const loginInput = new Input({
   attributes: {
@@ -73,24 +87,33 @@ passwordInput.setProps({
   },
 });
 
-export const authData = {
-  form: new Form({
-    template: formTemplate,
-    className: 'form',
-    title: 'Вход',
-    button: new Button({
-      text: 'Войти',
-    }),
-    formLink: {
-      text: 'Зарегистрироваться',
-      link: 'registration',
-    },
-    events: {
-      submit: onSubmitForm,
-    },
-    inputs: [
-      loginInputBlock,
-      passwordInputBlock,
-    ],
+const inputs = [
+  loginInputBlock,
+  passwordInputBlock,
+];
+
+const form = new Form({
+  errorText: errorsMessages.form,
+  template: formTemplate,
+  className: 'form',
+  title: 'Вход',
+  button: new Button({
+    text: 'Войти',
   }),
+  formLink: {
+    text: 'Зарегистрироваться',
+    link: 'registration',
+  },
+
+  inputs,
+});
+
+form.setProps({
+  events: {
+    submit: onSubmitForm(form, inputs),
+  },
+});
+
+export const authData = {
+  form,
 };

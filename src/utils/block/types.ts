@@ -37,6 +37,7 @@ export interface BlockInterface {
     _setClasses: () => void;
     compile: (template: string, props: propsType) => HTMLElement;
     getContent: () => HTMLElement;
+    children: childrenType;
 }
 
 export const isBlockInterfaceArray = (element: BlockInterface | BlockInterface[]): element is BlockInterface[] => isArray(element as BlockInterface[]);

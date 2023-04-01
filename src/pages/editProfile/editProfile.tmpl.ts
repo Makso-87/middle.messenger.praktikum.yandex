@@ -21,4 +21,8 @@ export const formTemplate = `
             {{{ buttonSave }}}
         </div>
     </div>
+    
+    {{#if error}}
+        <div class="form__error">{{errorText}}</div>
+    {{/if}}
 `;

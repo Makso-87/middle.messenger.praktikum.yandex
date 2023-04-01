@@ -1,9 +1,7 @@
 import template from './profile.tmpl';
 import Block from '../../utils/block/block';
-import { Button } from '../../components/button';
 import { ProfileDataItem } from './components/profileDataItem';
 import { Avatar } from '../../components/avatar';
-import { Input } from '../../components/input';
 import { Link } from '../../components/link';
 
 export class Profile extends Block {
@@ -24,15 +22,6 @@ export class Profile extends Block {
 export const profileData = {
   avatar: new Avatar({
     url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
-    inputId: 'avatar',
-    input: new Input({
-      initialClassName: 'avatar__change-button-input',
-      attributes: {
-        type: 'file',
-        name: 'avatar',
-        id: 'avatar',
-      },
-    }),
   }),
   firstName: 'Гендальф',
   buttonEditProfile: new Link({
@@ -73,7 +62,7 @@ export const profileData = {
     }),
     new ProfileDataItem({
       profileDataKey: 'Телефон',
-      profileDataValue: '+7 (999) 999 99 99',
+      profileDataValue: '+79999999999',
     }),
   ],
 };

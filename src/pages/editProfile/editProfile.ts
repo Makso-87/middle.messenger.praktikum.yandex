@@ -7,6 +7,7 @@ import { formTemplate, template } from './editProfile.tmpl';
 import { Form } from '../../components/form';
 import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
+import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 
 export class EditProfile extends Block {
   constructor(props) {
@@ -22,23 +23,6 @@ export class EditProfile extends Block {
     return this.compile(template, this.props);
   }
 }
-
-const onSubmitForm = (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = {
-    login: formData.get('login'),
-    email: formData.get('email'),
-    avatar: formData.get('avatar'),
-    first_name: formData.get('first_name'),
-    second_name: formData.get('second_name'),
-    display_name: formData.get('display_name'),
-    phone: formData.get('phone'),
-  };
-
-  // eslint-disable-next-line no-console
-  console.log(data);
-};
 
 const inputAvatar = new Input({
   initialClassName: 'avatar__change-button-input',
@@ -175,34 +159,41 @@ inputPhone.setProps({
   },
 });
 
-export const editProfileData = {
-  form: new Form({
-    className: 'form_edit-profile',
-    template: formTemplate,
-    avatar: new Avatar({
-      url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
-      inputId: 'avatar',
-      input: inputAvatar,
-    }),
-    firstName: 'Гендальф',
-    buttonSave: new Button({
-      text: 'Сохранить',
-    }),
-    buttonCancel: new Link({
-      text: 'Отменить',
-      link: 'chats',
-      className: 'button button_type_2',
-    }),
-    events: {
-      submit: onSubmitForm,
-    },
-    inputs: [
-      inputEmailBlock,
-      inputLoginBlock,
-      inputFirstNameBlock,
-      inputSecondNameBlock,
-      inputDisplayNameBlock,
-      inputPhoneBlock,
-    ],
+const inputs = [
+  inputEmailBlock,
+  inputLoginBlock,
+  inputFirstNameBlock,
+  inputSecondNameBlock,
+  inputDisplayNameBlock,
+  inputPhoneBlock,
+];
+
+const form = new Form({
+  className: 'form_edit-profile',
+  template: formTemplate,
+  avatar: new Avatar({
+    url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
+    inputId: 'avatar',
+    input: inputAvatar,
   }),
+  firstName: 'Гендальф',
+  buttonSave: new Button({
+    text: 'Сохранить',
+  }),
+  buttonCancel: new Link({
+    text: 'Отменить',
+    link: 'chats',
+    className: 'button button_type_2',
+  }),
+  inputs,
+});
+
+form.setProps({
+  events: {
+    submit: onSubmitForm(form, inputs),
+  },
+});
+
+export const editProfileData = {
+  form,
 };

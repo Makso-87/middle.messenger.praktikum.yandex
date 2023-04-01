@@ -5,6 +5,7 @@ import { formTemplate, template } from './registration.tmpl';
 import { InputBlock } from '../../components/inputBlock';
 import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
+import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 
 export class Registration extends Block {
   constructor(props) {
@@ -19,23 +20,6 @@ export class Registration extends Block {
     return this.compile(template, this.props);
   }
 }
-
-const onSubmitForm = (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = {
-    login: formData.get('login'),
-    email: formData.get('email'),
-    first_name: formData.get('first_name'),
-    second_name: formData.get('second_name'),
-    phone: formData.get('phone'),
-    oldPassword: formData.get('oldPassword'),
-    newPassword: formData.get('newPassword'),
-  };
-
-  // eslint-disable-next-line no-console
-  console.log(data);
-};
 
 const inputEmail = new Input({
   attributes: {
@@ -177,29 +161,36 @@ inputPasswordCheck.setProps({
   },
 });
 
-export const registrationData = {
-  form: new Form({
-    template: formTemplate,
-    title: 'Регистрация',
-    button: new Button({
-      text: 'Зарегистрироваться',
-      link: '/',
-    }),
-    formLink: {
-      text: 'Войти',
-      link: '/',
-    },
-    events: {
-      submit: onSubmitForm,
-    },
-    inputs: [
-      inputEmailBlock,
-      inputLoginBlock,
-      inputFirstNameBlock,
-      inputSecondNameBlock,
-      inputPhoneBlock,
-      inputPasswordBlock,
-      inputPasswordCheckBlock,
-    ],
+const inputs = [
+  inputEmailBlock,
+  inputLoginBlock,
+  inputFirstNameBlock,
+  inputSecondNameBlock,
+  inputPhoneBlock,
+  inputPasswordBlock,
+  inputPasswordCheckBlock,
+];
+
+const form = new Form({
+  template: formTemplate,
+  title: 'Регистрация',
+  button: new Button({
+    text: 'Зарегистрироваться',
+    link: '/',
   }),
+  formLink: {
+    text: 'Войти',
+    link: '/',
+  },
+  inputs,
+});
+
+form.setProps({
+  events: {
+    submit: onSubmitForm(form, inputs),
+  },
+});
+
+export const registrationData = {
+  form,
 };

@@ -6,6 +6,7 @@ import { template, formTemplate } from './changePassword.tmpl';
 import { Form } from '../../components/form';
 import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
+import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 
 export class ChangePassword extends Block {
   constructor(props) {
@@ -21,18 +22,6 @@ export class ChangePassword extends Block {
     return this.compile(template, this.props);
   }
 }
-
-const onSubmitForm = (event) => {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = {
-    oldPassword: formData.get('oldPassword'),
-    newPassword: formData.get('newPassword'),
-  };
-
-  // eslint-disable-next-line no-console
-  console.log(data);
-};
 
 const inputOldPassword = new Input(
   {
@@ -82,25 +71,32 @@ inputNewPassword.setProps({
   },
 });
 
-export const changePasswordData = {
-  form: new Form({
-    className: 'form_edit-change-password',
-    template: formTemplate,
-    buttonSave: new Button({
-      text: 'Сохранить',
-      link: 'chats',
-    }),
-    buttonCancel: new Link({
-      text: 'Отменить',
-      link: 'chats',
-      className: 'button button_type_2',
-    }),
-    events: {
-      submit: onSubmitForm,
-    },
-    inputs: [
-      inputOldPasswordBlock,
-      inputNewPasswordBlock,
-    ],
+const inputs = [
+  inputOldPasswordBlock,
+  inputNewPasswordBlock,
+];
+
+const form = new Form({
+  className: 'form_edit-change-password',
+  template: formTemplate,
+  buttonSave: new Button({
+    text: 'Сохранить',
+    link: 'chats',
   }),
+  buttonCancel: new Link({
+    text: 'Отменить',
+    link: 'chats',
+    className: 'button button_type_2',
+  }),
+  inputs,
+});
+
+form.setProps({
+  events: {
+    submit: onSubmitForm(form, inputs),
+  },
+});
+
+export const changePasswordData = {
+  form,
 };

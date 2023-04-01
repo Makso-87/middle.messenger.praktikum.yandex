@@ -6,6 +6,10 @@ export const formTemplate = `
     {{{inputs}}}
     
     {{{button}}}
+    
+    {{#if error}}
+        <div class="form__error">{{errorText}}</div>
+    {{/if}}
 
     <a href="{{formLink.link}}" class="form__link">{{formLink.text}}</a>  
 `;

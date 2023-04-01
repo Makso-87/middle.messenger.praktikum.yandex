@@ -3,7 +3,9 @@
 .form {
   width: 466px;
   border-radius: 20px;
+
   @include shadow($shadow_gray);
+
   background: $main_light;
   display: flex;
   justify-content: center;
@@ -33,4 +35,10 @@
 
 .form_edit-change-password {
   width: 540px;
+}
+
+.form__error {
+  font-size: 12px;
+  color: red;
+  margin: 10px 0 0;
 }
