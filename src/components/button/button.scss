@@ -19,15 +19,15 @@
   cursor: pointer;
 
   &:hover {
-    background: $blue_hover;
+    background: $blue-hover;
   }
 }
 
 .button_disabled {
-  background: $text_light_gray_2;
+  background: $text-light-gray-2;
 
   &:hover {
-    background: $text_light_gray_2;
+    background: $text-light-gray-2;
   }
 }
 

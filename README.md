@@ -23,3 +23,9 @@ npm run build
 [Макет](https://www.figma.com/file/HbxCUDgmlXcHRv4eewUSBw/Messanger?node-id=0%3A1&t=FbrKM9oKM4RK6Pmu-1)
 
 [Развернутый проект](https://legendary-kashata-460bb6.netlify.app/)
+
+В проекте используется TypeScript, SCSS, ESLit, Stylelint, Handlebars. 
+
+Проект построен по принципу компонентного подхода. 
+Все компоненты наследуются от класса Block, имеют реактивные свойства и шину событий. 
+Шаблонизацию отображения переданных свойств обеспечивает шаблонизатор Handlebars.

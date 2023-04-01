@@ -12,7 +12,7 @@
 
   &.message_self {
     .message__text-container {
-      background: $light_blue;
+      background: $light-blue;
     }
   }
 }
@@ -20,7 +20,7 @@
 .message__text-container {
   border-radius: 10px 10px 10px 0;
   padding: 11px 45px 20px 15px;
-  background: $light_gray;
+  background: $light-gray;
   margin: 0 0 0 15px;
   max-width: 414px;
   position: relative;
@@ -35,17 +35,11 @@
 .message__text {
   font-size: 14px;
   line-height: 20px;
-  color: $text_black;
+  color: $text-black;
 }
 
 .message__time {
   font-size: 12px;
   line-height: 12px;
-  color: $text_light_gray_2;
+  color: $text-light-gray-2;
 }
-
-.message__sent {}
-
-.message__delivered {}
-
-.message__read {}

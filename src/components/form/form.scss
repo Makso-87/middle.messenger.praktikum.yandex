@@ -4,9 +4,9 @@
   width: 466px;
   border-radius: 20px;
 
-  @include shadow($shadow_gray);
+  @include shadow($shadow-gray);
 
-  background: $main_light;
+  background: $main-light;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -15,7 +15,7 @@
 }
 
 .form__title {
-  @include title_h1;
+  @include title-h1;
 }
 
 .form__link {

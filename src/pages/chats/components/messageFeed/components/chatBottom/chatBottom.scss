@@ -19,7 +19,7 @@
   height: 34px;
   border: 1px solid $border;
   border-radius: 3px;
-  background: $text_light_gray_3;
+  background: $text-light-gray-3;
   font-size: 16px;
   line-height: 19px;
   padding: 7px 15px;
@@ -52,7 +52,7 @@
 }
 
 .send-message-button_disabled {
-  background: $text_light_gray_2;
+  background: $text-light-gray-2;
 }
 
 .attach-button {

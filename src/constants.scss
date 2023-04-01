@@ -1,18 +1,18 @@
 $blue: #2f4e9d;
-$blue_hover: lighten(#2f4e9d, 10%);
+$blue-hover: lighten(#2f4e9d, 10%);
 $white: #fff;
-$main_bg: #bbccd1;
-$main_light: #f2f2f2;
+$main-bg: #bbccd1;
+$main-light: #f2f2f2;
 $border: #9fb0b9;
-$text_black: #000;
-$text_gray: #525252;
-$text_light_gray_1: #999;
-$text_light_gray_2: #919295;
-$light_gray: #e4e4e4;
-$text_light_gray_3: #d9d9d9;
-$text_blue: $blue;
-$light_blue: #c7ddff;
-$shadow_gray: rgb(119 119 119 / 25%);
+$text-black: #000;
+$text-gray: #525252;
+$text-light-gray-1: #999;
+$text-light-gray-2: #919295;
+$light-gray: #e4e4e4;
+$text-light-gray-3: #d9d9d9;
+$text-blue: $blue;
+$light-blue: #c7ddff;
+$shadow-gray: rgb(119 119 119 / 25%);
 
 @mixin shadow($color) {
   box-shadow: 0 0 6px $color;
@@ -22,7 +22,7 @@ $shadow_gray: rgb(119 119 119 / 25%);
   transition: all 0.2s ease-in-out;
 }
 
-@mixin title_h1 {
+@mixin title-h1 {
   font-style: normal;
   font-weight: 700;
   font-size: 36px;

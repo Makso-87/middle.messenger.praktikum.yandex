@@ -38,6 +38,7 @@ export interface BlockInterface {
     compile: (template: string, props: propsType) => HTMLElement;
     getContent: () => HTMLElement;
     children: childrenType;
+    setProps: (nextProps: propsType) => void;
 }
 
 export const isBlockInterfaceArray = (element: BlockInterface | BlockInterface[]): element is BlockInterface[] => isArray(element as BlockInterface[]);

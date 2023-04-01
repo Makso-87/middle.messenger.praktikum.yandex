@@ -12,7 +12,7 @@
   font-size: 16px;
   line-height: 19px;
 
-  @include shadow($shadow_gray);
+  @include shadow($shadow-gray);
 }
 
 .input-item__label {

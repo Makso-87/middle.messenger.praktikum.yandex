@@ -276,8 +276,6 @@ export default class Block implements BlockInterface {
   }
 
   private _makePropsProxy(props) {
-  // Можно и так передать this
-  // Такой способ больше не применяется с приходом ES6+
     const self = this;
 
     return new Proxy(props, {
