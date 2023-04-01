@@ -9,6 +9,7 @@ import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 import { propsType } from '../../utils/block/types';
+import { ErrorMessage } from '../../components/errorMessage';
 
 export class EditProfile extends Block {
   constructor(props: propsType) {
@@ -92,71 +93,90 @@ const inputEmailBlock = new InputBlock({
   errorText: errorsMessages.email,
   label: 'Почта',
   input: inputEmail,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.email,
+  }),
 });
 
 const inputLoginBlock = new InputBlock({
-  errorText: errorsMessages.login,
   label: 'Логин',
   input: inputLogin,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.login,
+  }),
 });
 
 const inputFirstNameBlock = new InputBlock({
-  errorText: errorsMessages.first_name,
   label: 'Имя',
   input: inputFirstName,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.first_name,
+  }),
 });
 
 const inputSecondNameBlock = new InputBlock({
-  errorText: errorsMessages.second_name,
   label: 'Фамилия',
   input: inputSecondName,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.second_name,
+  }),
 });
 
 const inputDisplayNameBlock = new InputBlock({
-  errorText: errorsMessages.first_name,
   label: 'Имя в чате',
   input: inputDisplayName,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.first_name,
+  }),
 });
 
 const inputPhoneBlock = new InputBlock({
-  errorText: errorsMessages.phone,
   label: 'Телефон',
   input: inputPhone,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.phone,
+  }),
 });
 
 inputEmail.setProps({
   events: {
     blur: validateInput(inputEmailBlock),
+    focus: validateInput(inputEmailBlock),
   },
 });
 
 inputLogin.setProps({
   events: {
     blur: validateInput(inputLoginBlock),
+    focus: validateInput(inputLoginBlock),
   },
 });
 
 inputFirstName.setProps({
   events: {
     blur: validateInput(inputFirstNameBlock),
+    focus: validateInput(inputFirstNameBlock),
   },
 });
 
 inputSecondName.setProps({
   events: {
     blur: validateInput(inputSecondNameBlock),
+    focus: validateInput(inputSecondNameBlock),
   },
 });
 
 inputDisplayName.setProps({
   events: {
     blur: validateInput(inputDisplayNameBlock),
+    focus: validateInput(inputDisplayNameBlock),
   },
 });
 
 inputPhone.setProps({
   events: {
     blur: validateInput(inputPhoneBlock),
+    focus: validateInput(inputPhoneBlock),
   },
 });
 
@@ -172,6 +192,9 @@ const inputs = [
 const form = new Form({
   className: 'form_edit-profile',
   template: formTemplate,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.form,
+  }),
   avatar: new Avatar({
     url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
     inputId: 'avatar',

@@ -195,7 +195,7 @@ export default class Block implements BlockInterface {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  render() {}
+  render(): Node {}
 
   getContent() {
     return this.element;
@@ -217,7 +217,7 @@ export default class Block implements BlockInterface {
     });
   }
 
-  compile(template: string, props: propsType = {}): HTMLElement {
+  compile(template: string, props: propsType = {}): Node {
     const propsAndStubs = { ...props };
 
     Object.entries(this.children).forEach(([key, child]: [string, Block]) => {

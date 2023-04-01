@@ -5,8 +5,8 @@ const template = `
     
     {{{input}}}
     
-    {{#if error}}
-        <div class="input-item__error">{{errorText}}</div>
+    {{#if errorMessage}}
+        {{{errorMessage}}}
     {{/if}}
 `;
 

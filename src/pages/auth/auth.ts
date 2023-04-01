@@ -7,6 +7,7 @@ import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 import { propsType } from '../../utils/block/types';
+import { ErrorMessage } from '../../components/errorMessage';
 
 export class Auth extends Block {
   constructor(props: propsType) {
@@ -42,13 +43,17 @@ const passwordInput = new Input({
 });
 
 const loginInputBlock = new InputBlock({
-  errorText: errorsMessages.login,
   input: loginInput,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.login,
+  }),
 });
 
 const passwordInputBlock = new InputBlock({
   input: passwordInput,
-  errorText: errorsMessages.password,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.password,
+  }),
 });
 
 loginInput.setProps({
@@ -61,6 +66,7 @@ loginInput.setProps({
 passwordInput.setProps({
   events: {
     blur: validateInput(passwordInputBlock),
+    focus: validateInput(passwordInputBlock),
   },
 });
 
@@ -70,7 +76,9 @@ const inputs = [
 ];
 
 const form = new Form({
-  errorText: errorsMessages.form,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.form,
+  }),
   template: formTemplate,
   className: 'form',
   title: 'Вход',

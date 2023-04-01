@@ -36,8 +36,10 @@ export const validateInput = (inputBlock: Input) => (event: InputEvent) => {
   const result = isValidInputValue(value, name);
 
   if (result) {
-    inputBlock.setProps({ error: false });
+    // inputBlock.setProps({ error: false });
+    inputBlock.children.errorMessage.hide();
   } else {
-    inputBlock.setProps({ error: true, attributes: { autofocus: 'autofocus' } });
+    // inputBlock.setProps({ error: true, attributes: { autofocus: 'autofocus' } });
+    inputBlock.children.errorMessage.show();
   }
 };

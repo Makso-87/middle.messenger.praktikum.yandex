@@ -3,7 +3,8 @@ import { isArray } from '../mydash/isArray';
 import Block from './block';
 
 export type attributesType = {
-    [key: string]: string;
+    name?: string;
+    [key: string]: string | unknown;
 }
 
 export type propsType = {
@@ -36,7 +37,7 @@ export interface BlockInterface {
     removeAttributes: (attributes: string[]) => void;
     removeClassNames: (classNames: string[]) => void;
     componentDidUpdate: (oldProps?: propsType, newProps?: propsType,) => boolean;
-    render: () => void;
+    render: () => Node;
     show: () => void;
     hide: () => void;
 }

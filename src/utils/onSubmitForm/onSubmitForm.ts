@@ -25,9 +25,9 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event) => {
     const result = isValidInputValue(data[name], name);
 
     if (result) {
-      inputBlock.setProps({ error: false });
+      inputBlock.children.errorMessage.hide();
     } else {
-      inputBlock.setProps({ error: true });
+      inputBlock.children.errorMessage.show();
     }
 
     predicates[`is${capitalizeString(toCamelCase(name))}`] = result;
@@ -36,9 +36,7 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event) => {
   const validationValues = Object.values(predicates).map((value) => value);
 
   if (isAllTrue(validationValues) && data.oldPassword === data.newPassword) {
-    form.setProps({
-      error: false,
-    });
+    form.children.errorMessage.hide();
 
     // eslint-disable-next-line no-console
     console.log(data);
@@ -48,18 +46,20 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event) => {
   if (
     isOneOfAllFalse(validationValues)
   ) {
-    form.setProps({
+    form.children.errorMessage.setProps({
       errorText: errorsMessages.form,
-      error: true,
     });
+
+    form.children.errorMessage.show();
 
     return;
   }
 
   if (data?.oldPassword !== data?.newPassword) {
-    form.setProps({
+    form.children.errorMessage.setProps({
       errorText: errorsMessages.passwordsMatch,
-      error: true,
     });
+
+    form.children.errorMessage.show();
   }
 };

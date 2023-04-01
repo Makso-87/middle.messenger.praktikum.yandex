@@ -8,6 +8,7 @@ import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 import { propsType } from '../../utils/block/types';
+import { ErrorMessage } from '../../components/errorMessage';
 
 export class ChangePassword extends Block {
   constructor(props: propsType) {
@@ -49,26 +50,32 @@ const inputNewPassword = new Input(
 );
 
 const inputOldPasswordBlock = new InputBlock({
-  errorText: errorsMessages.password,
   label: 'Текущий пароль',
   input: inputOldPassword,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.password,
+  }),
 });
 
 const inputNewPasswordBlock = new InputBlock({
-  errorText: errorsMessages.password,
   label: 'Новый пароль',
   input: inputNewPassword,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.password,
+  }),
 });
 
 inputOldPassword.setProps({
   events: {
     blur: validateInput(inputOldPasswordBlock),
+    focus: validateInput(inputOldPasswordBlock),
   },
 });
 
 inputNewPassword.setProps({
   events: {
     blur: validateInput(inputNewPasswordBlock),
+    focus: validateInput(inputNewPasswordBlock),
   },
 });
 
@@ -80,6 +87,9 @@ const inputs = [
 const form = new Form({
   className: 'form_edit-change-password',
   template: formTemplate,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.form,
+  }),
   buttonSave: new Button({
     text: 'Сохранить',
     link: 'chats',
