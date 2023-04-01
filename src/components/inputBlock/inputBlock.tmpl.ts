@@ -4,6 +4,10 @@ const template = `
     {{/if}}
     
     {{{input}}}
+    
+    {{#if error}}
+        <div class="input-item__error">{{errorText}}</div>
+    {{/if}}
 `;
 
 export default template;

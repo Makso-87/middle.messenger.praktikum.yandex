@@ -5,6 +5,7 @@ import { Input } from '../../components/input';
 import { template, formTemplate } from './changePassword.tmpl';
 import { Form } from '../../components/form';
 import { Link } from '../../components/link';
+import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 
 export class ChangePassword extends Block {
   constructor(props) {
@@ -28,8 +29,58 @@ const onSubmitForm = (event) => {
     oldPassword: formData.get('oldPassword'),
     newPassword: formData.get('newPassword'),
   };
+
+  // eslint-disable-next-line no-console
   console.log(data);
 };
+
+const inputOldPassword = new Input(
+  {
+    attributes: {
+      type: 'password',
+      label: 'Текущий пароль',
+      name: 'oldPassword',
+      id: 'old-password',
+      placeholder: 'Текущий пароль',
+    },
+  },
+);
+
+const inputNewPassword = new Input(
+  {
+    attributes: {
+      type: 'password',
+      label: 'Новый пароль',
+      name: 'newPassword',
+      id: 'new-password',
+      placeholder: 'Новый пароль',
+    },
+  },
+);
+
+const inputOldPasswordBlock = new InputBlock({
+  errorText: errorsMessages.password,
+  label: 'Текущий пароль',
+  input: inputOldPassword,
+});
+
+const inputNewPasswordBlock = new InputBlock({
+  errorText: errorsMessages.password,
+  label: 'Новый пароль',
+  input: inputNewPassword,
+});
+
+inputOldPassword.setProps({
+  events: {
+    blur: validateInput(inputOldPasswordBlock),
+  },
+});
+
+inputNewPassword.setProps({
+  events: {
+    blur: validateInput(inputNewPasswordBlock),
+  },
+});
 
 export const changePasswordData = {
   form: new Form({
@@ -48,34 +99,8 @@ export const changePasswordData = {
       submit: onSubmitForm,
     },
     inputs: [
-      new InputBlock({
-        label: 'Текущий пароль',
-        input: new Input(
-          {
-            attributes: {
-              type: 'password',
-              label: 'Текущий пароль',
-              name: 'oldPassword',
-              id: 'old-password',
-              placeholder: 'Текущий пароль',
-            },
-          },
-        ),
-      }),
-      new InputBlock({
-        label: 'Новый пароль',
-        input: new Input(
-          {
-            attributes: {
-              type: 'password',
-              label: 'Новый пароль',
-              name: 'newPassword',
-              id: 'new-password',
-              placeholder: 'Новый пароль',
-            },
-          },
-        ),
-      }),
+      inputOldPasswordBlock,
+      inputNewPasswordBlock,
     ],
   }),
 };

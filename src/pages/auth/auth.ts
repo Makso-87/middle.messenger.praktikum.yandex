@@ -4,6 +4,7 @@ import { InputBlock } from '../../components/inputBlock';
 import { Input } from '../../components/input';
 import { formTemplate, template } from './auth.tmpl';
 import { Button } from '../../components/button';
+import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 
 export class Auth extends Block {
   constructor(props) {
@@ -20,10 +21,6 @@ export class Auth extends Block {
   }
 }
 
-const onLoginInput = (event) => {
-  const { value } = event.target;
-};
-
 const onSubmitForm = (event) => {
   event.preventDefault();
   const formData = new FormData(event.target);
@@ -31,8 +28,50 @@ const onSubmitForm = (event) => {
     login: formData.get('login'),
     password: formData.get('password'),
   };
+
+  // eslint-disable-next-line no-console
   console.log(data);
 };
+
+const loginInput = new Input({
+  attributes: {
+    id: 'sign-in-login',
+    placeholder: 'Логин',
+    type: 'text',
+    name: 'login',
+  },
+});
+
+const passwordInput = new Input({
+  attributes: {
+    id: 'sign-in-password',
+    placeholder: 'Пароль',
+    type: 'password',
+    name: 'password',
+  },
+});
+
+const loginInputBlock = new InputBlock({
+  errorText: errorsMessages.login,
+  input: loginInput,
+});
+
+const passwordInputBlock = new InputBlock({
+  input: passwordInput,
+  errorText: errorsMessages.password,
+});
+
+loginInput.setProps({
+  events: {
+    blur: validateInput(loginInputBlock),
+  },
+});
+
+passwordInput.setProps({
+  events: {
+    blur: validateInput(passwordInputBlock),
+  },
+});
 
 export const authData = {
   form: new Form({
@@ -50,29 +89,8 @@ export const authData = {
       submit: onSubmitForm,
     },
     inputs: [
-      new InputBlock({
-        input: new Input({
-          attributes: {
-            id: 'sign-in-login',
-            placeholder: 'Логин',
-            type: 'text',
-            name: 'login',
-          },
-          events: {
-            blur: onLoginInput,
-          },
-        }),
-      }),
-      new InputBlock({
-        input: new Input({
-          attributes: {
-            id: 'sign-in-password',
-            placeholder: 'Пароль',
-            type: 'password',
-            name: 'password',
-          },
-        }),
-      }),
+      loginInputBlock,
+      passwordInputBlock,
     ],
   }),
 };

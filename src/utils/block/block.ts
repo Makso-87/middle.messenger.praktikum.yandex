@@ -96,6 +96,34 @@ export default class Block implements BlockInterface {
     });
   }
 
+  private _removeAttributes(attributes: string[]) {
+    attributes.forEach((attribute) => this._element.removeAttribute(attribute));
+
+    const newAttributes = Object.keys(this.props.attributes).reduce((acc, key) => {
+      if (attributes.includes(key)) {
+        return acc;
+      }
+
+      return {
+        ...acc,
+        [key]: this.props.attributes[key],
+      };
+    }, {});
+
+    this.setProps({
+      attributes: { ...newAttributes },
+    });
+  }
+
+  private _removeClassNames(classNames: string[]) {
+    this._element.classList.remove(...classNames);
+    const newCLasses = this.props.className.split(' ').filter((name) => !classNames.includes(name)).join(' ');
+
+    this.setProps({
+      className: newCLasses,
+    });
+  }
+
   private _setClasses() {
     const { className = '' } = this.props;
 
@@ -111,6 +139,14 @@ export default class Block implements BlockInterface {
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
+  }
+
+  removeAttributes(attributes: string[]) {
+    this._removeAttributes(attributes);
+  }
+
+  removeClassNames(classNames: string[]) {
+    this._removeClassNames(classNames);
   }
 
   private _componentDidUpdate(oldProps, newProps) {
@@ -132,6 +168,14 @@ export default class Block implements BlockInterface {
     }
 
     Object.assign(this.props, nextProps);
+
+    if (Object.keys(nextProps).filter((key) => key === 'className')) {
+      this._setClasses();
+    }
+
+    if (Object.keys(nextProps).filter((key) => key === 'attributes')) {
+      this._setAttributes();
+    }
   };
 
   get element() {

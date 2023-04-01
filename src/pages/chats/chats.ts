@@ -13,6 +13,7 @@ import { ChatBottom } from './components/messageFeed/components/chatBottom';
 import { Form } from '../../components/form';
 import { Link } from '../../components/link';
 import { InputBlock } from '../../components/inputBlock';
+import { isValidInputValue } from '../../utils/validators/validateInput';
 
 export class Chats extends Block {
   constructor(props) {
@@ -36,8 +37,50 @@ const onSubmitForm = (event) => {
     message: formData.get('message'),
     attach: formData.get('attach'),
   };
+
+  // eslint-disable-next-line no-console
   console.log(data);
 };
+
+const sendButton = new Button({
+  initialClassName: 'send-message-button',
+  className: 'send-message-button_disabled',
+  attributes: {
+    disabled: 'disabled',
+  },
+});
+
+const validateInput = (event) => {
+  const { value, name } = event.target;
+  const result = isValidInputValue(value, name);
+
+  if (result) {
+    sendButton.removeAttributes(['disabled']);
+    sendButton.removeClassNames(['send-message-button_disabled']);
+  } else {
+    sendButton.setProps({
+      className: 'send-message-button_disabled',
+      attributes: {
+        disabled: 'disabled',
+      },
+    });
+  }
+};
+
+const inputMessage = new Input({
+  initialClassName: 'message-input',
+  attributes: {
+    type: 'text',
+    name: 'message',
+    placeholder: 'Сообщение',
+  },
+});
+
+inputMessage.setProps({
+  events: {
+    input: validateInput,
+  },
+});
 
 export const getChatsData = () => ({
   chatFeed: new ChatFeed({
@@ -174,17 +217,8 @@ export const chatsItemData = {
       form: new Form({
         initialClassName: 'chat-bottom-form',
         template: '{{{attachButton}}} {{{input}}} {{{sendButton}}}',
-        input: new Input({
-          initialClassName: 'message-input',
-          attributes: {
-            type: 'text',
-            name: 'message',
-            placeholder: 'Сообщение',
-          },
-        }),
-        sendButton: new Button({
-          initialClassName: 'send-message-button',
-        }),
+        input: inputMessage,
+        sendButton,
         events: { submit: onSubmitForm },
         attachButton: new InputBlock({
           initialClassName: 'attach-button',

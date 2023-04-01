@@ -23,6 +23,14 @@
   }
 }
 
+.button_disabled {
+  background: $text_light_gray_2;
+
+  &:hover {
+    background: $text_light_gray_2;
+  }
+}
+
 .button_margin-top-40 {
   margin-top: 40px;
 }

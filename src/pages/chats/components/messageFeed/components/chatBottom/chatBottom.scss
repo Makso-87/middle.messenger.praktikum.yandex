@@ -38,6 +38,8 @@
   border: none;
   cursor: pointer;
 
+  @include transition;
+
    &::after {
      content: '';
      display: block;
@@ -47,6 +49,10 @@
      height: 21px;
      background: url('../../../../../../../static/images/icons/send.svg') no-repeat center / contain;
    }
+}
+
+.send-message-button_disabled {
+  background: $text_light_gray_2;
 }
 
 .attach-button {
