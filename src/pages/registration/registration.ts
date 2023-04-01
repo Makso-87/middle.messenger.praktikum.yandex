@@ -6,9 +6,10 @@ import { InputBlock } from '../../components/inputBlock';
 import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
+import { propsType } from '../../utils/block/types';
 
 export class Registration extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `registration ${props.className ?? ''}`,

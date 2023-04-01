@@ -6,9 +6,10 @@ import { formTemplate, template } from './auth.tmpl';
 import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
+import { propsType } from '../../utils/block/types';
 
 export class Auth extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `auth ${props.className ?? ''}`,
@@ -21,31 +22,6 @@ export class Auth extends Block {
     return this.compile(template, this.props);
   }
 }
-
-// const onSubmitForm = (form) => (event) => {
-//   event.preventDefault();
-//   const formData = new FormData(event.target);
-//   const data = {
-//     login: formData.get('login'),
-//     password: formData.get('password'),
-//   };
-//
-//   const isLoginValid = isValidInputValue(data.login, 'login');
-//   const isPasswordValid = isValidInputValue(data.password, 'password');
-//
-//   if (isLoginValid && isPasswordValid) {
-//     form.setProps({
-//       error: false,
-//     });
-//
-//     // eslint-disable-next-line no-console
-//     console.log(data);
-//   } else {
-//     form.setProps({
-//       error: true,
-//     });
-//   }
-// };
 
 const loginInput = new Input({
   attributes: {
@@ -78,6 +54,7 @@ const passwordInputBlock = new InputBlock({
 loginInput.setProps({
   events: {
     blur: validateInput(loginInputBlock),
+    focus: validateInput(loginInputBlock),
   },
 });
 

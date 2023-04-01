@@ -1,8 +1,9 @@
 import template from './profileDataItem.tmpl';
 import Block from '../../../../utils/block/block';
+import { propsType } from '../../../../utils/block/types';
 
 export class ProfileDataItem extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `profile__data-line-item ${props.className ?? ''}`,

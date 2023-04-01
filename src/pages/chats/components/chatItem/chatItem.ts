@@ -1,8 +1,9 @@
 import template from './chatItem.tmpl';
 import Block from '../../../../utils/block/block';
+import { propsType } from '../../../../utils/block/types';
 
 export class ChatItem extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `chat-item ${props.className ?? ''}`,

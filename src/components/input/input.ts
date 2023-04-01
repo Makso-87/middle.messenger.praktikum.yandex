@@ -1,7 +1,8 @@
 import Block from '../../utils/block/block';
+import { propsType } from '../../utils/block/types';
 
 export class Input extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `${props.initialClassName ?? 'input-item__input'} ${props.className ?? ''}`,

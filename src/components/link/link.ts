@@ -1,9 +1,10 @@
 import template from './link.tmpl';
 import Block from '../../utils/block/block';
+import { propsType } from '../../utils/block/types';
 
 export class Link extends Block {
-  constructor(props) {
-    const newProps = {
+  constructor(props: propsType) {
+    const newProps: propsType = {
       ...props,
       className: `${props.initialClassName ?? 'link'} ${props.className ?? ''}`,
       attributes: {

@@ -1,9 +1,9 @@
 import * as handlebars from 'handlebars';
 import { v4 as uuid } from 'uuid';
 import EventBus from '../eventBus/eventBus';
-import { isArray } from '../mydash/isArray';
 import {
-  BlockInterface, eventsType, isBlockInterfaceArray, propsType,
+  attributesType,
+  BlockInterface, childrenType, eventsType, isBlockInterfaceArray, propsType,
 } from './types';
 
 export default class Block implements BlockInterface {
@@ -14,7 +14,7 @@ export default class Block implements BlockInterface {
     FLOW_RENDER: 'flow:render',
   };
 
-  _element;
+  _element: HTMLElement;
 
   _meta;
 
@@ -24,7 +24,7 @@ export default class Block implements BlockInterface {
 
   children;
 
-  events;
+  events: eventsType;
 
   _id;
 
@@ -53,7 +53,7 @@ export default class Block implements BlockInterface {
     eventBus.emit(Block.EVENTS.INIT);
   }
 
-  private _registerEvents(eventBus) {
+  private _registerEvents(eventBus: EventBus) {
     eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
@@ -93,22 +93,23 @@ export default class Block implements BlockInterface {
   }
 
   private _setAttributes() {
-    Object.entries(this.props.attributes || {}).forEach(([name, value]) => {
+    Object.entries(this.props.attributes || {}).forEach(([name, value]: [name: string, value: string]) => {
       this._element.setAttribute(name, value);
     });
   }
 
   private _removeAttributes(attributes: string[]) {
     attributes.forEach((attribute) => this._element.removeAttribute(attribute));
+    const { attributes: currentAttributes }: { attributes: attributesType} = this.props;
 
-    const newAttributes = Object.keys(this.props.attributes).reduce((acc, key) => {
+    const newAttributes = Object.keys(currentAttributes).reduce((acc, key) => {
       if (attributes.includes(key)) {
         return acc;
       }
 
       return {
         ...acc,
-        [key]: this.props.attributes[key],
+        [key]: currentAttributes[key],
       };
     }, {});
 
@@ -119,7 +120,8 @@ export default class Block implements BlockInterface {
 
   private _removeClassNames(classNames: string[]) {
     this._element.classList.remove(...classNames);
-    const newCLasses = this.props.className.split(' ').filter((name) => !classNames.includes(name)).join(' ');
+    const { className = '' } = this.props;
+    const newCLasses = className.split(' ').filter((name: string) => !classNames.includes(name)).join(' ');
 
     this.setProps({
       className: newCLasses,
@@ -130,14 +132,14 @@ export default class Block implements BlockInterface {
     const { className = '' } = this.props;
 
     if (className.length) {
-      className.trim().split(' ').forEach((classNameItem) => {
+      className.trim().split(' ').forEach((classNameItem: string) => {
         this._element.classList.add(classNameItem);
       });
     }
   }
 
   // Может переопределять пользователь, необязательно трогать
-  componentDidMount(oldProps?) {}
+  componentDidMount(oldProps?: propsType) {}
 
   dispatchComponentDidMount() {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
@@ -151,7 +153,7 @@ export default class Block implements BlockInterface {
     this._removeClassNames(classNames);
   }
 
-  private _componentDidUpdate(oldProps, newProps) {
+  private _componentDidUpdate(oldProps: propsType, newProps: propsType) {
     const response = this.componentDidUpdate(oldProps, newProps);
 
     if (response) {
@@ -160,11 +162,11 @@ export default class Block implements BlockInterface {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  componentDidUpdate(oldProps?, newProps?) {
+  componentDidUpdate(oldProps?: propsType, newProps?: propsType) {
     return true;
   }
 
-  setProps = (nextProps) => {
+  setProps = (nextProps: propsType) => {
     if (!nextProps) {
       return;
     }
@@ -219,15 +221,15 @@ export default class Block implements BlockInterface {
     const propsAndStubs = { ...props };
 
     Object.entries(this.children).forEach(([key, child]: [string, Block]) => {
-      propsAndStubs[key] = isArray(child) ? this._getArrayChildren(child) : `<div data-id="${child._id}"></div>`;
+      propsAndStubs[key] = isBlockInterfaceArray(child) ? this._getArrayChildren(child) : `<div data-id="${child._id}"></div>`;
     });
 
     const fragment = this._createDocumentElement('template');
 
     fragment.innerHTML = handlebars.compile(template)(propsAndStubs);
 
-    const childHandler = (child) => {
-      if (isArray(child)) {
+    const childHandler = (child: Block | Block[]) => {
+      if (isBlockInterfaceArray(child)) {
         child.forEach(childHandler);
         return;
       }
@@ -242,9 +244,9 @@ export default class Block implements BlockInterface {
     return fragment.content;
   }
 
-  private _getChildren(propsAndChildren) {
-    const children = {};
-    const props = {};
+  private _getChildren(propsAndChildren: propsType) {
+    const children: childrenType | childrenType[] = {};
+    const props: propsType = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]: [string, Block | Block[]]) => {
       if (value instanceof Block || this._isChildrenArray(value)) {
@@ -277,11 +279,11 @@ export default class Block implements BlockInterface {
     return isBlock;
   }
 
-  private _makePropsProxy(props) {
+  private _makePropsProxy(props: propsType) {
     const self = this;
 
     return new Proxy(props, {
-      set(target, prop, val) {
+      set(target: propsType, prop:string, val) {
         const oldTarget = { ...target };
         // eslint-disable-next-line no-param-reassign
         target[prop] = val;
@@ -294,8 +296,7 @@ export default class Block implements BlockInterface {
     });
   }
 
-  private _createDocumentElement(tagName) {
-  // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
+  private _createDocumentElement(tagName: string) {
     // eslint-disable-next-line no-undef
     const element: HTMLElement = document.createElement(tagName);
 

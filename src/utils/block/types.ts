@@ -2,12 +2,16 @@ import EventBus from '../eventBus/eventBus';
 import { isArray } from '../mydash/isArray';
 import Block from './block';
 
+export type attributesType = {
+    [key: string]: string;
+}
+
 export type propsType = {
+    link?: string;
+    template?: string;
     className?: string;
     initialClassName?: string;
-    attributes?: {
-        [key: string]: string;
-    };
+    attributes?: attributesType;
     [key: string]: unknown | unknown[],
 };
 

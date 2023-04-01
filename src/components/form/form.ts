@@ -1,9 +1,10 @@
 import '../input';
 import '../button';
 import Block from '../../utils/block/block';
+import { propsType } from '../../utils/block/types';
 
 export class Form extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `${props.initialClassName ?? 'form'} ${props.className ?? ''}`,

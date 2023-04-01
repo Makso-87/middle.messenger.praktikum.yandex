@@ -7,9 +7,10 @@ import { Form } from '../../components/form';
 import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
+import { propsType } from '../../utils/block/types';
 
 export class ChangePassword extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `profile ${props.className ?? ''}`,

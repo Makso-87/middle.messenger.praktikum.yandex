@@ -3,9 +3,10 @@ import Block from '../../utils/block/block';
 import { ProfileDataItem } from './components/profileDataItem';
 import { Avatar } from '../../components/avatar';
 import { Link } from '../../components/link';
+import { propsType } from '../../utils/block/types';
 
 export class Profile extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `profile ${props.className ?? ''}`,

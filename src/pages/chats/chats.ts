@@ -14,9 +14,10 @@ import { Form } from '../../components/form';
 import { Link } from '../../components/link';
 import { InputBlock } from '../../components/inputBlock';
 import { isValidInputValue } from '../../utils/validators/validateInput';
+import { propsType } from '../../utils/block/types';
 
 export class Chats extends Block {
-  constructor(props) {
+  constructor(props: propsType) {
     const newProps = {
       ...props,
       className: `chats ${props.className ?? ''}`,
@@ -30,7 +31,7 @@ export class Chats extends Block {
   }
 }
 
-const onSubmitForm = (event) => {
+const onSubmitForm = (event: InputEvent) => {
   event.preventDefault();
   const formData = new FormData(event.target);
   const data = {
@@ -50,7 +51,7 @@ const sendButton = new Button({
   },
 });
 
-const validateInput = (event) => {
+const validateInput = (event: InputEvent) => {
   const { value, name } = event.target;
   const result = isValidInputValue(value, name);
 
