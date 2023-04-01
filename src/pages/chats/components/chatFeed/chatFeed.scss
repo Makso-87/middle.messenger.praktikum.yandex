@@ -2,9 +2,9 @@
 
 .chat-feed {
   width: 345px;
-  background: $main_bg;
+  background: $main-bg;
   border-right: 1px solid $border;
-  padding: 16px 0 0 0;
+  padding: 16px 0 0;
   flex-shrink: 0;
 }
 
@@ -19,11 +19,11 @@
     font-size: 16px;
     line-height: 19px;
     text-decoration: none;
-    color: $text_gray;
+    color: $text-gray;
     padding: 0 16px 0 0;
     position: relative;
 
-    &:after {
+    &::after {
       content: '';
       display: block;
       position: absolute;
@@ -31,7 +31,7 @@
       top: -2px;
       width: 24px;
       height: 24px;
-      background: url(../../../../../static/images/icons/chevron-right.svg) no-repeat center / contain;
+      background: url('../../../../../static/images/icons/chevron-right.svg') no-repeat center / contain;
     }
   }
 }
@@ -46,7 +46,7 @@
   height: 34px;
   border: 1px solid $border;
   border-radius: 3px;
-  background: $text_light_gray_3;
+  background: $text-light-gray-3;
   padding: 0 20px;
   font-weight: 500;
   font-size: 16px;

@@ -1,0 +1,22 @@
+@import "../../../../../../constants";
+
+.chat-top {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid $border;
+}
+
+.chat-top__interlocutor-name {
+  margin: 0 auto 0 15px;
+}
+
+.chat-top__settings-button {
+  width: 26px;
+  height: 29px;
+  background: url('../../../../../../../static/images/icons/settings-dots.svg') no-repeat center;
+  margin: 0 0 0 auto;
+}
+

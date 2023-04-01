@@ -1,0 +1,22 @@
+@import "../../../../../../constants";
+
+.chat-middle {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  padding: 90px 0 15px;
+  overflow: auto;
+  position: relative;
+}
+
+.chat-middle__date {
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  line-height: 17px;
+  color: $text-light-gray-2;
+}
+

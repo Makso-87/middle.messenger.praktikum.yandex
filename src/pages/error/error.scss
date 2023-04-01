@@ -7,20 +7,13 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background: $main_light;
+  background: $main-light;
 }
 
 .error-title {
   font-weight: 700;
   font-size: 96px;
   line-height: 116px;
-  color: $text_black;
+  color: $text-black;
   margin-bottom: 30px;
-}
-
-.error-description {
-  font-weight: 700;
-  font-size: 32px;
-  line-height: 39px;
-  color: $text_black;
 }

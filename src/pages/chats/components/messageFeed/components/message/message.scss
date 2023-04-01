@@ -1,0 +1,45 @@
+@import "../../../../../../constants";
+
+.message {
+  display: flex;
+  flex-direction: row;
+  margin: 0 0 15px;
+  align-items: flex-end;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.message_self {
+    .message__text-container {
+      background: $light-blue;
+    }
+  }
+}
+
+.message__text-container {
+  border-radius: 10px 10px 10px 0;
+  padding: 11px 45px 20px 15px;
+  background: $light-gray;
+  margin: 0 0 0 15px;
+  max-width: 414px;
+  position: relative;
+}
+
+.message__bottom-info {
+  position: absolute;
+  right: 12px;
+  bottom: 7px;
+}
+
+.message__text {
+  font-size: 14px;
+  line-height: 20px;
+  color: $text-black;
+}
+
+.message__time {
+  font-size: 12px;
+  line-height: 12px;
+  color: $text-light-gray-2;
+}
