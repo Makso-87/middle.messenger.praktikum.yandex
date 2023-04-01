@@ -1,5 +1,6 @@
 import EventBus from '../eventBus/eventBus';
 import { isArray } from '../mydash/isArray';
+import Block from './block';
 
 export type propsType = {
     className?: string;
@@ -11,34 +12,29 @@ export type propsType = {
 };
 
 export type childrenType = {
-    [key: string]: BlockInterface;
+    [key: string]: Block;
+};
+
+export type eventsType = {
+    [key: string]: () => void;
 };
 
 export interface BlockInterface {
-    _id?: string;
-    _element: HTMLElement | null;
-    _registerEvents: (arg: EventBus) => void;
+    events: eventsType;
     props: propsType;
     eventBus: () => EventBus;
     dispatchComponentDidMount: () => void;
-    _createResources: () => void;
-    _init: () => void;
-    _componentDidMount: () => void;
-    _componentDidUpdate: (arg1: propsType, arg2: propsType) => void;
-    _render: () => void;
-    _addEvents: () => void;
-    _removeEvents: () => void;
-    _getChildren: (propsAndChildren: propsType) => { props: propsType, children: childrenType };
-    _getArrayChildren: (array: BlockInterface[]) => string
-    _isChildrenArray: (array: BlockInterface[] | unknown[]) => boolean
-    _makePropsProxy: (props: propsType) => propsType;
-    _createDocumentElement: (tagName: string) => HTMLElement;
-    _setAttributes: () => void;
-    _setClasses: () => void;
     compile: (template: string, props: propsType) => HTMLElement;
     getContent: () => HTMLElement;
     children: childrenType;
     setProps: (nextProps: propsType) => void;
+    componentDidMount: (oldProps?: propsType) => void;
+    removeAttributes: (attributes: string[]) => void;
+    removeClassNames: (classNames: string[]) => void;
+    componentDidUpdate: (oldProps?: propsType, newProps?: propsType,) => boolean;
+    render: () => void;
+    show: () => void;
+    hide: () => void;
 }
 
-export const isBlockInterfaceArray = (element: BlockInterface | BlockInterface[]): element is BlockInterface[] => isArray(element as BlockInterface[]);
+export const isBlockInterfaceArray = (element: Block | Block[]): element is Block[] => isArray(element as Block[]);
