@@ -14,9 +14,9 @@ export default class Block implements BlockInterface {
     FLOW_RENDER: 'flow:render',
   };
 
-  _element = null;
+  _element;
 
-  _meta = null;
+  _meta;
 
   settings = {
     withInternalID: false,
