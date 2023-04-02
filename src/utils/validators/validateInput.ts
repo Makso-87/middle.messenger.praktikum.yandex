@@ -1,4 +1,10 @@
-const rules = {
+import { Input } from '../../components/input';
+
+export type validationRulesType = {
+  [key: string]: RegExp;
+};
+
+const rules: validationRulesType = {
   first_name: /^[A-ZА-Я][a-zа-я-]+/, // латиница или кириллица, первая буква должна быть заглавной, без пробелов и без цифр, нет спецсимволов (допустим только дефис).
   second_name: /^[A-ZА-Я][a-zа-я-]+/, // латиница или кириллица, первая буква должна быть заглавной, без пробелов и без цифр, нет спецсимволов (допустим только дефис).
   display_name: /^[A-ZА-Я][a-zа-я-]+/, // латиница или кириллица, первая буква должна быть заглавной, без пробелов и без цифр, нет спецсимволов (допустим только дефис).
@@ -23,15 +29,17 @@ export const errorsMessages = {
   form: 'Некоторые поля заполнены неверно. Пожалуйста проверьте сообщения об ошибках.',
   passwordsMatch: 'Пароли должны совпадать',
 };
-export const isValidInputValue = (value, name) => rules[name].test(value);
+export const isValidInputValue = (value: string, name: string) => rules[name].test(value);
 
-export const validateInput = (inputBlock) => (event) => {
+export const validateInput = (inputBlock: Input) => (event: InputEvent) => {
   const { value, name } = event.target;
   const result = isValidInputValue(value, name);
 
   if (result) {
-    inputBlock.setProps({ error: false });
+    // inputBlock.setProps({ error: false });
+    inputBlock.children.errorMessage.hide();
   } else {
-    inputBlock.setProps({ error: true });
+    // inputBlock.setProps({ error: true, attributes: { autofocus: 'autofocus' } });
+    inputBlock.children.errorMessage.show();
   }
 };

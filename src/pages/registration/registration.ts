@@ -6,9 +6,13 @@ import { InputBlock } from '../../components/inputBlock';
 import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
+import { PropsInterface } from '../../utils/block/types';
+import { ErrorMessage } from '../../components/errorMessage';
 
-export class Registration extends Block {
-  constructor(props) {
+interface RegistrationProps extends PropsInterface {}
+
+export class Registration extends Block<RegistrationProps> {
+  constructor(props: RegistrationProps) {
     const newProps = {
       ...props,
       className: `registration ${props.className ?? ''}`,
@@ -85,79 +89,100 @@ const inputPasswordCheck = new Input({
 });
 
 const inputEmailBlock = new InputBlock({
-  errorText: errorsMessages.email,
   input: inputEmail,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.email,
+  }),
 });
 
 const inputLoginBlock = new InputBlock({
-  errorText: errorsMessages.login,
   input: inputLogin,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.login,
+  }),
 });
 
 const inputFirstNameBlock = new InputBlock({
-  errorText: errorsMessages.first_name,
   input: inputFirstName,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.first_name,
+  }),
 });
 
 const inputSecondNameBlock = new InputBlock({
-  errorText: errorsMessages.second_name,
   input: inputSecondName,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.second_name,
+  }),
 });
 
 const inputPhoneBlock = new InputBlock({
-  errorText: errorsMessages.phone,
   input: inputPhone,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.phone,
+  }),
 });
 
 const inputPasswordBlock = new InputBlock({
-  errorText: errorsMessages.password,
   input: inputPassword,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.password,
+  }),
 });
 
 const inputPasswordCheckBlock = new InputBlock({
-  errorText: errorsMessages.password,
   input: inputPasswordCheck,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.password,
+  }),
 });
 
 inputEmail.setProps({
   events: {
     blur: validateInput(inputEmailBlock),
+    focus: validateInput(inputEmailBlock),
   },
 });
 
 inputLogin.setProps({
   events: {
     blur: validateInput(inputLoginBlock),
+    focus: validateInput(inputLoginBlock),
   },
 });
 
 inputFirstName.setProps({
   events: {
     blur: validateInput(inputFirstNameBlock),
+    focus: validateInput(inputFirstNameBlock),
   },
 });
 
 inputSecondName.setProps({
   events: {
     blur: validateInput(inputSecondNameBlock),
+    focus: validateInput(inputSecondNameBlock),
   },
 });
 
 inputPhone.setProps({
   events: {
     blur: validateInput(inputPhoneBlock),
+    focus: validateInput(inputPhoneBlock),
   },
 });
 
 inputPassword.setProps({
   events: {
     blur: validateInput(inputPasswordBlock),
+    focus: validateInput(inputPasswordBlock),
   },
 });
 
 inputPasswordCheck.setProps({
   events: {
     blur: validateInput(inputPasswordCheckBlock),
+    focus: validateInput(inputPasswordCheckBlock),
   },
 });
 
@@ -173,6 +198,9 @@ const inputs = [
 
 const form = new Form({
   template: formTemplate,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.form,
+  }),
   title: 'Регистрация',
   button: new Button({
     text: 'Зарегистрироваться',

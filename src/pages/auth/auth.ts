@@ -6,9 +6,13 @@ import { formTemplate, template } from './auth.tmpl';
 import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
+import { ErrorMessage } from '../../components/errorMessage';
+import { PropsInterface } from '../../utils/block/types';
 
-export class Auth extends Block {
-  constructor(props) {
+interface AuthProps extends PropsInterface{}
+
+export class Auth extends Block<AuthProps> {
+  constructor(props: AuthProps) {
     const newProps = {
       ...props,
       className: `auth ${props.className ?? ''}`,
@@ -22,32 +26,7 @@ export class Auth extends Block {
   }
 }
 
-// const onSubmitForm = (form) => (event) => {
-//   event.preventDefault();
-//   const formData = new FormData(event.target);
-//   const data = {
-//     login: formData.get('login'),
-//     password: formData.get('password'),
-//   };
-//
-//   const isLoginValid = isValidInputValue(data.login, 'login');
-//   const isPasswordValid = isValidInputValue(data.password, 'password');
-//
-//   if (isLoginValid && isPasswordValid) {
-//     form.setProps({
-//       error: false,
-//     });
-//
-//     // eslint-disable-next-line no-console
-//     console.log(data);
-//   } else {
-//     form.setProps({
-//       error: true,
-//     });
-//   }
-// };
-
-const loginInput = new Input({
+const loginInput: Block = new Input({
   attributes: {
     id: 'sign-in-login',
     placeholder: 'Логин',
@@ -66,24 +45,30 @@ const passwordInput = new Input({
 });
 
 const loginInputBlock = new InputBlock({
-  errorText: errorsMessages.login,
   input: loginInput,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.login,
+  }),
 });
 
 const passwordInputBlock = new InputBlock({
   input: passwordInput,
-  errorText: errorsMessages.password,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.password,
+  }),
 });
 
 loginInput.setProps({
   events: {
     blur: validateInput(loginInputBlock),
+    focus: validateInput(loginInputBlock),
   },
 });
 
 passwordInput.setProps({
   events: {
     blur: validateInput(passwordInputBlock),
+    focus: validateInput(passwordInputBlock),
   },
 });
 
@@ -93,7 +78,9 @@ const inputs = [
 ];
 
 const form = new Form({
-  errorText: errorsMessages.form,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.form,
+  }),
   template: formTemplate,
   className: 'form',
   title: 'Вход',
@@ -102,7 +89,7 @@ const form = new Form({
   }),
   formLink: {
     text: 'Зарегистрироваться',
-    link: 'registration',
+    url: 'registration',
   },
 
   inputs,

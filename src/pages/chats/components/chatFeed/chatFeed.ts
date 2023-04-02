@@ -1,9 +1,12 @@
 import template from './chatFeed.tmpl';
 import '../chatItem';
 import Block from '../../../../utils/block/block';
+import { PropsInterface } from '../../../../utils/block/types';
 
-export class ChatFeed extends Block {
-  constructor(props) {
+interface ChatFeedInterface extends PropsInterface {}
+
+export class ChatFeed extends Block<ChatFeedInterface> {
+  constructor(props: ChatFeedInterface) {
     const newProps = {
       ...props,
       className: `chat-feed ${props.className ?? ''}`,

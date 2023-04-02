@@ -1,8 +1,11 @@
 import template from './error.tmpl';
 import Block from '../../utils/block/block';
+import { PropsInterface } from '../../utils/block/types';
 
-export class Error extends Block {
-  constructor(props) {
+interface ErrorProps extends PropsInterface {}
+
+export class Error extends Block<ErrorProps> {
+  constructor(props: ErrorProps) {
     const newProps = {
       ...props,
       className: `error-page ${props.className ?? ''}`,

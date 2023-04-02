@@ -1,8 +1,11 @@
 import template from './chatItem.tmpl';
 import Block from '../../../../utils/block/block';
+import { PropsInterface } from '../../../../utils/block/types';
 
-export class ChatItem extends Block {
-  constructor(props) {
+interface ChatItemProps extends PropsInterface {}
+
+export class ChatItem extends Block<ChatItemProps> {
+  constructor(props: ChatItemProps) {
     const newProps = {
       ...props,
       className: `chat-item ${props.className ?? ''}`,

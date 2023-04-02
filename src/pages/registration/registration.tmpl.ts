@@ -7,8 +7,8 @@ export const formTemplate = `
     
     {{{button}}}
     
-    {{#if error}}
-        <div class="form__error">{{errorText}}</div>
+    {{#if errorMessage}}
+        {{{errorMessage}}}
     {{/if}}
 
     <a href="{{formLink.link}}" class="form__link">{{formLink.text}}</a>  

@@ -1,8 +1,14 @@
 import template from './link.tmpl';
 import Block from '../../utils/block/block';
+import { PropsInterface } from '../../utils/block/types';
 
-export class Link extends Block {
-  constructor(props) {
+interface LinkProps extends PropsInterface{
+  link?: string
+  text?: string;
+}
+
+export class Link extends Block<LinkProps> {
+  constructor(props: LinkProps) {
     const newProps = {
       ...props,
       className: `${props.initialClassName ?? 'link'} ${props.className ?? ''}`,
