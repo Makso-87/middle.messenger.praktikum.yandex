@@ -8,11 +8,13 @@ import { Form } from '../../components/form';
 import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
-import { propsType } from '../../utils/block/types';
 import { ErrorMessage } from '../../components/errorMessage';
+import { PropsInterface } from '../../utils/block/types';
 
-export class EditProfile extends Block {
-  constructor(props: propsType) {
+interface EditProfileProps extends PropsInterface {}
+
+export class EditProfile extends Block<EditProfileProps> {
+  constructor(props: EditProfileProps) {
     const newProps = {
       ...props,
       className: `profile ${props.className ?? ''}`,

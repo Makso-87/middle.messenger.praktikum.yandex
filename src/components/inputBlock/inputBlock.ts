@@ -1,10 +1,16 @@
 import Block from '../../utils/block/block';
 import template from './inputBlock.tmpl';
 import './inputBlock.scss';
-import { propsType } from '../../utils/block/types';
+import { ChildrenType, PropsInterface } from '../../utils/block/types';
 
-export class InputBlock extends Block {
-  constructor(props: propsType) {
+interface InputBlockProps extends PropsInterface {
+  label?: string;
+  input: ChildrenType;
+  errorMessage?: ChildrenType | unknown;
+}
+
+export class InputBlock extends Block<InputBlockProps> {
+  constructor(props: InputBlockProps) {
     const newProps = {
       ...props,
       className: `${props.initialClassName ?? 'input-item'} ${props.className ?? ''}`,

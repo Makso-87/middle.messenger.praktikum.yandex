@@ -1,9 +1,11 @@
 import Block from '../../../../utils/block/block';
 import template from './errorDescription.tmpl';
-import { propsType } from '../../../../utils/block/types';
+import { PropsInterface } from '../../../../utils/block/types';
 
-export class ErrorDescription extends Block {
-  constructor(props: propsType) {
+interface ErrorDescriptionProps extends PropsInterface {}
+
+export class ErrorDescription extends Block<ErrorDescriptionProps> {
+  constructor(props: ErrorDescriptionProps) {
     const newProps = {
       ...props,
       className: `error-description ${props.className ?? ''}`,

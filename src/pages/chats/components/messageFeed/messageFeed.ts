@@ -1,9 +1,11 @@
 import template from './messageFeed.tmpl';
 import Block from '../../../../utils/block/block';
-import { propsType } from '../../../../utils/block/types';
+import { PropsInterface } from '../../../../utils/block/types';
 
-export class MessageFeed extends Block {
-  constructor(props:propsType = {}) {
+interface MessageFeedProps extends PropsInterface {}
+
+export class MessageFeed extends Block<MessageFeedProps> {
+  constructor(props:MessageFeedProps = {}) {
     const newProps = {
       ...props,
       className: `message-feed ${props.className ?? ''}`,

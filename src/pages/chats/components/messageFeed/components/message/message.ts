@@ -1,9 +1,11 @@
 import Block from '../../../../../../utils/block/block';
 import { template } from './message.tmpl';
-import { propsType } from '../../../../../../utils/block/types';
+import { PropsInterface } from '../../../../../../utils/block/types';
 
-export class Message extends Block {
-  constructor(props: propsType) {
+interface MessageProps extends PropsInterface {}
+
+export class Message extends Block<MessageProps> {
+  constructor(props: MessageProps) {
     const newProps = {
       ...props,
       className: `message ${props.className ?? ''}`,

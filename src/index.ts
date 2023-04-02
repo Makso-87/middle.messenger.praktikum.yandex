@@ -6,19 +6,22 @@ import { Chats, getChatsData, chatsItemData } from './pages/chats';
 import { Error } from './pages/error';
 import { Profile, profileData } from './pages/profile';
 import { Registration, registrationData } from './pages/registration';
-import './components/form';
-import './components/input';
-import './components/avatar';
 import { EditProfile, editProfileData } from './pages/editProfile';
 import { ChangePassword, changePasswordData } from './pages/changePassword';
 import { render } from './utils/render/render';
 import { ErrorDescription } from './pages/error/components/errorDescription';
 import { Link } from './components/link';
+import Block from './utils/block/block';
 
-// eslint-disable-next-line no-undef
 const { location: { pathname } } = window;
 
-const routing = {
+type routingType = {
+  [key: string]: {
+    page: Block,
+  }
+}
+
+const routing: routingType = {
   '/': {
     page: new Auth(authData),
   },

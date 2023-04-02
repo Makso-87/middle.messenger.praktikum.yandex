@@ -1,8 +1,10 @@
 import Block from '../../utils/block/block';
-import { propsType } from '../../utils/block/types';
+import { PropsInterface } from '../../utils/block/types';
 
-export class Input extends Block {
-  constructor(props: propsType) {
+interface InputProps extends PropsInterface {}
+
+export class Input extends Block<InputProps> {
+  constructor(props: InputProps) {
     const newProps = {
       ...props,
       className: `${props.initialClassName ?? 'input-item__input'} ${props.className ?? ''}`,

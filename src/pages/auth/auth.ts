@@ -6,11 +6,13 @@ import { formTemplate, template } from './auth.tmpl';
 import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
-import { propsType } from '../../utils/block/types';
 import { ErrorMessage } from '../../components/errorMessage';
+import { PropsInterface } from '../../utils/block/types';
 
-export class Auth extends Block {
-  constructor(props: propsType) {
+interface AuthProps extends PropsInterface{}
+
+export class Auth extends Block<AuthProps> {
+  constructor(props: AuthProps) {
     const newProps = {
       ...props,
       className: `auth ${props.className ?? ''}`,
@@ -24,7 +26,7 @@ export class Auth extends Block {
   }
 }
 
-const loginInput = new Input({
+const loginInput: Block = new Input({
   attributes: {
     id: 'sign-in-login',
     placeholder: 'Логин',
@@ -87,7 +89,7 @@ const form = new Form({
   }),
   formLink: {
     text: 'Зарегистрироваться',
-    link: 'registration',
+    url: 'registration',
   },
 
   inputs,

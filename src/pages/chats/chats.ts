@@ -14,10 +14,12 @@ import { Form } from '../../components/form';
 import { Link } from '../../components/link';
 import { InputBlock } from '../../components/inputBlock';
 import { isValidInputValue } from '../../utils/validators/validateInput';
-import { propsType } from '../../utils/block/types';
+import { PropsInterface } from '../../utils/block/types';
 
-export class Chats extends Block {
-  constructor(props: propsType) {
+interface ChatsProps extends PropsInterface {}
+
+export class Chats extends Block<ChatsProps> {
+  constructor(props: ChatsProps) {
     const newProps = {
       ...props,
       className: `chats ${props.className ?? ''}`,

@@ -2,11 +2,10 @@ import * as handlebars from 'handlebars';
 import { v4 as uuid } from 'uuid';
 import EventBus from '../eventBus/eventBus';
 import {
-  attributesType,
-  BlockInterface, childrenType, eventsType, isBlockInterfaceArray, propsType,
+  AttributesType, ChildrenType, EventsType, isBlockInterfaceArray, PropsInterface,
 } from './types';
 
-export default class Block implements BlockInterface {
+export default class Block<P extends Record<string, any> = PropsInterface> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -22,17 +21,17 @@ export default class Block implements BlockInterface {
     withInternalID: false,
   };
 
-  children;
+  children: ChildrenType;
 
-  events: eventsType;
+  events: EventsType;
+
+  eventBus: () => EventBus;
 
   _id;
 
-  props;
+  props: P;
 
-  eventBus;
-
-  constructor(tagName: string = 'div', propsAndChildren: propsType = {}) {
+  constructor(tagName: string = 'div', propsAndChildren: P = {}) {
     const { props, children = {} } = this._getChildren(propsAndChildren);
     const eventBus: EventBus = new EventBus();
 
@@ -98,9 +97,9 @@ export default class Block implements BlockInterface {
     });
   }
 
-  private _removeAttributes(attributes: string[]) {
+  private _removeAttributes(attributes: string[]): void {
     attributes.forEach((attribute) => this._element.removeAttribute(attribute));
-    const { attributes: currentAttributes }: { attributes: attributesType} = this.props;
+    const { attributes: currentAttributes }: { attributes: AttributesType} = this.props;
 
     const newAttributes = Object.keys(currentAttributes).reduce((acc, key) => {
       if (attributes.includes(key)) {
@@ -121,10 +120,10 @@ export default class Block implements BlockInterface {
   private _removeClassNames(classNames: string[]) {
     this._element.classList.remove(...classNames);
     const { className = '' } = this.props;
-    const newCLasses = className.split(' ').filter((name: string) => !classNames.includes(name)).join(' ');
+    const newClasses = className.split(' ').filter((name: string) => !classNames.includes(name)).join(' ');
 
     this.setProps({
-      className: newCLasses,
+      className: newClasses,
     });
   }
 
@@ -139,21 +138,21 @@ export default class Block implements BlockInterface {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  componentDidMount(oldProps?: propsType) {}
+  componentDidMount(oldProps?: P): void {}
 
-  dispatchComponentDidMount() {
+  dispatchComponentDidMount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  removeAttributes(attributes: string[]) {
+  removeAttributes(attributes: string[]): void {
     this._removeAttributes(attributes);
   }
 
-  removeClassNames(classNames: string[]) {
+  removeClassNames(classNames: string[]): void {
     this._removeClassNames(classNames);
   }
 
-  private _componentDidUpdate(oldProps: propsType, newProps: propsType) {
+  private _componentDidUpdate(oldProps: P, newProps: P) {
     const response = this.componentDidUpdate(oldProps, newProps);
 
     if (response) {
@@ -162,11 +161,11 @@ export default class Block implements BlockInterface {
   }
 
   // Может переопределять пользователь, необязательно трогать
-  componentDidUpdate(oldProps?: propsType, newProps?: propsType) {
+  componentDidUpdate(oldProps?: P, newProps?: P): boolean {
     return true;
   }
 
-  setProps = (nextProps: propsType) => {
+  setProps = (nextProps: P): void => {
     if (!nextProps) {
       return;
     }
@@ -197,12 +196,12 @@ export default class Block implements BlockInterface {
   // Может переопределять пользователь, необязательно трогать
   render(): Node {}
 
-  getContent() {
+  getContent(): HTMLElement {
     return this.element;
   }
 
   private _addEvents() {
-    const { events = {} }: { events: eventsType} = this.props;
+    const { events = {} }: { events: EventsType} = this.props;
 
     Object.entries(events).forEach(([event, callback]) => {
       this._element.addEventListener(event, callback);
@@ -210,14 +209,14 @@ export default class Block implements BlockInterface {
   }
 
   private _removeEvents() {
-    const { events = {} }: { events: eventsType} = this.props;
+    const { events = {} }: { events: EventsType} = this.props;
 
     Object.entries(events).forEach(([event, callback]) => {
       this._element.removeEventListener(event, callback);
     });
   }
 
-  compile(template: string, props: propsType = {}): Node {
+  compile(template: string, props: P = {}): Node {
     const propsAndStubs = { ...props };
 
     Object.entries(this.children).forEach(([key, child]: [string, Block]) => {
@@ -244,9 +243,9 @@ export default class Block implements BlockInterface {
     return fragment.content;
   }
 
-  private _getChildren(propsAndChildren: propsType) {
-    const children: childrenType | childrenType[] = {};
-    const props: propsType = {};
+  private _getChildren(propsAndChildren: P) {
+    const children: ChildrenType | ChildrenType[] = {};
+    const props: P = {};
 
     Object.entries(propsAndChildren).forEach(([key, value]: [string, Block | Block[]]) => {
       if (value instanceof Block || this._isChildrenArray(value)) {
@@ -279,11 +278,11 @@ export default class Block implements BlockInterface {
     return isBlock;
   }
 
-  private _makePropsProxy(props: propsType) {
+  private _makePropsProxy(props: P) {
     const self = this;
 
     return new Proxy(props, {
-      set(target: propsType, prop:string, val) {
+      set(target: P, prop:string, val) {
         const oldTarget = { ...target };
         // eslint-disable-next-line no-param-reassign
         target[prop] = val;
@@ -307,11 +306,11 @@ export default class Block implements BlockInterface {
     return element;
   }
 
-  show() {
+  show(): void {
     this.getContent().style.display = 'block';
   }
 
-  hide() {
+  hide(): void {
     this.getContent().style.display = 'none';
   }
 }

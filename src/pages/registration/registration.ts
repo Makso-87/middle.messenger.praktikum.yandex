@@ -6,11 +6,13 @@ import { InputBlock } from '../../components/inputBlock';
 import { Button } from '../../components/button';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
-import { propsType } from '../../utils/block/types';
+import { PropsInterface } from '../../utils/block/types';
 import { ErrorMessage } from '../../components/errorMessage';
 
-export class Registration extends Block {
-  constructor(props: propsType) {
+interface RegistrationProps extends PropsInterface {}
+
+export class Registration extends Block<RegistrationProps> {
+  constructor(props: RegistrationProps) {
     const newProps = {
       ...props,
       className: `registration ${props.className ?? ''}`,

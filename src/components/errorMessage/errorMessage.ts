@@ -1,9 +1,14 @@
 import Block from '../../utils/block/block';
-import { propsType } from '../../utils/block/types';
 import { template } from './errorMessage.tmpl';
 
-export class ErrorMessage extends Block {
-  constructor(props: propsType) {
+interface ErrorMessageProps {
+  errorText: string;
+  initialClassName?: string;
+  className?: string;
+}
+
+export class ErrorMessage extends Block<ErrorMessageProps> {
+  constructor(props: ErrorMessageProps) {
     const newProps = {
       ...props,
       className: `${props.initialClassName ?? 'error-message'} ${props.className ?? ''}`,

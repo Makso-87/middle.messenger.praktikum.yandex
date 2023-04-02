@@ -7,11 +7,13 @@ import { Form } from '../../components/form';
 import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
-import { propsType } from '../../utils/block/types';
 import { ErrorMessage } from '../../components/errorMessage';
+import { PropsInterface } from '../../utils/block/types';
 
-export class ChangePassword extends Block {
-  constructor(props: propsType) {
+interface ChangePasswordProps extends PropsInterface{}
+
+export class ChangePassword extends Block<ChangePasswordProps> {
+  constructor(props: ChangePasswordProps) {
     const newProps = {
       ...props,
       className: `profile ${props.className ?? ''}`,

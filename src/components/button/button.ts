@@ -1,9 +1,14 @@
 import template from './button.tmpl';
 import Block from '../../utils/block/block';
-import { propsType } from '../../utils/block/types';
+import { PropsInterface } from '../../utils/block/types';
 
-export class Button extends Block {
-  constructor(props: propsType) {
+interface ButtonProps extends PropsInterface {
+  link?: string;
+  text?: string;
+}
+
+export class Button extends Block<ButtonProps> {
+  constructor(props: ButtonProps) {
     const newProps = {
       ...props,
       className: `${props.initialClassName ?? 'button'} ${props.className ?? ''}`,

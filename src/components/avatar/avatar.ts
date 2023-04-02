@@ -1,9 +1,15 @@
 import template from './avatar.tmpl';
 import Block from '../../utils/block/block';
-import { propsType } from '../../utils/block/types';
+import { ChildrenType, PropsInterface } from '../../utils/block/types';
 
-export class Avatar extends Block {
-  constructor(props: propsType) {
+interface AvatarProps extends PropsInterface{
+  url: string;
+  input?: ChildrenType;
+  inputId?: string;
+}
+
+export class Avatar extends Block<AvatarProps> {
+  constructor(props: AvatarProps) {
     const newProps = {
       ...props,
       className: `avatar ${props.className ?? ''}`,

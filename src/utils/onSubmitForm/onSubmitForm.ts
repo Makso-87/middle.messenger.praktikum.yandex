@@ -5,7 +5,7 @@ import { isOneOfAllFalse } from '../mydash/isOneOfAllFalse';
 import { capitalizeString } from '../mydash/capitalizeString';
 import { toCamelCase } from '../mydash/toCamelCase';
 
-export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event) => {
+export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event: InputEvent) => {
   event.preventDefault();
   const formData: FormData = new FormData(event.target);
 
