@@ -7,6 +7,7 @@
   border-top: 1px solid $border;
   padding: 8px 28px 8px 24px;
   position: relative;
+
   &:hover {
     background: $border;
   }
@@ -16,6 +17,8 @@
   width: 40px;
   height: 40px;
   margin: 0 18px 0 0;
+  display: flex;
+  flex-shrink: 0;
 }
 
 .chat-item__image {
@@ -23,7 +26,7 @@
   height: 40px;
   border-radius: 50%;
   background: no-repeat center / cover;
-  background-color: $main_light;
+  background-color: $main-light;
 }
 
 .chat-item__link {
@@ -32,22 +35,23 @@
   width: 100%;
 }
 
-.chat-item__image {}
-.chat-item__data {}
+.chat-item__data {
+  width: 100%;
+}
 
 .chat-item__name {
   font-weight: 500;
   font-size: 14px;
   line-height: 17px;
   margin: 0 0 3px;
-  color: $text_black;
+  color: $text-black;
 }
 
 .chat-item__message-preview {
   font-weight: 500;
   font-size: 10px;
   line-height: 12px;
-  color: $text_light_gray_2;
+  color: $text-light-gray-2;
 }
 
 .chat-item__time {
@@ -57,7 +61,7 @@
   font-weight: 500;
   font-size: 10px;
   line-height: 12px;
-  color: $text_light_gray_2;
+  color: $text-light-gray-2;
 }
 
 .chat-item__message-counter {

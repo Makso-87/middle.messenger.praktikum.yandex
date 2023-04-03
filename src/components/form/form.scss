@@ -3,8 +3,10 @@
 .form {
   width: 466px;
   border-radius: 20px;
-  @include shadow($shadow_gray);
-  background: $main_light;
+
+  @include shadow($shadow-gray);
+
+  background: $main-light;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -13,7 +15,7 @@
 }
 
 .form__title {
-  @include title_h1;
+  @include title-h1;
 }
 
 .form__link {
@@ -33,4 +35,10 @@
 
 .form_edit-change-password {
   width: 540px;
+}
+
+.form__error {
+  font-size: 12px;
+  color: red;
+  margin: 10px 0 0;
 }

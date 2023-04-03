@@ -1,0 +1,72 @@
+@import "../../../../../../constants";
+
+.chat-bottom {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid $border;
+}
+
+.chat-bottom-form {
+  display: flex;
+  width: 100%;
+  align-items: center;
+}
+
+.message-input {
+  width: 100%;
+  height: 34px;
+  border: 1px solid $border;
+  border-radius: 3px;
+  background: $text-light-gray-3;
+  font-size: 16px;
+  line-height: 19px;
+  padding: 7px 15px;
+}
+
+.send-message-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: $blue;
+  margin: 0 0 0 15px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+
+  @include transition;
+
+   &::after {
+     content: '';
+     display: block;
+     position: relative;
+     left: 2px;
+     width: 21px;
+     height: 21px;
+     background: url('../../../../../../../static/images/icons/send.svg') no-repeat center / contain;
+   }
+}
+
+.send-message-button_disabled {
+  background: $text-light-gray-2;
+}
+
+.attach-button {
+  .input-item__label {
+    width: 40px;
+    height: 44px;
+    flex-shrink: 0;
+    margin-left: -12px;
+    margin-bottom: 0;
+    cursor: pointer;
+    background: url('../../../../../../../static/images/icons/attach.svg') no-repeat center / contain;
+  }
+}
+
+.attach-button-input {
+  display: none;
+}
