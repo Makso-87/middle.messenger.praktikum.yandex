@@ -2,7 +2,7 @@ import './common_styles.scss';
 import './fonts.scss';
 import './layout/main/index';
 import { Auth, authData } from './pages/auth';
-import { Chats, getChatsData, chatsItemData } from './pages/chats';
+import { Chats, chatsData } from './pages/chats';
 import { Error } from './pages/error';
 import { ProfileObserved, profileData } from './pages/profile';
 import { Registration, registrationData } from './pages/registration';
@@ -17,8 +17,7 @@ authController.fetchUser();
 
 router.use('/', Auth, authData)
   .use('/sign-up', Registration, registrationData)
-  .use('/messenger', Chats, getChatsData())
-  .use('/chat', Chats, { ...chatsItemData })
+  .use('/messenger', Chats, chatsData)
   .use('/profile', ProfileObserved, profileData)
   .use('/settings', EditProfile, editProfileData)
   .use('/change-password', ChangePassword, changePasswordData)

@@ -3,7 +3,7 @@ import Block from '../../utils/block/block';
 import { ChildrenType, PropsInterface } from '../../utils/block/types';
 
 interface AvatarProps extends PropsInterface{
-  url: string;
+  url?: string;
   input?: ChildrenType;
   inputId?: string;
 }

@@ -4,4 +4,5 @@ export const template = `
     <div class="chat-top__interlocutor-name">{{interlocutorName}}</div>
     
     {{{settingsButton}}}
+    {{{popupMenu}}}
 `;
