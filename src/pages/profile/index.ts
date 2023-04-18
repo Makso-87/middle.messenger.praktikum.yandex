@@ -1,4 +1,4 @@
 import './profile.scss';
 
-export { Profile } from './profile';
+export { ProfileObserved } from './profile';
 export { profileData } from './profile';

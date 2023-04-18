@@ -12,7 +12,7 @@ export class Avatar extends Block<AvatarProps> {
   constructor(props: AvatarProps) {
     const newProps = {
       ...props,
-      className: `avatar ${props.className ?? ''}`,
+      className: `${props.initialClassName ?? 'avatar'} ${props.className ?? ''}`,
     };
 
     super('div', newProps);

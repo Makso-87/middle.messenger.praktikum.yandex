@@ -2,7 +2,7 @@ import template from './link.tmpl';
 import Block from '../../utils/block/block';
 import { PropsInterface } from '../../utils/block/types';
 
-interface LinkProps extends PropsInterface{
+export interface LinkProps extends PropsInterface{
   link?: string
   text?: string;
 }

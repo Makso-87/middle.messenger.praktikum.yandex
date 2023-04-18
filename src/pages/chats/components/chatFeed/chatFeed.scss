@@ -8,10 +8,31 @@
   flex-shrink: 0;
 }
 
+.chat-feed__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px 0 24px;
+}
+
+.chat-feed__add-chat {
+  width: 110px;
+  height: 30px;
+  font-size: 14px;
+}
+
+.chat-feed__add-chat-form {
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.chat-feed__modal-title {
+  margin: 0 0 30px;
+}
+
 .chat-feed__profile-button {
   display: flex;
   justify-content: flex-end;
-  padding: 0 28px 0 0;
 
   a {
     display: inline-block;

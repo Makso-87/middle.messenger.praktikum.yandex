@@ -1,8 +1,9 @@
 const template = `
-    <a href="chat-item" class="chat-item__link">
-        <div class="chat-item__avatar">
-            <img class="chat-item__image" src="{{avatar}}" alt="" />
-        </div>
+    <a href="chat" class="chat-item__link">
+            {{{avatar}}}
+<!--        <div class="chat-item__avatar">-->
+<!--            <img class="chat-item__image" src="{{avatar}}" alt="" />-->
+<!--        </div>-->
 
         <div class="chat-item__data">
             <div class="chat-item__name">{{name}}</div>

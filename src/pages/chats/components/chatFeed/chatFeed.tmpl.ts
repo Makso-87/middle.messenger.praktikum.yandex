@@ -1,6 +1,10 @@
-const template = `
-    <div class="chat-feed__profile-button">
-        <a href="profile">Профиль</a>
+const template = `    
+    <div class="chat-feed__top">
+        {{{addChatButton}}}
+    
+        <div class="chat-feed__profile-button">
+            <a href="profile">Профиль</a>
+        </div>
     </div>
 
     <div class="chat-feed__search">
@@ -10,6 +14,8 @@ const template = `
     <ul class="chat-feed__chats-list">
         {{{chatsList}}}
     </ul>  
+    
+    {{{modalPopup}}}
 `;
 
 export default template;

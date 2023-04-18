@@ -8,6 +8,8 @@ import { errorsMessages, validateInput } from '../../utils/validators/validateIn
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 import { PropsInterface } from '../../utils/block/types';
 import { ErrorMessage } from '../../components/errorMessage';
+import { NavLink } from '../../components/navLink';
+import authController from '../../controllers/AuthController';
 
 interface RegistrationProps extends PropsInterface {}
 
@@ -73,7 +75,7 @@ const inputPhone = new Input({
 const inputPassword = new Input({
   attributes: {
     type: 'password',
-    name: 'oldPassword',
+    name: 'password',
     id: 'sign-up-password',
     placeholder: 'Пароль',
   },
@@ -82,7 +84,7 @@ const inputPassword = new Input({
 const inputPasswordCheck = new Input({
   attributes: {
     type: 'password',
-    name: 'newPassword',
+    name: 'checkPassword',
     id: 'sign-up-password-check',
     placeholder: 'Повторите пароль',
   },
@@ -204,18 +206,22 @@ const form = new Form({
   title: 'Регистрация',
   button: new Button({
     text: 'Зарегистрироваться',
-    link: '/',
   }),
-  formLink: {
+  formLink: new NavLink({
+    className: 'form__link',
     text: 'Войти',
     link: '/',
-  },
+  }),
   inputs,
 });
 
+const controller = (data: unknown) => {
+  authController.signup(data);
+};
+
 form.setProps({
   events: {
-    submit: onSubmitForm(form, inputs),
+    submit: onSubmitForm(form, inputs, controller),
   },
 });
 
