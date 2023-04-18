@@ -13,6 +13,7 @@ export const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
 
       if (type === 'Object' || type === 'Array') {
         result[rhsKey] = merge(lhs[rhsKey], rhs[rhsKey]);
+        return;
       }
 
       result[rhsKey] = rhs[rhsKey];
