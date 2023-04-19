@@ -21,3 +21,22 @@
   margin: 0 0 0 auto;
 }
 
+.chat-top__popup-menu {
+  display: none;
+  right: 0;
+  left: auto;
+  z-index: 1;
+  background: $main-bg;
+  padding: 10px 0;
+  border-radius: 0 0 5px 5px;
+}
+
+.chat-top__menu_item {
+  list-style-type: none;
+  cursor: pointer;
+  padding: 8px 15px;
+
+  &:hover {
+    background: rgb(255 255 255 / 30%);
+  }
+}

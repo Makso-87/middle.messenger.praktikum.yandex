@@ -32,6 +32,8 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
 
   props: P;
 
+  private _hidden: boolean;
+
   constructor(tagName: string = 'div', propsAndChildren: P = {}) {
     const { props, children = {} } = this._getChildren(propsAndChildren);
     const eventBus: EventBus = new EventBus();
@@ -329,11 +331,17 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
     return element;
   }
 
+  getHiddenValue(): boolean {
+    return this._hidden;
+  }
+
   show(display: string = 'block'): void {
     this.getContent().style.display = display;
+    this._hidden = false;
   }
 
   hide(): void {
     this.getContent().style.display = 'none';
+    this._hidden = true;
   }
 }

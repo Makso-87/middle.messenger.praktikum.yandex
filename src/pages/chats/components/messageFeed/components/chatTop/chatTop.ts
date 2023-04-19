@@ -28,13 +28,16 @@ const ObservedCurrentChatAvatar = observe(({ chats }) => ({ url: chats?.data?.cu
 const ObservedCurrentChatTop = observe(({ chats }) => ({ interlocutorName: chats?.data?.currentChat?.title }))(ChatTop);
 
 const popupMenu = new PopupMenu({
+  className: 'chat-top__popup-menu',
   items: [
     new CustomComponent({
       tagName: 'li',
+      className: 'chat-top__menu_item',
       text: 'Добавить пользователя',
     }),
     new CustomComponent({
       tagName: 'li',
+      className: 'chat-top__menu_item',
       text: 'Удалить чат',
     }),
   ],
@@ -49,7 +52,11 @@ export const chatTop = new ObservedCurrentChatTop({
     events: {
       click: (event: Event) => {
         event.preventDefault();
-        popupMenu.show();
+        if (popupMenu.getHiddenValue()) {
+          popupMenu.show();
+        } else {
+          popupMenu.hide();
+        }
       },
     },
   }),
