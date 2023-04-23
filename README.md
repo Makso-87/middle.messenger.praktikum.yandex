@@ -24,6 +24,8 @@ npm run build
 
 [Развернутый проект](https://legendary-kashata-460bb6.netlify.app/)
 
+[Последний pull request](https://github.com/Makso-87/middle.messenger.praktikum.yandex/pull/11)
+
 В проекте используется TypeScript, SCSS, ESLit, Stylelint, Handlebars. 
 
 Проект построен по принципу компонентного подхода. 

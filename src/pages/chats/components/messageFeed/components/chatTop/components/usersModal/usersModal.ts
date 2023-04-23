@@ -1,5 +1,5 @@
 import { ModalPopup } from '../../../../../../../../components/modalPopup';
-import { CustomComponent } from '../../../../../../../../components/customComponent/customComponent';
+import { CustomComponent } from '../../../../../../../../components/customComponent';
 import { observe } from '../../../../../../../../hocs/withStore';
 import store from '../../../../../../../../utils/store/store';
 import Block from '../../../../../../../../utils/block/block';
