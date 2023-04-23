@@ -6,6 +6,7 @@ import { InputBlock } from '../../../../../../components/inputBlock';
 import { Input } from '../../../../../../components/input';
 import { Button } from '../../../../../../components/button';
 import { isValidInputValue } from '../../../../../../utils/validators/validateInput';
+import store from '../../../../../../utils/store/store';
 
 interface ChatBottomProps extends PropsInterface{}
 
@@ -24,16 +25,21 @@ export class ChatBottom extends Block<ChatBottomProps> {
   }
 }
 
-const onSubmitForm = (event: InputEvent) => {
+const onSubmitForm = (event: FormDataEvent) => {
   event.preventDefault();
-  const formData = new FormData(event.target);
+  const form: HTMLFormElement = event.target as HTMLFormElement;
+  const formData = new FormData(form);
   const data = {
     message: formData.get('message'),
     attach: formData.get('attach'),
   };
 
-  // eslint-disable-next-line no-console
-  console.log(data);
+  const { sockets, chats: { data: { currentChat } } } = store.getState();
+
+  const socket = sockets[currentChat.id];
+
+  socket.send(JSON.stringify({ type: 'message', content: data.message }));
+  form.reset();
 };
 
 const sendButton = new Button({

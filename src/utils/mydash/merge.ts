@@ -3,6 +3,14 @@ export type Indexed<T = any> = {
 };
 
 export const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
+  if (rhs === null) {
+    return { ...lhs };
+  }
+
+  if (lhs === null) {
+    return { ...rhs };
+  }
+
   const lhsKeys = Object.keys(lhs);
   const rhsKeys = Object.keys(rhs);
   const result = lhs;
@@ -11,7 +19,7 @@ export const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
     if (lhsKeys.includes(rhsKey)) {
       const type = Object.prototype.toString.call(rhs[rhsKey]).slice(8, -1);
 
-      if (type === 'Object' || type === 'Array') {
+      if (type === 'Object') {
         result[rhsKey] = merge(lhs[rhsKey], rhs[rhsKey]);
         return;
       }

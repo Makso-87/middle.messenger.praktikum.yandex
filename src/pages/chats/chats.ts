@@ -22,6 +22,10 @@ import { ErrorMessage } from '../../components/errorMessage';
 import { chatTop } from './components/messageFeed/components/chatTop/chatTop';
 import { chatMiddle } from './components/messageFeed/components/chatMiddle/chatMiddle';
 import { chatBottom } from './components/messageFeed/components/chatBottom/chatBottom';
+import { createWSConnection } from '../../utils/ws/ws';
+import { getTime } from '../../utils/mydash/getTime';
+import { ChatType } from '../../models/chat';
+import { NavLink } from '../../components/navLink';
 
 interface ChatsProps extends PropsInterface {}
 
@@ -46,20 +50,38 @@ const getChatsList = (list = []): Block[] | undefined => {
     return [];
   }
 
-  return list.map((chatItem: object) => new ChatItem(
-    {
-      avatar: new Avatar({ url: chatItem.avatar, className: 'avatar_size_50 chat-item__avatar' }),
-      name: chatItem.title ?? '',
-      lastMessage: chatItem.last_message ?? '',
-      lastMessageTime: '',
-      newMessagesCount: chatItem.unread_count,
-      events: {
-        click: () => {
-          store.setState('chats.data.currentChat', { ...chatItem });
+  const { user: currentUser } = store.getState();
+
+  return list.map((chatItem: ChatType) => {
+    const {
+      id, avatar, title, last_message: lastMessage, unread_count: unreadCount,
+    } = chatItem;
+    return new ChatItem(
+      {
+        avatar: new Avatar({ url: avatar, className: 'avatar_size_50 chat-item__avatar' }),
+        name: title ?? '',
+        author: currentUser?.data?.login === lastMessage?.user.login ? 'Вы' : lastMessage?.user.first_name ?? lastMessage?.user.login,
+        lastMessage: lastMessage?.content ?? '',
+        lastMessageTime: getTime(lastMessage?.time ?? ''),
+        newMessagesCount: unreadCount || null,
+        events: {
+          click: async () => {
+            store.setState('chats.data.currentChat', { ...chatItem, messages: [], token: '' });
+            await chatsController.getChatToken({ chatId: id });
+
+            const { user, chats: { data: { currentChat } } } = store.getState() || {};
+            const webSocket = createWSConnection(user.data.id, currentChat.id, currentChat.token);
+            store.setState('sockets', { [currentChat.id]: webSocket });
+            chatsController.getChatUsers({ chatId: id });
+
+            webSocket.onopen = () => {
+              webSocket.send(JSON.stringify({ type: 'get old', content: '0' }));
+            };
+          },
         },
       },
-    },
-  ));
+    );
+  });
 };
 
 const addChatTitleInput = new InputBlock({
@@ -76,38 +98,14 @@ const addChatTitleInput = new InputBlock({
   }),
 });
 
-const closeModal = (event: Event) => {
-  event.preventDefault();
-  modalPopup.hide();
-};
-
-const openModal = (event: Event) => {
-  event.preventDefault();
-  modalPopup.show('flex');
-};
-
-const closeModalButton = new Button({
-  text: '',
-  initialClassName: 'modal-close-button',
-  events: {
-    click: closeModal,
-  },
-});
-
 const submitNewChatButton = new Button({
   text: 'Добавить чат',
   className: 'button_margin-top-10',
 });
 
-const controller = async (data: unknown) => {
-  await chatsController.addChat(data);
-  modalPopup.hide();
-};
-
 const addChatForm = new Form({
   template: formTemplate,
   input: addChatTitleInput,
-  closeButton: closeModalButton,
   className: 'chat-feed__add-chat-form',
   submitNewChatButton,
   errorMessage: new ErrorMessage({
@@ -115,17 +113,28 @@ const addChatForm = new Form({
   }),
 });
 
+const modalPopup = new ModalPopup({
+  content: addChatForm,
+});
+
+modalPopup.hide();
+
+const controller = async (data: unknown) => {
+  await chatsController.addChat(data);
+  modalPopup.hide();
+};
+
 addChatForm.setProps({
   events: {
     submit: onSubmitAddChat(addChatForm, [addChatTitleInput], controller),
   },
 });
 
-const modalPopup = new ModalPopup({
-  content: addChatForm,
-});
-
-modalPopup.hide();
+const openModal = (event: Event) => {
+  event.preventDefault();
+  modalPopup.show('flex');
+  modalPopup.lockDocument();
+};
 
 const addChatButton = new Button({
   text: 'Добавить чат',
@@ -153,6 +162,10 @@ export const chatsData = {
   chatFeed: new ChatFeedObserved({
     addChatButton,
     modalPopup,
+    profileButton: new NavLink({
+      text: 'Профиль',
+      link: '/profile',
+    }),
     input: new Input({
       initialClassName: 'feed__search-input',
       attributes: {

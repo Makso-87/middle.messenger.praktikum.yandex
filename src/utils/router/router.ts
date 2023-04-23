@@ -1,9 +1,6 @@
 import { Route } from '../route/route';
 import Block from '../block/block';
-
-/* Вы можете доработать его и слушать событие "hashchange"
-https://developer.mozilla.org/ru/docs/Web/API/Window/hashchange_event, реализовав HashRouter
-Он удобен в SPA-приложениях, когда работа происходит в рамках одной страницы. */
+import { authenticationControl } from '../authenticationControl/authenticationControl';
 
 class Router {
   static __instance: InstanceType<any>;
@@ -56,12 +53,19 @@ class Router {
 
     this._currentRoute = route;
     route.render();
+    this._onRouteExecute();
   }
 
   go(pathname: string): void {
     this.history.pushState({}, '', pathname);
     this._onRoute(pathname);
   }
+
+  set onRouteExecute(callback: () => void) {
+    this._onRouteExecute = callback;
+  }
+
+  _onRouteExecute() {}
 
   back(): void {
     this.history.back();
@@ -75,5 +79,6 @@ class Router {
     return this.routes.find((route) => route.match(pathname));
   }
 }
-
-export default new Router('.app');
+const router = new Router('.app');
+router.onRouteExecute = () => authenticationControl();
+export default router;

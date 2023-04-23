@@ -14,6 +14,10 @@ body {
   font-family: Inter, Arial, Verdana, sans-serif;
 }
 
+.body-lock {
+  overflow: hidden;
+}
+
 main {
   display: flex;
   width: 100%;

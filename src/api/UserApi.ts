@@ -14,6 +14,10 @@ export interface UserPasswordData<T extends Record<string, string> = any> {
   newPassword: T;
 }
 
+export interface FindUserData<T extends Record<string, string> = any> {
+  login: T;
+}
+
 export class UserApi extends BaseApi {
   constructor() {
     super('/user');
@@ -37,7 +41,11 @@ export class UserApi extends BaseApi {
     data: { ...data },
   });
 
-  findUser = () => {};
+  findUser = (data: FindUserData) => this.fetch.post('/search', {
+    headers: { 'Content-Type': 'application/json' },
+    credentials: true,
+    data: { ...data },
+  });
 
   create = undefined;
 

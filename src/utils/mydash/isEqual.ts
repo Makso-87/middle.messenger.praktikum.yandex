@@ -1,14 +1,15 @@
-const isArray = (value: unknown): value is [] => Array.isArray(value);
-
-type PlainObject<T = unknown> = {
-  [key in string]: T;
-};
-
-const isPlainObject = (value: unknown): value is PlainObject => Object.prototype.toString.call(value).slice(8, -1) === 'Object';
-
-const isArrayOrPlainObject = (value: unknown): value is ([] | PlainObject) => isPlainObject(value) || isArray(value);
+import { isPlainObject } from './isPlainObject';
+import { isArray } from './isArray';
 
 export const isEqual = (arg1: any, arg2: any):boolean => {
+  if (arg1 !== null && arg2 === null) {
+    return false;
+  }
+
+  if (arg1 === null && arg2 === null) {
+    return true;
+  }
+
   const arg1Keys = Object.keys(arg1);
   const arg2Keys = Object.keys(arg2);
 
@@ -27,8 +28,8 @@ export const isEqual = (arg1: any, arg2: any):boolean => {
       if (!result) {
         return result;
       }
-    } else if (Array.isArray(arg1[aKey])) {
-      if (!Array.isArray(arg2[aKey])) {
+    } else if (isArray(arg1[aKey])) {
+      if (!isArray(arg2[aKey])) {
         return false;
       }
 

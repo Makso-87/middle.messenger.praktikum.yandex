@@ -94,7 +94,6 @@ const form = new Form({
     text: 'Зарегистрироваться',
     link: '/sign-up',
   }),
-
   inputs,
 });
 

@@ -1,6 +1,6 @@
 import './common_styles.scss';
 import './fonts.scss';
-import './layout/main/index';
+import './layout/main/index.ts';
 import { Auth, authData } from './pages/auth';
 import { Chats, chatsData } from './pages/chats';
 import { Error } from './pages/error';
@@ -13,6 +13,7 @@ import router from './utils/router/router';
 import authController from './controllers/AuthController';
 import { NavLink } from './components/navLink';
 
+// (async () => {
 authController.fetchUser();
 
 router.use('/', Auth, authData)
@@ -23,11 +24,11 @@ router.use('/', Auth, authData)
   .use('/change-password', ChangePassword, changePasswordData)
   .use('/error-404', Error, {
     errorCode: '404',
-    errorDescription: [new ErrorDescription({ text: 'Кажется, сбились с пути' })],
+    errorDescription: [new ErrorDescription({ text: 'Кажется, Вы сбились с пути' })],
     errorButton: new NavLink({
       initialClassName: 'button',
       text: 'Вернуться к чатам',
-      link: 'chats',
+      link: '/messenger',
       className: 'link button_margin-top-40',
     }),
   })
@@ -44,8 +45,9 @@ router.use('/', Auth, authData)
     errorButton: new NavLink({
       initialClassName: 'button',
       text: 'Вернуться к чатам',
-      link: 'chats',
+      link: '/messenger',
       className: 'link button_margin-top-40',
     }),
   })
   .start();
+// })();

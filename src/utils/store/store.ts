@@ -1,12 +1,17 @@
 import EventBus from '../eventBus/eventBus';
 import { set } from '../mydash/set';
+import { User } from '../../models/user';
 
 export enum StoreEvents {
   Updated = 'updated',
 }
 
 type Indexed<T = unknown> = {
-  [key in string]: T;
+  [key: string]: T;
+  user?: {
+    data: User | undefined;
+    [key: string]: T;
+  };
 };
 
 class Store extends EventBus {
@@ -17,7 +22,6 @@ class Store extends EventBus {
   public setState = (path: string, value: unknown) => {
     set(this._state, path, value);
     this.emit(StoreEvents.Updated);
-    console.log('setState', value, 'state', this.getState());
   };
 }
 

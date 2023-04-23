@@ -7,11 +7,11 @@ const getKey = (key: string, parentKey: string) => (parentKey ? `${parentKey}[${
 
 const handleArray = (key: string, arr: PlainObject) => arr.reduce((acc: string, item: PlainObject, index: number) => {
   if (isArray(item)) {
-    // return `${acc}${handleArray(`${key}[${index}]`, item)}`;
+    // return `${acc}${handleArray(`${key}[${index.ts}]`, item)}`;
     return `${acc}${handleArray(getKey(String(index), key), item)}`;
   }
 
-  // return `${acc}${key}[${index}]=${item}${getAmpersand(arr, index)}`;
+  // return `${acc}${key}[${index.ts}]=${item}${getAmpersand(arr, index.ts)}`;
   return `${acc}${getKey(String(index), key)}=${item}${getAmpersand(arr, index)}`;
 }, '');
 

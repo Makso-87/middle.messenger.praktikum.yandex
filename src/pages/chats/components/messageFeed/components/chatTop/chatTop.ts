@@ -3,9 +3,11 @@ import { template } from './chatTop.tmpl';
 import { PropsInterface } from '../../../../../../utils/block/types';
 import { observe } from '../../../../../../hocs/withStore';
 import { Avatar } from '../../../../../../components/avatar';
-import { Link } from '../../../../../../components/link';
-import { CustomComponent } from '../../../../../../components/customComponent/customComponent';
-import { PopupMenu } from '../../../../../../components/popupMenu';
+import { popupMenu } from './components/poupMenu/popupMenu';
+import { addUsersModal } from './components/addUserModal';
+import { Button } from '../../../../../../components/button';
+import { usersModal } from './components/usersModal';
+import { avatarModal } from './components/avatarModal';
 
 interface ChatTopProps extends PropsInterface {}
 
@@ -27,27 +29,14 @@ export class ChatTop extends Block<ChatTopProps> {
 const ObservedCurrentChatAvatar = observe(({ chats }) => ({ url: chats?.data?.currentChat?.avatar }))(Avatar);
 const ObservedCurrentChatTop = observe(({ chats }) => ({ interlocutorName: chats?.data?.currentChat?.title }))(ChatTop);
 
-const popupMenu = new PopupMenu({
-  className: 'chat-top__popup-menu',
-  items: [
-    new CustomComponent({
-      tagName: 'li',
-      className: 'chat-top__menu_item',
-      text: 'Добавить пользователя',
-    }),
-    new CustomComponent({
-      tagName: 'li',
-      className: 'chat-top__menu_item',
-      text: 'Удалить чат',
-    }),
-  ],
-});
-
 export const chatTop = new ObservedCurrentChatTop({
   avatar: new ObservedCurrentChatAvatar({
     className: 'avatar_size_50 avatar_margin_none',
   }),
-  settingsButton: new Link({
+  addUsersModal,
+  usersModal,
+  avatarModal,
+  settingsButton: new Button({
     className: 'chat-top__settings-button',
     events: {
       click: (event: Event) => {

@@ -5,4 +5,7 @@ export const template = `
     
     {{{settingsButton}}}
     {{{popupMenu}}}
+    {{{addUsersModal}}}
+    {{{usersModal}}}
+    {{{avatarModal}}}
 `;

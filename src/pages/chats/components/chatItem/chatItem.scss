@@ -7,6 +7,7 @@
   border-top: 1px solid $border;
   padding: 8px 28px 8px 24px;
   position: relative;
+  cursor: pointer;
 
   &:hover {
     background: $border;
@@ -49,10 +50,26 @@
 
 .chat-item__message-preview {
   font-weight: 500;
-  font-size: 10px;
-  line-height: 12px;
+  font-size: 14px;
+  line-height: 14px;
   color: $text-light-gray-2;
+  display: flex;
+  margin: 10px 0 0;
 }
+
+.chat-item__message-author {
+  color: $text-blue;
+}
+
+.chat-item__message-text {
+  margin: 0 0 0 5px;
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 170px;
+  white-space: nowrap;
+}
+
 
 .chat-item__time {
   position: absolute;
@@ -66,7 +83,7 @@
 
 .chat-item__message-counter {
   position: absolute;
-  bottom: 11px;
+  bottom: 16px;
   right: 28px;
   color: $white;
   font-weight: 500;
@@ -75,4 +92,6 @@
   padding: 2px 6px;
   border-radius: 10px;
   background: $blue;
+  min-width: 17px;
+  min-height: 17px;
 }

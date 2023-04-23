@@ -13,6 +13,10 @@ export interface ChatManipulationData {
   chatId: number;
 }
 
+export interface SetChatAvatarData extends ChatManipulationData {
+  avatar: File;
+}
+
 export interface DeleteUsersFromChatData extends AddUsersToChatData {}
 
 export class ChatsApi extends BaseApi {
@@ -58,6 +62,12 @@ export class ChatsApi extends BaseApi {
 
   getChatUsers = (data: ChatManipulationData) => this.fetch.get(`/${data.chatId}/users`, {
     credentials: true,
+  });
+
+  setChatAvatar = (data: SetChatAvatarData) => this.fetch.put('/avatar', {
+    credentials: true,
+    formData: true,
+    data,
   });
 
   create = undefined;

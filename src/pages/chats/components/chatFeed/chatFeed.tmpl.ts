@@ -3,7 +3,8 @@ const template = `
         {{{addChatButton}}}
     
         <div class="chat-feed__profile-button">
-            <a href="profile">Профиль</a>
+<!--            <a href="profile">Профиль</a>-->
+            {{{profileButton}}}
         </div>
     </div>
 

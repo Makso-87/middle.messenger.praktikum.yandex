@@ -6,6 +6,7 @@ interface CustomComponentProps extends PropsInterface {
     content?: Block | Block[];
     tagName?: string;
     text?: string;
+    template?: string;
 }
 
 export class CustomComponent extends Block<CustomComponentProps> {
@@ -19,6 +20,6 @@ export class CustomComponent extends Block<CustomComponentProps> {
   }
 
   render() {
-    return this.compile(template, this.props);
+    return this.compile(this.props.template ?? template, this.props);
   }
 }

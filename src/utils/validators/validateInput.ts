@@ -30,6 +30,10 @@ export const errorsMessages = {
   message: 'Не должно быть пустым',
   form: 'Некоторые поля заполнены неверно. Пожалуйста проверьте сообщения об ошибках.',
   passwordsMatch: 'Пароли должны совпадать',
+  emailExist: 'Такой email уже существует',
+  userExist: 'Такой пользователь уже существует',
+  userNoExist: 'Такого пользователя не существует',
+  userNoAuthorized: 'Вы не авторизованы',
 };
 export const isValidInputValue = (value: string, name: string) => rules[name].test(value);
 

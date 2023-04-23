@@ -19,10 +19,13 @@
   height: 29px;
   background: url('../../../../../../../static/images/icons/settings-dots.svg') no-repeat center;
   margin: 0 0 0 auto;
+
+  &:hover {
+    background: url('../../../../../../../static/images/icons/settings-dots-black.svg') no-repeat center;
+  }
 }
 
 .chat-top__popup-menu {
-  display: none;
   right: 0;
   left: auto;
   z-index: 1;
@@ -40,3 +43,4 @@
     background: rgb(255 255 255 / 30%);
   }
 }
+

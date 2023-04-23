@@ -4,6 +4,7 @@ import EventBus from '../eventBus/eventBus';
 import {
   AttributesType, ChildrenType, EventsType, isBlockInterfaceArray, PropsInterface,
 } from './types';
+import { isEqual } from '../mydash/isEqual';
 
 export default abstract class Block<P extends Record<string, any> = PropsInterface> {
   static EVENTS = {
@@ -167,23 +168,26 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
     this._removeClassNames(classNames);
   }
 
-  private _componentDidUpdate(oldProps: P, newProps: P) {
-    const response = this.componentDidUpdate(oldProps, newProps);
+  dispatchComponentDidUpdate(): void {
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU);
+  }
 
-    if (response) {
+  private _componentDidUpdate(oldProps: P, newProps: P) {
+    this.componentDidUpdate(oldProps, newProps);
+
+    if (!isEqual(oldProps, newProps)) {
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
-  // Может переопределять пользователь, необязательно трогать
-  componentDidUpdate(oldProps?: P, newProps?: P): boolean {
-    return true;
-  }
+  componentDidUpdate(oldProps?: P, newProps?: P): void {}
 
   setProps = (nextProps: P): void => {
     if (!nextProps) {
       return;
     }
+
+    const oldProps = this.props;
 
     const { props = {}, children = {} } = this._getChildren(nextProps);
 
@@ -198,7 +202,7 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
       this._setAttributes();
     }
 
-    this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
+    this._componentDidUpdate(oldProps, props);
   };
 
   get element() {
@@ -260,7 +264,9 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
 
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
 
-      stub.replaceWith(child.getContent());
+      if (stub) {
+        stub.replaceWith(child.getContent());
+      }
     };
 
     Object.values(this.children).forEach(childHandler);
@@ -271,9 +277,10 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
   private _getChildren(propsAndChildren: P) {
     const children: ChildrenType | ChildrenType[] = {};
     const props: P = {};
+    const childrenKeys = Object.keys(this.children || {});
 
     Object.entries(propsAndChildren).forEach(([key, value]: [string, Block | Block[]]) => {
-      if (value instanceof Block || this._isChildrenArray(value)) {
+      if (value instanceof Block || this._isChildrenArray(value) || childrenKeys.includes(key)) {
         children[key] = value;
       } else {
         props[key] = value;
@@ -343,5 +350,13 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
   hide(): void {
     this.getContent().style.display = 'none';
     this._hidden = true;
+  }
+
+  lockDocument(): void {
+    document.body.classList.add('body-lock');
+  }
+
+  unlockDocument(): void {
+    document.body.classList.remove('body-lock');
   }
 }
