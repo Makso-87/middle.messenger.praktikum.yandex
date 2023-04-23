@@ -4,11 +4,12 @@ import { InputBlock } from '../../components/inputBlock';
 import { Input } from '../../components/input';
 import { template, formTemplate } from './changePassword.tmpl';
 import { Form } from '../../components/form';
-import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 import { ErrorMessage } from '../../components/errorMessage';
 import { PropsInterface } from '../../utils/block/types';
+import { NavLink } from '../../components/navLink';
+import userController from '../../controllers/UserController';
 
 interface ChangePasswordProps extends PropsInterface{}
 
@@ -94,19 +95,22 @@ const form = new Form({
   }),
   buttonSave: new Button({
     text: 'Сохранить',
-    link: 'chats',
   }),
-  buttonCancel: new Link({
+  buttonCancel: new NavLink({
     text: 'Отменить',
-    link: 'chats',
+    link: '/profile',
     className: 'button button_type_2',
   }),
   inputs,
 });
 
+const controller = (data: unknown) => {
+  userController.updateUserPassword(data);
+};
+
 form.setProps({
   events: {
-    submit: onSubmitForm(form, inputs),
+    submit: onSubmitForm(form, inputs, controller),
   },
 });
 

@@ -10,6 +10,9 @@ export const formTemplate = `
     {{#if errorMessage}}
         {{{errorMessage}}}
     {{/if}}
+    
+    
+    {{{formLink}}}
 
-    <a href="{{formLink.link}}" class="form__link">{{formLink.text}}</a>  
+<!--    <a href="{{formLink.link}}" class="form__link">{{formLink.text}}</a>  -->
 `;

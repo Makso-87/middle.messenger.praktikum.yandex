@@ -7,6 +7,7 @@
   align-items: center;
   padding-bottom: 15px;
   border-bottom: 1px solid $border;
+  position: relative;
 }
 
 .chat-top__interlocutor-name {
@@ -18,5 +19,28 @@
   height: 29px;
   background: url('../../../../../../../static/images/icons/settings-dots.svg') no-repeat center;
   margin: 0 0 0 auto;
+
+  &:hover {
+    background: url('../../../../../../../static/images/icons/settings-dots-black.svg') no-repeat center;
+  }
+}
+
+.chat-top__popup-menu {
+  right: 0;
+  left: auto;
+  z-index: 1;
+  background: $main-bg;
+  padding: 10px 0;
+  border-radius: 0 0 5px 5px;
+}
+
+.chat-top__menu_item {
+  list-style-type: none;
+  cursor: pointer;
+  padding: 8px 15px;
+
+  &:hover {
+    background: rgb(255 255 255 / 30%);
+  }
 }
 

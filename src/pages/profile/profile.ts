@@ -2,12 +2,15 @@ import template from './profile.tmpl';
 import Block from '../../utils/block/block';
 import { ProfileDataItem } from './components/profileDataItem';
 import { Avatar } from '../../components/avatar';
-import { Link } from '../../components/link';
 import { PropsInterface } from '../../utils/block/types';
+import { observe } from '../../hocs/withStore';
+import { Button } from '../../components/button';
+import authController from '../../controllers/AuthController';
+import { NavLink } from '../../components/navLink';
 
 interface ProfileProps extends PropsInterface {}
 
-export class Profile extends Block<ProfileProps> {
+class Profile extends Block<ProfileProps> {
   constructor(props: ProfileProps) {
     const newProps = {
       ...props,
@@ -22,50 +25,82 @@ export class Profile extends Block<ProfileProps> {
   }
 }
 
+const AvatarObserved = observe((state) => ({ url: state?.user?.data?.avatar || '' }))(Avatar);
+export const ProfileObserved = observe((state) => ({ firstName: state?.user?.data?.first_name || '' }))(Profile);
+
+const onLogout = (event) => {
+  event.preventDefault();
+  authController.logout();
+};
+
+const EmailDataObserved = observe(({ user }) => ({ profileDataValue: user?.data?.email }))(ProfileDataItem);
+const LoginDataObserved = observe(({ user }) => ({ profileDataValue: user?.data?.login }))(ProfileDataItem);
+
+const FirstNameDataObserved = observe(({ user }) => (
+  { profileDataValue: user?.data?.first_name }
+))(ProfileDataItem);
+
+const SecondNameDataObserved = observe(({ user }) => (
+  { profileDataValue: user?.data?.second_name }
+))(ProfileDataItem);
+
+const DisplayNameDataObserved = observe(({ user }) => (
+  { profileDataValue: user?.data?.display_name ?? '' }
+))(ProfileDataItem);
+
+const PhoneDataObserved = observe(({ user }) => (
+  { profileDataValue: user?.data?.phone ?? '' }
+))(ProfileDataItem);
+
 export const profileData = {
-  avatar: new Avatar({
-    url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
-  }),
+  avatar: new AvatarObserved({ url: '' }),
   firstName: 'Гендальф',
-  buttonEditProfile: new Link({
+  buttonEditProfile: new NavLink({
     className: 'button',
-    link: 'edit-profile',
+    link: '/settings',
     text: 'Изменить данные',
   }),
-  buttonChangePassword: new Link({
+  buttonChangePassword: new NavLink({
     className: 'button',
-    link: 'change-password',
+    link: '/change-password',
     text: 'Изменить пароль',
   }),
-  buttonBack: new Link({
+  buttonBack: new NavLink({
     className: 'button button_type_2',
-    link: '/',
+    text: 'Назад',
+    link: '/messenger',
+  }),
+  buttonLogout: new Button({
+    className: 'button button_type_2',
     text: 'Выйти',
+    events: {
+      click: onLogout,
+    },
   }),
   data: [
-    new ProfileDataItem({
+    new EmailDataObserved({
       profileDataKey: 'Почта',
-      profileDataValue: 'gendalf@valinor.me',
+      profileDataValue: '',
     }),
-    new ProfileDataItem({
+    new LoginDataObserved({
       profileDataKey: 'Логин',
-      profileDataValue: 'gendalf-white',
+      profileDataValue: '',
     }),
-    new ProfileDataItem({
+    new FirstNameDataObserved({
       profileDataKey: 'Имя',
-      profileDataValue: 'Гендальф',
+      profileDataValue: '',
     }),
-    new ProfileDataItem({
+    new SecondNameDataObserved({
       profileDataKey: 'Фамилия',
-      profileDataValue: 'Белый',
+      profileDataValue: '',
     }),
-    new ProfileDataItem({
+    new DisplayNameDataObserved({
       profileDataKey: 'Имя в чате',
-      profileDataValue: 'wizard',
+      profileDataValue: '',
     }),
-    new ProfileDataItem({
+    new PhoneDataObserved({
       profileDataKey: 'Телефон',
-      profileDataValue: '+79999999999',
+      profileDataValue: '',
     }),
   ],
 };

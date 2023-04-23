@@ -4,12 +4,14 @@ import EventBus from '../eventBus/eventBus';
 import {
   AttributesType, ChildrenType, EventsType, isBlockInterfaceArray, PropsInterface,
 } from './types';
+import { isEqual } from '../mydash/isEqual';
 
-export default class Block<P extends Record<string, any> = PropsInterface> {
+export default abstract class Block<P extends Record<string, any> = PropsInterface> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
     FLOW_CDU: 'flow:component-did-update',
+    FLOW_CWU: 'flow:component-will-unmount',
     FLOW_RENDER: 'flow:render',
   };
 
@@ -30,6 +32,8 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
   _id;
 
   props: P;
+
+  private _hidden: boolean;
 
   constructor(tagName: string = 'div', propsAndChildren: P = {}) {
     const { props, children = {} } = this._getChildren(propsAndChildren);
@@ -56,6 +60,7 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
     eventBus.on(Block.EVENTS.INIT, this._init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(Block.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
   }
 
@@ -78,6 +83,7 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
     this.componentDidMount();
 
     const childrenValues: Block[] = Object.values(this.children);
+
     const dispatchChildren = (children: Block | Block[]) => {
       if (isBlockInterfaceArray(children)) {
         children.forEach((child: Block | Block[]) => {
@@ -89,6 +95,10 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
     };
 
     dispatchChildren(childrenValues);
+  }
+
+  private _componentWillUnmount() {
+    this.componentWillUnmount();
   }
 
   private _setAttributes() {
@@ -144,6 +154,12 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
+  componentWillUnmount(oldProps?: P): void {}
+
+  dispatchComponentWillUnmount(): void {
+    this.eventBus().emit(Block.EVENTS.FLOW_CWU);
+  }
+
   removeAttributes(attributes: string[]): void {
     this._removeAttributes(attributes);
   }
@@ -152,25 +168,31 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
     this._removeClassNames(classNames);
   }
 
-  private _componentDidUpdate(oldProps: P, newProps: P) {
-    const response = this.componentDidUpdate(oldProps, newProps);
+  dispatchComponentDidUpdate(): void {
+    this.eventBus().emit(Block.EVENTS.FLOW_CDU);
+  }
 
-    if (response) {
+  private _componentDidUpdate(oldProps: P, newProps: P) {
+    this.componentDidUpdate(oldProps, newProps);
+
+    if (!isEqual(oldProps, newProps)) {
       this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
   }
 
-  // Может переопределять пользователь, необязательно трогать
-  componentDidUpdate(oldProps?: P, newProps?: P): boolean {
-    return true;
-  }
+  componentDidUpdate(oldProps?: P, newProps?: P): void {}
 
   setProps = (nextProps: P): void => {
     if (!nextProps) {
       return;
     }
 
-    Object.assign(this.props, nextProps);
+    const oldProps = this.props;
+
+    const { props = {}, children = {} } = this._getChildren(nextProps);
+
+    Object.assign(this.props, props);
+    Object.assign(this.children, children);
 
     if (Object.keys(nextProps).filter((key) => key === 'className')) {
       this._setClasses();
@@ -179,6 +201,8 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
     if (Object.keys(nextProps).filter((key) => key === 'attributes')) {
       this._setAttributes();
     }
+
+    this._componentDidUpdate(oldProps, props);
   };
 
   get element() {
@@ -195,6 +219,11 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
 
   // Может переопределять пользователь, необязательно трогать
   render(): Node {}
+
+  unmount(): void {
+    this.dispatchComponentWillUnmount();
+    this._element.remove();
+  }
 
   getContent(): HTMLElement {
     return this.element;
@@ -235,7 +264,9 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
 
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
 
-      stub.replaceWith(child.getContent());
+      if (stub) {
+        stub.replaceWith(child.getContent());
+      }
     };
 
     Object.values(this.children).forEach(childHandler);
@@ -246,9 +277,10 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
   private _getChildren(propsAndChildren: P) {
     const children: ChildrenType | ChildrenType[] = {};
     const props: P = {};
+    const childrenKeys = Object.keys(this.children || {});
 
     Object.entries(propsAndChildren).forEach(([key, value]: [string, Block | Block[]]) => {
-      if (value instanceof Block || this._isChildrenArray(value)) {
+      if (value instanceof Block || this._isChildrenArray(value) || childrenKeys.includes(key)) {
         children[key] = value;
       } else {
         props[key] = value;
@@ -306,11 +338,25 @@ export default class Block<P extends Record<string, any> = PropsInterface> {
     return element;
   }
 
-  show(): void {
-    this.getContent().style.display = 'block';
+  getHiddenValue(): boolean {
+    return this._hidden;
+  }
+
+  show(display: string = 'block'): void {
+    this.getContent().style.display = display;
+    this._hidden = false;
   }
 
   hide(): void {
     this.getContent().style.display = 'none';
+    this._hidden = true;
+  }
+
+  lockDocument(): void {
+    document.body.classList.add('body-lock');
+  }
+
+  unlockDocument(): void {
+    document.body.classList.remove('body-lock');
   }
 }

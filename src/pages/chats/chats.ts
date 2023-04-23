@@ -1,20 +1,31 @@
+import './components/messageFeed/components/chatTop/chatTop.scss';
+import './components/messageFeed/components/chatMiddle/chatMiddle.scss';
+import './components/messageFeed/components/chatBottom/chatBottom.scss';
 import Block from '../../utils/block/block';
-import template from './chats.tmpl';
+import store from '../../utils/store/store';
+import { template, formTemplate } from './chats.tmpl';
 import { ChatFeed } from './components/chatFeed';
 import { ChatItem } from './components/chatItem';
 import { MessageFeed } from './components/messageFeed';
 import { Input } from '../../components/input';
 import { Button } from '../../components/button';
-import { ChatTop } from './components/messageFeed/components/chatTop';
 import { Avatar } from '../../components/avatar';
-import { ChatMiddle } from './components/messageFeed/components/chatMiddle';
-import { Message } from './components/messageFeed/components/message';
-import { ChatBottom } from './components/messageFeed/components/chatBottom';
 import { Form } from '../../components/form';
-import { Link } from '../../components/link';
 import { InputBlock } from '../../components/inputBlock';
-import { isValidInputValue } from '../../utils/validators/validateInput';
+import { errorsMessages } from '../../utils/validators/validateInput';
 import { PropsInterface } from '../../utils/block/types';
+import { observe } from '../../hocs/withStore';
+import chatsController from '../../controllers/ChatsController';
+import { ModalPopup } from '../../components/modalPopup';
+import { onSubmitForm as onSubmitAddChat } from '../../utils/onSubmitForm/onSubmitForm';
+import { ErrorMessage } from '../../components/errorMessage';
+import { chatTop } from './components/messageFeed/components/chatTop/chatTop';
+import { chatMiddle } from './components/messageFeed/components/chatMiddle/chatMiddle';
+import { chatBottom } from './components/messageFeed/components/chatBottom/chatBottom';
+import { createWSConnection } from '../../utils/ws/ws';
+import { getTime } from '../../utils/mydash/getTime';
+import { ChatType } from '../../models/chat';
+import { NavLink } from '../../components/navLink';
 
 interface ChatsProps extends PropsInterface {}
 
@@ -29,64 +40,132 @@ export class Chats extends Block<ChatsProps> {
   }
 
   render() {
+    chatsController.getChats();
     return this.compile(template, this.props);
   }
 }
 
-const onSubmitForm = (event: InputEvent) => {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const data = {
-    message: formData.get('message'),
-    attach: formData.get('attach'),
-  };
-
-  // eslint-disable-next-line no-console
-  console.log(data);
-};
-
-const sendButton = new Button({
-  initialClassName: 'send-message-button',
-  className: 'send-message-button_disabled',
-  attributes: {
-    disabled: 'disabled',
-  },
-});
-
-const validateInput = (event: InputEvent) => {
-  const { value, name } = event.target;
-  const result = isValidInputValue(value, name);
-
-  if (result) {
-    sendButton.removeAttributes(['disabled']);
-    sendButton.removeClassNames(['send-message-button_disabled']);
-  } else {
-    sendButton.setProps({
-      className: 'send-message-button_disabled',
-      attributes: {
-        disabled: 'disabled',
-      },
-    });
+const getChatsList = (list = []): Block[] | undefined => {
+  if (!list.length) {
+    return [];
   }
+
+  const { user: currentUser } = store.getState();
+
+  return list.map((chatItem: ChatType) => {
+    const {
+      id, avatar, title, last_message: lastMessage, unread_count: unreadCount,
+    } = chatItem;
+    return new ChatItem(
+      {
+        avatar: new Avatar({ url: avatar, className: 'avatar_size_50 chat-item__avatar' }),
+        name: title ?? '',
+        author: currentUser?.data?.login === lastMessage?.user.login ? 'Вы' : lastMessage?.user.first_name ?? lastMessage?.user.login,
+        lastMessage: lastMessage?.content ?? '',
+        lastMessageTime: getTime(lastMessage?.time ?? ''),
+        newMessagesCount: unreadCount || null,
+        events: {
+          click: async () => {
+            store.setState('chats.data.currentChat', { ...chatItem, messages: [], token: '' });
+            await chatsController.getChatToken({ chatId: id });
+
+            const { user, chats: { data: { currentChat } } } = store.getState() || {};
+            const webSocket = createWSConnection(user.data.id, currentChat.id, currentChat.token);
+            store.setState('sockets', { [currentChat.id]: webSocket });
+            chatsController.getChatUsers({ chatId: id });
+
+            webSocket.onopen = () => {
+              webSocket.send(JSON.stringify({ type: 'get old', content: '0' }));
+            };
+          },
+        },
+      },
+    );
+  });
 };
 
-const inputMessage = new Input({
-  initialClassName: 'message-input',
-  attributes: {
-    type: 'text',
-    name: 'message',
-    placeholder: 'Сообщение',
-  },
+const addChatTitleInput = new InputBlock({
+  input: new Input({
+    attributes: {
+      initialClassName: '',
+      name: 'title',
+      type: 'text',
+      placeholder: 'Введите название чата',
+    },
+  }),
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.title,
+  }),
 });
 
-inputMessage.setProps({
+const submitNewChatButton = new Button({
+  text: 'Добавить чат',
+  className: 'button_margin-top-10',
+});
+
+const addChatForm = new Form({
+  template: formTemplate,
+  input: addChatTitleInput,
+  className: 'chat-feed__add-chat-form',
+  submitNewChatButton,
+  errorMessage: new ErrorMessage({
+    errorText: errorsMessages.form,
+  }),
+});
+
+const modalPopup = new ModalPopup({
+  content: addChatForm,
+});
+
+modalPopup.hide();
+
+const controller = async (data: unknown) => {
+  await chatsController.addChat(data);
+  modalPopup.hide();
+};
+
+addChatForm.setProps({
   events: {
-    input: validateInput,
+    submit: onSubmitAddChat(addChatForm, [addChatTitleInput], controller),
   },
 });
 
-export const getChatsData = () => ({
-  chatFeed: new ChatFeed({
+const openModal = (event: Event) => {
+  event.preventDefault();
+  modalPopup.show('flex');
+  modalPopup.lockDocument();
+};
+
+const addChatButton = new Button({
+  text: 'Добавить чат',
+  className: 'chat-feed__add-chat',
+  events: {
+    click: openModal,
+  },
+});
+
+const messageFeedContent = {
+  chatTop,
+  chatMiddle,
+  chatBottom,
+};
+
+const ChatFeedObserved = observe(({ chats }) => ({ chatsList: getChatsList(chats?.data?.list) }))(ChatFeed);
+const MessageFeedObserved = observe(({ chats }) => ({
+  currentChat: chats?.data?.currentChat,
+  chatTop: chats?.data?.currentChat ? messageFeedContent.chatTop : undefined,
+  chatMiddle: chats?.data?.currentChat ? messageFeedContent.chatMiddle : undefined,
+  chatBottom: chats?.data?.currentChat ? messageFeedContent.chatBottom : undefined,
+}))(MessageFeed);
+
+export const chatsData = {
+  chatFeed: new ChatFeedObserved({
+    addChatButton,
+    modalPopup,
+    profileButton: new NavLink({
+      text: 'Профиль',
+      link: '/profile',
+    }),
     input: new Input({
       initialClassName: 'feed__search-input',
       attributes: {
@@ -94,149 +173,6 @@ export const getChatsData = () => ({
         placeholder: 'Поиск',
       },
     }),
-    chatsList: [
-      new ChatItem(
-        {
-          avatar: 'https://i.pinimg.com/originals/b6/46/bd/b646bd99f792ac04c5d25a3bef085f5c.jpg',
-          name: 'Бильбо Бэггинс',
-          lastMessage: 'Привет!',
-          lastMessageTime: '6:00',
-          newMessagesCount: '2',
-        },
-      ),
-      new ChatItem(
-        {
-          avatar: 'https://i.pinimg.com/736x/39/c5/ec/39c5ec0ff5d5d8a0fb1c4fa934b27cc8.jpg',
-          name: 'Торин Дубощит',
-          lastMessage: 'Дубекар!',
-          lastMessageTime: '18:00',
-          newMessagesCount: '3',
-        },
-      ),
-      new ChatItem(
-        {
-          avatar: 'https://www.koukalek.cz/www/ir/actor-images/carodej-radagast-990--mm1024x768.jpg',
-          name: 'Радагаст Бурый',
-          lastMessage: 'Зеленый лес болен, Гендальф!',
-          lastMessageTime: '10:08',
-          newMessagesCount: '1',
-        },
-      ),
-      new ChatItem(
-        {
-          avatar: 'https://avatarko.ru/img/kartinka/33/film_gnom_32281.jpg',
-          name: 'Балин',
-          lastMessage: 'Это драконья болезнь. Я уже видел такое...',
-          lastMessageTime: '19:08',
-          newMessagesCount: '1',
-        },
-      ),
-    ],
   }),
-  messageFeed: new MessageFeed(),
-});
-
-export const chatsItemData = {
-  ...getChatsData(),
-  messageFeed: new MessageFeed({
-    chatItem: true,
-    chatTop: new ChatTop({
-      avatar: new Avatar({
-        className: 'avatar_size_50 avatar_margin_none',
-        url: 'https://i.pinimg.com/originals/b6/46/bd/b646bd99f792ac04c5d25a3bef085f5c.jpg',
-      }),
-      interlocutorName: 'Бильбо Беггинс',
-      settingsButton: new Link({
-        className: 'chat-top__settings-button',
-      }),
-    }),
-    chatMiddle: new ChatMiddle({
-      date: '24 февраля',
-      messages: [
-        new Message({
-          avatar: new Avatar({
-            className: 'avatar_size_50 avatar_margin_none',
-            url: 'https://i.pinimg.com/originals/b6/46/bd/b646bd99f792ac04c5d25a3bef085f5c.jpg',
-          }),
-          text: 'Доброе утро!',
-          time: '6:00',
-          sent: true,
-          delivered: true,
-          read: true,
-        }),
-        new Message({
-          avatar: new Avatar({
-            className: 'avatar_size_50 avatar_margin_none',
-            url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
-          }),
-          className: 'message_self',
-          text: `Что Вы хотите этим сказать? Желаете мне доброго 
-                утра или утверждаете, что утро доброе и не важно, 
-                что я о нем думаю? Или может Вы хотите сказать, что
-                испытали на себе доброту этого утра? Или Вы 
-                считаете, что все должны быть добрыми в это утро?`,
-          time: '6:03',
-          sent: true,
-          delivered: true,
-          read: true,
-        }),
-        new Message({
-          avatar: new Avatar({
-            className: 'avatar_size_50 avatar_margin_none',
-            url: 'https://i.pinimg.com/originals/b6/46/bd/b646bd99f792ac04c5d25a3bef085f5c.jpg',
-          }),
-          text: 'Все это сразу, я полагаю.',
-          time: '6:04',
-          sent: true,
-          delivered: true,
-          read: true,
-        }),
-        new Message({
-          avatar: new Avatar({
-            className: 'avatar_size_50 avatar_margin_none',
-            url: 'https://i.pinimg.com/originals/b6/46/bd/b646bd99f792ac04c5d25a3bef085f5c.jpg',
-          }),
-          text: 'Я могу Вам помочь?',
-          time: '6:05',
-          sent: true,
-          delivered: true,
-          read: true,
-        }),
-        new Message({
-          avatar: new Avatar({
-            className: 'avatar_size_50 avatar_margin_none',
-            url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
-          }),
-          className: 'message_self',
-          text: 'Это мы скоро узнаем. Я ищу того, кто готов отправиться на встречу приключениям.',
-          time: '6:06',
-          sent: true,
-          delivered: true,
-          read: true,
-        }),
-      ],
-    }),
-    chatBottom: new ChatBottom({
-      form: new Form({
-        initialClassName: 'chat-bottom-form',
-        template: '{{{attachButton}}} {{{input}}} {{{sendButton}}}',
-        input: inputMessage,
-        sendButton,
-        events: { submit: onSubmitForm },
-        attachButton: new InputBlock({
-          initialClassName: 'attach-button',
-          label: ' ',
-          id: 'attach',
-          input: new Input({
-            initialClassName: 'attach-button-input',
-            attributes: {
-              type: 'file',
-              name: 'attach',
-              id: 'attach',
-            },
-          }),
-        }),
-      }),
-    }),
-  }),
+  messageFeed: new MessageFeedObserved({}),
 };

@@ -8,6 +8,8 @@ import { errorsMessages, validateInput } from '../../utils/validators/validateIn
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 import { ErrorMessage } from '../../components/errorMessage';
 import { PropsInterface } from '../../utils/block/types';
+import { NavLink } from '../../components/navLink';
+import authController from '../../controllers/AuthController';
 
 interface AuthProps extends PropsInterface{}
 
@@ -87,17 +89,21 @@ const form = new Form({
   button: new Button({
     text: 'Войти',
   }),
-  formLink: {
+  formLink: new NavLink({
+    className: 'form__link',
     text: 'Зарегистрироваться',
-    url: 'registration',
-  },
-
+    link: '/sign-up',
+  }),
   inputs,
 });
 
+const controller = (data: unknown) => {
+  authController.signin(data);
+};
+
 form.setProps({
   events: {
-    submit: onSubmitForm(form, inputs),
+    submit: onSubmitForm(form, inputs, controller),
   },
 });
 
