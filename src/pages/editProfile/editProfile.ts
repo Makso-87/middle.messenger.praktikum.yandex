@@ -12,7 +12,6 @@ import { PropsInterface } from '../../utils/block/types';
 import { observe } from '../../hocs/withStore';
 import userController from '../../controllers/UserController';
 import { NavLink } from '../../components/navLink';
-import store from '../../utils/store/store';
 
 interface EditProfileProps extends PropsInterface {}
 

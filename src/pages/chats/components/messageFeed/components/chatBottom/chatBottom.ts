@@ -51,7 +51,7 @@ const sendButton = new Button({
 });
 
 const validateInput = (event: InputEvent) => {
-  const { value, name } = event.target;
+  const { value, name } = event.target as HTMLInputElement;
   const result = isValidInputValue(value, name);
 
   if (result) {

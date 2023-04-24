@@ -1,7 +1,7 @@
 import { isPlainObject } from './isPlainObject';
 import { isArray } from './isArray';
 
-export const isEqual = (arg1: any, arg2: any):boolean => {
+export const isEqual = (arg1: unknown, arg2: unknown):boolean => {
   if (arg1 !== null && arg2 === null) {
     return false;
   }

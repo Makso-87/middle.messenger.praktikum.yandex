@@ -3,7 +3,7 @@ import Block from '../block/block';
 import { authenticationControl } from '../authenticationControl/authenticationControl';
 
 class Router {
-  static __instance: InstanceType<any>;
+  static __instance: InstanceType<unknown>;
 
   _rootQuery: string;
 

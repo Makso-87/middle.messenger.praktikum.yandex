@@ -7,6 +7,17 @@ const METHODS = {
   DELETE: 'DELETE',
 };
 
+interface Options {
+  headers?: object;
+  method?: string;
+  data?: unknown;
+  credentials?: boolean;
+  formData?: boolean;
+  timeout?: number;
+}
+
+type FetchType = (path: string, options: Options) => Promise<unknown>;
+
 export default class MyFetch {
   static API_URL = 'https://ya-praktikum.tech/api/v2';
 
@@ -16,17 +27,17 @@ export default class MyFetch {
     this.endpoint = `${MyFetch.API_URL}${endpoint}`;
   }
 
-  get = (path: string = '/', options = {}) => this.request(`${this.endpoint}${path}`, {
+  get: FetchType = (path, options = {}) => this.request(`${this.endpoint}${path}`, {
     ...options,
     method: METHODS.GET,
   }, options.timeout);
 
-  post = (path: string, options = {}) => this.request(`${this.endpoint}${path}`, {
+  post: FetchType = (path, options = {}) => this.request(`${this.endpoint}${path}`, {
     ...options,
     method: METHODS.POST,
   }, options.timeout);
 
-  put = (path: string, options = {}) => this.request(
+  put: FetchType = (path, options = {}) => this.request(
     `${this.endpoint}${path}`,
     {
       ...options,
@@ -35,7 +46,7 @@ export default class MyFetch {
     options.timeout,
   );
 
-  delete = (path: string, options = {}) => this.request(`${this.endpoint}${path}`, {
+  delete: FetchType = (path, options = {}) => this.request(`${this.endpoint}${path}`, {
     ...options,
     method: METHODS.DELETE,
   }, options.timeout);
@@ -43,7 +54,7 @@ export default class MyFetch {
   request = (url: string, options = {}, timeout = 5000) => {
     const {
       method, data, headers: customHeaders = {}, credentials = false, formData = false,
-    } = options;
+    }: Options = options;
 
     const headers = {
       accept: 'application/json',

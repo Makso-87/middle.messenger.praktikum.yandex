@@ -1,14 +1,14 @@
 import { isPlainObject, PlainObject } from './isPlainObject';
 import { isArray } from './isArray';
 
-function cloneDeep<T extends object = any>(obj: T) {
+function cloneDeep<T extends object = {}>(obj: T) {
   let startValue: [] | PlainObject = {};
 
   if (isArray(obj)) {
     startValue = [];
   }
 
-  return Object.entries(obj).reduce((acc: any, [itemKey, itemValue]: [string, T]) => {
+  return Object.entries(obj).reduce((acc: unknown, [itemKey, itemValue]: [string, T]) => {
     if (isArray(itemValue) || isPlainObject(itemValue)) {
       acc[itemKey] = cloneDeep(itemValue);
       return acc;

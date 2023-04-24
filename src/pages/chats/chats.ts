@@ -24,7 +24,7 @@ import { chatMiddle } from './components/messageFeed/components/chatMiddle/chatM
 import { chatBottom } from './components/messageFeed/components/chatBottom/chatBottom';
 import { createWSConnection } from '../../utils/ws/ws';
 import { getTime } from '../../utils/mydash/getTime';
-import { ChatType } from '../../models/chat';
+import { Chat } from '../../models/chat';
 import { NavLink } from '../../components/navLink';
 
 interface ChatsProps extends PropsInterface {}
@@ -52,7 +52,7 @@ const getChatsList = (list = []): Block[] | undefined => {
 
   const { user: currentUser } = store.getState();
 
-  return list.map((chatItem: ChatType) => {
+  return list.map((chatItem: Chat) => {
     const {
       id, avatar, title, last_message: lastMessage, unread_count: unreadCount,
     } = chatItem;

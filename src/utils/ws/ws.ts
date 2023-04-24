@@ -1,6 +1,7 @@
 import { isArray } from '../mydash/isArray';
 import store from '../store/store';
 import chatsController from '../../controllers/ChatsController';
+import { parseJSON } from '../parseJSON/parseJSON';
 
 export class WS {
   static API_URL = 'wss://ya-praktikum.tech/ws/chats';
@@ -25,7 +26,7 @@ export class WS {
 
 export const createWSConnection = (userId: string, chatId: string, token: string) => {
   const socket = new WS({ userId, chatId, token }).create();
-  let interval;
+  let interval: unknown;
 
   socket.addEventListener('open', () => {
     interval = setInterval(() => {
@@ -38,10 +39,16 @@ export const createWSConnection = (userId: string, chatId: string, token: string
   });
 
   socket.addEventListener('message', (event: MessageEvent) => {
-    const data = JSON.parse(event.data);
+    const { data, error } = parseJSON(event.data);
+
+    if (error) {
+      const { user: { errors = [] } = {} } = store.getState();
+      store.setState('chats.errors', [...errors, error]);
+      return;
+    }
 
     if (isArray(data)) {
-      const { chats: { data: { currentChat: { messages = [] } } } } = store.getState();
+      const { chats: { data: { currentChat: { messages = [] } = {} } = {} } = {} } = store.getState();
 
       if (data.length) {
         store.setState('chats.data.currentChat.messages', [...data.reverse(), ...messages]);
@@ -49,7 +56,7 @@ export const createWSConnection = (userId: string, chatId: string, token: string
     }
 
     if (data.user_id && data.id) {
-      const { chats: { data: { currentChat: { messages } } } } = store.getState();
+      const { chats: { data: { currentChat: { messages = [] } = {} } = {} } = {} } = store.getState();
       store.setState('chats.data.currentChat.messages', [...messages, data]);
       chatsController.getChats();
     }
