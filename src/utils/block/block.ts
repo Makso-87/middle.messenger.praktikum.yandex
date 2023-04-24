@@ -6,7 +6,7 @@ import {
 } from './types';
 import { isEqual } from '../mydash/isEqual';
 
-export default abstract class Block<P extends Record<string, any> = PropsInterface> {
+export default abstract class Block<P extends Record<string, unknown> = PropsInterface> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -217,7 +217,6 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
     this._addEvents();
   }
 
-  // Может переопределять пользователь, необязательно трогать
   render(): Node {}
 
   unmount(): void {
@@ -249,7 +248,9 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
     const propsAndStubs = { ...props };
 
     Object.entries(this.children).forEach(([key, child]: [string, Block]) => {
-      propsAndStubs[key] = isBlockInterfaceArray(child) ? this._getArrayChildren(child) : `<div data-id="${child._id}"></div>`;
+      if (child) {
+        propsAndStubs[key] = isBlockInterfaceArray(child) ? this._getArrayChildren(child) : `<div data-id="${child._id}"></div>`;
+      }
     });
 
     const fragment = this._createDocumentElement('template');
@@ -262,7 +263,7 @@ export default abstract class Block<P extends Record<string, any> = PropsInterfa
         return;
       }
 
-      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+      const stub = child ? fragment.content.querySelector(`[data-id="${child._id}"]`) : null;
 
       if (stub) {
         stub.replaceWith(child.getContent());

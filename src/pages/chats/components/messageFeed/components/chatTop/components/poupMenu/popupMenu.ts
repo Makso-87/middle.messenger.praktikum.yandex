@@ -1,4 +1,4 @@
-import { CustomComponent } from '../../../../../../../../components/customComponent/customComponent';
+import { CustomComponent } from '../../../../../../../../components/customComponent';
 import { PopupMenu } from '../../../../../../../../components/popupMenu';
 import { addUsersModal } from '../addUserModal';
 import store from '../../../../../../../../utils/store/store';

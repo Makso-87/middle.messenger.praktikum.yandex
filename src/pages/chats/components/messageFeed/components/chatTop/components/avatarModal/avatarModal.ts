@@ -1,5 +1,5 @@
 import { ModalPopup } from '../../../../../../../../components/modalPopup';
-import { CustomComponent } from '../../../../../../../../components/customComponent/customComponent';
+import { CustomComponent } from '../../../../../../../../components/customComponent';
 import { Form } from '../../../../../../../../components/form';
 import { formTemplate } from './avatarModal.tmpl';
 import { ErrorMessage } from '../../../../../../../../components/errorMessage';

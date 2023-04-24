@@ -1,6 +1,6 @@
 import { BaseApi } from './BaseApi';
 
-export interface SignupData<T extends Record<string, string> = any> {
+export interface SignupData<T extends Record<string, string> = unknown> {
   first_name: T,
   second_name: T,
   login: T,

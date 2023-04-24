@@ -1,10 +1,10 @@
 import Block from '../block/block';
 import { render } from '../render/render';
 
-export class Route<P extends Record<string, any> = any> {
+export class Route<P extends Record<string, unknown> = unknown> {
   _pathname: string;
 
-  _blockClass: InstanceType<any>;
+  _blockClass: InstanceType<unknown>;
 
   _block: Block | null;
 

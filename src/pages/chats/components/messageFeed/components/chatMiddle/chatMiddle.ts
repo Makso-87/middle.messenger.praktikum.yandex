@@ -22,12 +22,6 @@ export class ChatMiddle extends Block<ChatMiddleProps> {
     super('div', newProps);
   }
 
-  componentDidUpdate() {
-    // const element = this.getContent();
-    // const { scrollHeight } = element;
-    // element.scrollTo(0, scrollHeight);
-  }
-
   render() {
     return this.compile(template, this.props);
   }
@@ -38,7 +32,11 @@ const getMessages = (list: MessageType[] = []) => {
     return [];
   }
 
-  const { user: authUser, chats: { data: { currentChat: { users } } } } = store.getState();
+  const { user: authUser, chats: { data: { currentChat: { users = [] } } } } = store.getState();
+
+  if (!users.length) {
+    return [];
+  }
 
   return list.map((messageItem: MessageType) => {
     const [user] = users.filter((usersItem) => usersItem.id === messageItem.user_id);
@@ -71,7 +69,9 @@ export const chatMiddle = new ChatMiddleObserved({
         const { sockets, chats: { data: { currentChat } } } = store.getState();
         const webSocket = sockets[currentChat.id];
 
-        webSocket.send(JSON.stringify({ type: 'get old', content: String(currentChat.messages.length - 1) }));
+        if (currentChat.messages) {
+          webSocket.send(JSON.stringify({ type: 'get old', content: String(currentChat.messages.length - 1) }));
+        }
       }
     },
   },

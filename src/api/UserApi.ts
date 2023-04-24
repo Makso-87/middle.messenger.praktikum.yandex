@@ -1,6 +1,6 @@
 import { BaseApi } from './BaseApi';
 
-export interface UserProfileData<T extends Record<string, string> = any> {
+export interface UserProfileData<T extends Record<string, string> = unknown> {
   first_name: T,
   second_name: T,
   display_name: T,
@@ -9,12 +9,12 @@ export interface UserProfileData<T extends Record<string, string> = any> {
   phone: T
 }
 
-export interface UserPasswordData<T extends Record<string, string> = any> {
+export interface UserPasswordData<T extends Record<string, string> = unknown> {
   oldPassword: T;
   newPassword: T;
 }
 
-export interface FindUserData<T extends Record<string, string> = any> {
+export interface FindUserData<T extends Record<string, string> = unknown> {
   login: T;
 }
 
@@ -35,7 +35,7 @@ export class UserApi extends BaseApi {
     data,
   });
 
-  updateUserPassword = (data: UserPasswordData) => this.fetch.put('/profile', {
+  updateUserPassword = (data: UserPasswordData) => this.fetch.put('/password', {
     headers: { 'Content-Type': 'application/json' },
     credentials: true,
     data: { ...data },

@@ -1,6 +1,6 @@
 import { Indexed, merge } from './merge';
 
-export const set = (object: Indexed | any, path: string, value: any): Indexed | any => {
+export const set = (object: Indexed | unknown, path: string, value: unknown): Indexed | unknown => {
   if (Object.prototype.toString.call(path).slice(8, -1) !== 'String') {
     throw new Error('path must be string');
   }
