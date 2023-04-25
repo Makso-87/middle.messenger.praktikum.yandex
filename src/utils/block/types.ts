@@ -9,7 +9,7 @@ export type AttributesType = {
 export type ChildrenType = { [key: string]: Block } | Block;
 
 export type EventsType = {
-    [key: string]: (event: InputEvent) => void | ((...args: unknown[]) => (event: InputEvent) => void);
+    [key: string]: (event: InputEvent) => void | Promise<void> | ((...args: unknown[]) => (event: InputEvent) => void);
 };
 
 export type KeyValuePropertyType = {

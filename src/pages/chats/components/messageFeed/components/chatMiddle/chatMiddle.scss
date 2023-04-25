@@ -20,3 +20,8 @@
   color: $text-light-gray-2;
 }
 
+.chat-middle__messages-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}

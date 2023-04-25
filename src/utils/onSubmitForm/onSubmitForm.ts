@@ -5,11 +5,15 @@ import { isOneOfAllFalse } from '../mydash/isOneOfAllFalse';
 import { capitalizeString } from '../mydash/capitalizeString';
 import { toCamelCase } from '../mydash/toCamelCase';
 
-export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event: InputEvent) => {
-  event.preventDefault();
-  const formData: FormData = new FormData(event.target);
+export type formRequestData<T extends Record<string, string> = unknown> = {
+  [key: string]: T;
+}
 
-  const data: {[key: string]: string} = inputBlocks.reduce((acc, inputBlock) => {
+export const onSubmitForm = (form: Block, inputBlocks: Block[], controller: (data: formRequestData) => void) => (event: FormDataEvent) => {
+  event.preventDefault();
+  const formData: FormData = new FormData(event.target as HTMLFormElement);
+
+  const data: formRequestData = inputBlocks.reduce((acc, inputBlock) => {
     const { name } = inputBlock.children.input.props.attributes;
 
     return {
@@ -17,6 +21,8 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event: Input
       [name]: formData.get(name),
     };
   }, {});
+
+  const { checkPassword } = data;
 
   const predicates: {[key: string | never]: boolean } = {};
 
@@ -35,11 +41,10 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event: Input
 
   const validationValues = Object.values(predicates).map((value) => value);
 
-  if (isAllTrue(validationValues) && data.oldPassword === data.newPassword) {
+  if (isAllTrue(validationValues) && (checkPassword ? data?.password === checkPassword : true)) {
     form.children.errorMessage.hide();
 
-    // eslint-disable-next-line no-console
-    console.log(data);
+    controller(data);
     return;
   }
 
@@ -55,7 +60,7 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[]) => (event: Input
     return;
   }
 
-  if (data?.oldPassword !== data?.newPassword) {
+  if (data?.password !== checkPassword && !!checkPassword) {
     form.children.errorMessage.setProps({
       errorText: errorsMessages.passwordsMatch,
     });

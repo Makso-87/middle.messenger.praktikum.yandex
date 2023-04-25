@@ -5,11 +5,13 @@ import { InputBlock } from '../../components/inputBlock';
 import { Input } from '../../components/input';
 import { formTemplate, template } from './editProfile.tmpl';
 import { Form } from '../../components/form';
-import { Link } from '../../components/link';
 import { errorsMessages, validateInput } from '../../utils/validators/validateInput';
 import { onSubmitForm } from '../../utils/onSubmitForm/onSubmitForm';
 import { ErrorMessage } from '../../components/errorMessage';
 import { PropsInterface } from '../../utils/block/types';
+import { observe } from '../../hocs/withStore';
+import userController from '../../controllers/UserController';
+import { NavLink } from '../../components/navLink';
 
 interface EditProfileProps extends PropsInterface {}
 
@@ -28,6 +30,85 @@ export class EditProfile extends Block<EditProfileProps> {
   }
 }
 
+const onInput = (input) => (event) => {
+  input.setProps({
+    attributes: {
+      ...input.props.attributes,
+      value: event.target.value,
+    },
+  });
+};
+
+const FormObserved = observe(({ user }) => ({ firstName: user?.data?.first_name ?? '' }))(Form);
+
+const AvatarObserved = observe(({ user }) => ({ url: user?.data?.avatar ?? '' }))(Avatar);
+
+const InputEmailObserved = observe(({ user }) => (
+  {
+    attributes: {
+      value: user?.data?.email ?? '',
+      name: 'email',
+      id: 'edit-email',
+      placeholder: 'Почта',
+      type: 'email',
+    },
+  }))(Input);
+
+const InputLoginObserved = observe(({ user }) => (
+  {
+    attributes: {
+      value: user?.data?.login ?? '',
+      name: 'login',
+      id: 'edit-login',
+      placeholder: 'Логин',
+      type: 'text',
+    },
+  }))(Input);
+
+const InputFirstNameObserved = observe(({ user }) => (
+  {
+    attributes: {
+      value: user?.data?.first_name ?? '',
+      name: 'first_name',
+      id: 'edit-first-name',
+      placeholder: 'Имя',
+      type: 'text',
+    },
+  }))(Input);
+
+const InputSecondNameObserved = observe(({ user }) => (
+  {
+    attributes: {
+      value: user?.data?.second_name ?? '',
+      name: 'second_name',
+      id: 'edit-last-name',
+      placeholder: 'Фамилия',
+      type: 'text',
+    },
+  }))(Input);
+
+const InputDisplayNameObserved = observe(({ user }) => (
+  {
+    attributes: {
+      value: user?.data?.display_name ?? '',
+      name: 'display_name',
+      id: 'edit-display-name',
+      placeholder: 'Имя в чате',
+      type: 'text',
+    },
+  }))(Input);
+
+const InputPhoneObserved = observe(({ user }) => (
+  {
+    attributes: {
+      value: user?.data?.phone ?? '',
+      name: 'phone',
+      id: 'edit-phone',
+      placeholder: 'Телефон',
+      type: 'text',
+    },
+  }))(Input);
+
 const inputAvatar = new Input({
   initialClassName: 'avatar__change-button-input',
   attributes: {
@@ -37,59 +118,12 @@ const inputAvatar = new Input({
   },
 });
 
-const inputEmail = new Input({
-  attributes: {
-    name: 'email',
-    id: 'edit-email',
-    placeholder: 'Почта',
-    type: 'email',
-  },
-});
-
-const inputLogin = new Input({
-  attributes: {
-    name: 'login',
-    id: 'edit-login',
-    placeholder: 'Логин',
-    type: 'text',
-  },
-});
-
-const inputFirstName = new Input({
-  attributes: {
-    name: 'first_name',
-    id: 'edit-first-name',
-    placeholder: 'Имя',
-    type: 'text',
-  },
-});
-
-const inputSecondName = new Input({
-  attributes: {
-    name: 'second_name',
-    id: 'edit-last-name',
-    placeholder: 'Фамилия',
-    type: 'text',
-  },
-});
-
-const inputDisplayName = new Input({
-  attributes: {
-    name: 'display_name',
-    id: 'edit-display-name',
-    placeholder: 'Имя в чате',
-    type: 'text',
-  },
-});
-
-const inputPhone = new Input({
-  attributes: {
-    name: 'phone',
-    id: 'edit-phone',
-    placeholder: 'Телефон',
-    type: 'text',
-  },
-});
+const inputEmail = new InputEmailObserved({});
+const inputLogin = new InputLoginObserved({});
+const inputFirstName = new InputFirstNameObserved({});
+const inputSecondName = new InputSecondNameObserved({});
+const inputDisplayName = new InputDisplayNameObserved({});
+const inputPhone = new InputPhoneObserved({});
 
 const inputEmailBlock = new InputBlock({
   errorText: errorsMessages.email,
@@ -144,6 +178,7 @@ inputEmail.setProps({
   events: {
     blur: validateInput(inputEmailBlock),
     focus: validateInput(inputEmailBlock),
+    input: onInput(inputEmail),
   },
 });
 
@@ -151,6 +186,7 @@ inputLogin.setProps({
   events: {
     blur: validateInput(inputLoginBlock),
     focus: validateInput(inputLoginBlock),
+    input: onInput(inputLogin),
   },
 });
 
@@ -158,6 +194,7 @@ inputFirstName.setProps({
   events: {
     blur: validateInput(inputFirstNameBlock),
     focus: validateInput(inputFirstNameBlock),
+    input: onInput(inputFirstName),
   },
 });
 
@@ -165,6 +202,7 @@ inputSecondName.setProps({
   events: {
     blur: validateInput(inputSecondNameBlock),
     focus: validateInput(inputSecondNameBlock),
+    input: onInput(inputSecondName),
   },
 });
 
@@ -172,6 +210,7 @@ inputDisplayName.setProps({
   events: {
     blur: validateInput(inputDisplayNameBlock),
     focus: validateInput(inputDisplayNameBlock),
+    input: onInput(inputDisplayName),
   },
 });
 
@@ -179,6 +218,7 @@ inputPhone.setProps({
   events: {
     blur: validateInput(inputPhoneBlock),
     focus: validateInput(inputPhoneBlock),
+    input: onInput(inputPhone),
   },
 });
 
@@ -191,32 +231,53 @@ const inputs = [
   inputPhoneBlock,
 ];
 
-const form = new Form({
+const form = new FormObserved({
   className: 'form_edit-profile',
   template: formTemplate,
   errorMessage: new ErrorMessage({
     errorText: errorsMessages.form,
   }),
-  avatar: new Avatar({
-    url: 'https://gamebomb.ru/files/galleries/001/a/a6/142164.jpg',
+  avatar: new AvatarObserved({
     inputId: 'avatar',
     input: inputAvatar,
   }),
-  firstName: 'Гендальф',
   buttonSave: new Button({
     text: 'Сохранить',
   }),
-  buttonCancel: new Link({
+  buttonCancel: new NavLink({
     text: 'Отменить',
-    link: 'chats',
+    link: '/profile',
     className: 'button button_type_2',
   }),
   inputs,
 });
 
+const onChangeAvatar = (event) => {
+  event.preventDefault();
+  const formData = new FormData(form.getContent());
+  formData.delete('email');
+  formData.delete('login');
+  formData.delete('first_name');
+  formData.delete('second_name');
+  formData.delete('display_name');
+  formData.delete('phone');
+
+  userController.updateUserAvatar(formData);
+};
+
+inputAvatar.setProps({
+  events: {
+    input: onChangeAvatar,
+  },
+});
+
+const controller = (data: unknown) => {
+  userController.updateUserData(data);
+};
+
 form.setProps({
   events: {
-    submit: onSubmitForm(form, inputs),
+    submit: onSubmitForm(form, inputs, controller),
   },
 });
 

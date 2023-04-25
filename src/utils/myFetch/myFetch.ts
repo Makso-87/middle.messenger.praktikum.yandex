@@ -1,3 +1,5 @@
+import { queryStringify } from '../mydash/stringifyQuery';
+
 const METHODS = {
   GET: 'GET',
   PUT: 'PUT',
@@ -5,28 +7,38 @@ const METHODS = {
   DELETE: 'DELETE',
 };
 
-const queryStringify = (data) => {
-  if (typeof data !== 'object') {
-    throw new Error('Data must be object');
-  }
+interface Options {
+  headers?: object;
+  method?: string;
+  data?: unknown;
+  credentials?: boolean;
+  formData?: boolean;
+  timeout?: number;
+}
 
-  const dataArray = Object.entries(data);
-  return dataArray.reduce((acc, [key, value], index) => `${acc}${key}=${value}${dataArray.length - 1 !== index ? '&' : ''}`, '?');
-};
+type FetchType = (path: string, options: Options) => Promise<unknown>;
 
 export default class MyFetch {
-  get = (url, options = {}) => this.request(url, {
+  static API_URL = 'https://ya-praktikum.tech/api/v2';
+
+  protected endpoint: string;
+
+  constructor(endpoint: string) {
+    this.endpoint = `${MyFetch.API_URL}${endpoint}`;
+  }
+
+  get: FetchType = (path, options = {}) => this.request(`${this.endpoint}${path}`, {
     ...options,
     method: METHODS.GET,
   }, options.timeout);
 
-  post = (url, options = {}) => this.request(url, {
+  post: FetchType = (path, options = {}) => this.request(`${this.endpoint}${path}`, {
     ...options,
     method: METHODS.POST,
   }, options.timeout);
 
-  put = (url, options = {}) => this.request(
-    url,
+  put: FetchType = (path, options = {}) => this.request(
+    `${this.endpoint}${path}`,
     {
       ...options,
       method: METHODS.PUT,
@@ -34,13 +46,20 @@ export default class MyFetch {
     options.timeout,
   );
 
-  delete = (url, options = {}) => this.request(url, {
+  delete: FetchType = (path, options = {}) => this.request(`${this.endpoint}${path}`, {
     ...options,
     method: METHODS.DELETE,
   }, options.timeout);
 
-  request = (url, options, timeout = 5000) => {
-    const { method, data, headers } = options;
+  request = (url: string, options = {}, timeout = 5000) => {
+    const {
+      method, data, headers: customHeaders = {}, credentials = false, formData = false,
+    }: Options = options;
+
+    const headers = {
+      accept: 'application/json',
+      ...customHeaders,
+    };
 
     const isGet = method === METHODS.GET;
 
@@ -50,15 +69,15 @@ export default class MyFetch {
       xhr.open(method, isGet && !!data ? `${url}${queryStringify(data)}` : url);
       xhr.timeout = timeout;
 
-      if (headers) {
-        Object.entries(([key, value]) => {
-          xhr.setRequestHeader(key, value);
-        });
-      }
+      Object.entries(headers).forEach(([key, value]: [string, string]) => {
+        xhr.setRequestHeader(key, value);
+      });
 
       xhr.onload = () => {
         resolve(xhr);
       };
+
+      xhr.withCredentials = credentials;
 
       xhr.onerror = reject;
       xhr.ontimeout = reject;
@@ -67,7 +86,7 @@ export default class MyFetch {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(JSON.stringify(data));
+        xhr.send(formData ? data : JSON.stringify(data));
       }
     });
   };

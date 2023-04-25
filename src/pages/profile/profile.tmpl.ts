@@ -16,7 +16,10 @@ const template = `
                 {{{ buttonChangePassword }}}
             </div>
             
-            {{{ buttonBack }}}
+            <div class="profile__buttons-edit-group">
+                {{{ buttonBack }}}
+                {{{ buttonLogout }}}
+            </div>
         </div>
     </div>
 `;

@@ -1,0 +1,59 @@
+@import "../../../../../../../../constants";
+
+.chat-users-modal__content {
+  position: relative;
+  width: 620px;
+  border-radius: 10px;
+
+  @include shadow($shadow-gray);
+
+  background: $main-light;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 30px;
+}
+
+.chat-users-modal__header {
+  margin: 0 0 20px;
+}
+
+.chat-users-modal__form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  // align-items: center;
+  justify-content: center;
+}
+
+.chat-users-modal__form-controls {
+  display: flex;
+}
+
+.chat-users-modal__users-list {
+  max-height: 250px;
+  overflow: auto;
+  margin: 10px 0 0;
+}
+
+.chat-users-modal__users-item {
+  list-style-type: none;
+  padding: 5px 0;
+  cursor: pointer;
+
+  @include transition;
+
+  &:hover {
+    color: red;
+  }
+}
+
+.chat-users-modal__users-lists-container {
+  display: flex;
+  width: 100%;
+}
+
+.chat-users-modal__users-list-container {
+   width: 50%;
+  padding: 0 20px 0 0;
+}
