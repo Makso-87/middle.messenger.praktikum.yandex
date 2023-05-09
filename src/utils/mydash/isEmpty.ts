@@ -1,6 +1,8 @@
 // todo задать тип generic
+import { getType } from './getType';
+
 export const isEmpty = (value: unknown) => {
-  const type = Object.prototype.toString.call(value).slice(8, -1);
+  const type = getType(value);
 
   switch (type) {
     case 'Array':

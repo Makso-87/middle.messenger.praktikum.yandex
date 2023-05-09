@@ -1,4 +1,6 @@
 import { queryStringify } from '../mydash/stringifyQuery';
+import { PlainObject } from '../mydash/isPlainObject';
+// import { PlainObject } from '../mydash/isPlainObject';
 
 const METHODS = {
   GET: 'GET',
@@ -10,13 +12,15 @@ const METHODS = {
 interface Options {
   headers?: object;
   method?: string;
-  data?: unknown;
+  data?: PlainObject | FormData;
   credentials?: boolean;
   formData?: boolean;
   timeout?: number;
 }
 
-type FetchType = (path: string, options: Options) => Promise<unknown>;
+type FetchType = (path?: string, options?: Options) => Promise<unknown>;
+
+const isFormData = (value: unknown): value is FormData => typeof value === FormData;
 
 export default class MyFetch {
   static API_URL = 'https://ya-praktikum.tech/api/v2';
@@ -27,7 +31,7 @@ export default class MyFetch {
     this.endpoint = `${MyFetch.API_URL}${endpoint}`;
   }
 
-  get: FetchType = (path, options = {}) => this.request(`${this.endpoint}${path}`, {
+  get: FetchType = (path = '', options = {}) => this.request(`${this.endpoint}${path}`, {
     ...options,
     method: METHODS.GET,
   }, options.timeout);
@@ -58,6 +62,11 @@ export default class MyFetch {
 
     const headers = {
       accept: 'application/json',
+      // 'Content-Security-Policy': 'default-src self; img-src self; script-src self; object-src none; style-src self; frame-ancestors self; base-uri self; form-action self; media-src https://ya-praktikum.tech/api/v2/resources;',
+      // 'X-Content-Type-Options': 'nosniff',
+      // 'X-Frame-Options': 'deny',
+      // 'Access-Control-Allow-Origin': 'https://ya-praktikum.tech',
+      // 'X-XSS-Protection': '1; mode=block',
       ...customHeaders,
     };
 
@@ -86,7 +95,7 @@ export default class MyFetch {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(formData ? data : JSON.stringify(data));
+        xhr.send(typeof data === FormData ? data : JSON.stringify(data));
       }
     });
   };

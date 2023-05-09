@@ -6,7 +6,7 @@ import {
 } from './types';
 import { isEqual } from '../mydash/isEqual';
 
-export default abstract class Block<P extends Record<string, unknown> = PropsInterface> {
+export default class Block<P extends PropsInterface = PropsInterface> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -17,7 +17,10 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
 
   _element: HTMLElement;
 
-  _meta;
+  _meta: {
+    tagName?: string;
+    props?: P;
+  };
 
   settings = {
     withInternalID: false,
@@ -35,7 +38,7 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
 
   private _hidden: boolean;
 
-  constructor(tagName: string = 'div', propsAndChildren: P = {}) {
+  constructor(tagName: string = 'div', propsAndChildren: P) {
     const { props, children = {} } = this._getChildren(propsAndChildren);
     const eventBus: EventBus = new EventBus();
 
@@ -65,7 +68,7 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
   }
 
   private _createResources() {
-    const { tagName } = this._meta;
+    const { tagName = '' } = this._meta;
     this._element = this._createDocumentElement(tagName);
   }
 
@@ -109,22 +112,25 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
 
   private _removeAttributes(attributes: string[]): void {
     attributes.forEach((attribute) => this._element.removeAttribute(attribute));
-    const { attributes: currentAttributes }: { attributes: AttributesType} = this.props;
+    const { attributes: currentAttributes } = this.props;
 
-    const newAttributes = Object.keys(currentAttributes).reduce((acc, key) => {
-      if (attributes.includes(key)) {
-        return acc;
-      }
+    if (currentAttributes) {
+      const newAttributes = Object.keys(currentAttributes).reduce((acc, key) => {
+        if (attributes.includes(key)) {
+          return acc;
+        }
 
-      return {
-        ...acc,
-        [key]: currentAttributes[key],
-      };
-    }, {});
+        return {
+          ...acc,
+          [key]: currentAttributes[key],
+        };
+      }, {} as AttributesType);
 
-    this.setProps({
-      attributes: { ...newAttributes },
-    });
+      // @ts-ignore
+      this.setProps({
+        attributes: { ...newAttributes },
+      });
+    }
   }
 
   private _removeClassNames(classNames: string[]) {
@@ -148,13 +154,17 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
   }
 
   // Может переопределять пользователь, необязательно трогать
-  componentDidMount(oldProps?: P): void {}
+  componentDidMount(oldProps?: P): P | undefined {
+    return oldProps;
+  }
 
   dispatchComponentDidMount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM);
   }
 
-  componentWillUnmount(oldProps?: P): void {}
+  componentWillUnmount(oldProps?: P): P | undefined {
+    return oldProps;
+  }
 
   dispatchComponentWillUnmount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CWU);
@@ -180,7 +190,9 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
     }
   }
 
-  componentDidUpdate(oldProps?: P, newProps?: P): void {}
+  componentDidUpdate(oldProps?: P, newProps?: P): boolean {
+    return isEqual(oldProps, newProps);
+  }
 
   setProps = (nextProps: P): void => {
     if (!nextProps) {
@@ -189,7 +201,7 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
 
     const oldProps = this.props;
 
-    const { props = {}, children = {} } = this._getChildren(nextProps);
+    const { props = {} as P, children = {} } = this._getChildren(nextProps);
 
     Object.assign(this.props, props);
     Object.assign(this.children, children);
@@ -217,7 +229,9 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
     this._addEvents();
   }
 
-  render(): Node {}
+  render(): Node {
+    return document.createElement('div');
+  }
 
   unmount(): void {
     this.dispatchComponentWillUnmount();
@@ -229,7 +243,7 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
   }
 
   private _addEvents() {
-    const { events = {} }: { events: EventsType} = this.props;
+    const { events = {} as EventsType } = this.props;
 
     Object.entries(events).forEach(([event, callback]) => {
       this._element.addEventListener(event, callback);
@@ -237,23 +251,24 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
   }
 
   private _removeEvents() {
-    const { events = {} }: { events: EventsType} = this.props;
+    const { events = {} as EventsType } = this.props;
 
     Object.entries(events).forEach(([event, callback]) => {
       this._element.removeEventListener(event, callback);
     });
   }
 
-  compile(template: string, props: P = {}): Node {
+  compile(template: string, props: P = {} as P): Node {
     const propsAndStubs = { ...props };
 
     Object.entries(this.children).forEach(([key, child]: [string, Block]) => {
       if (child) {
+        // @ts-ignore
         propsAndStubs[key] = isBlockInterfaceArray(child) ? this._getArrayChildren(child) : `<div data-id="${child._id}"></div>`;
       }
     });
 
-    const fragment = this._createDocumentElement('template');
+    const fragment = <HTMLTemplateElement> this._createDocumentElement('template');
 
     fragment.innerHTML = handlebars.compile(template)(propsAndStubs);
 
@@ -271,19 +286,20 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
     };
 
     Object.values(this.children).forEach(childHandler);
-
     return fragment.content;
   }
 
   private _getChildren(propsAndChildren: P) {
-    const children: ChildrenType | ChildrenType[] = {};
-    const props: P = {};
+    const children: ChildrenType | ChildrenType[] = {} as ChildrenType;
+    const props: P = {} as P;
     const childrenKeys = Object.keys(this.children || {});
 
     Object.entries(propsAndChildren).forEach(([key, value]: [string, Block | Block[]]) => {
       if (value instanceof Block || this._isChildrenArray(value) || childrenKeys.includes(key)) {
+        // @ts-ignore
         children[key] = value;
       } else {
+        // @ts-ignore
         props[key] = value;
       }
     });
@@ -291,7 +307,7 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
     return { children, props };
   }
 
-  private _getArrayChildren(array: Block[]) {
+  private _getArrayChildren(array: Block[]): string {
     return array.map((child) => `
       <div data-id="${child._id}"></div>`).reduce((acc: string, item: string) => `${acc}${item}
     `, '');
@@ -315,9 +331,10 @@ export default abstract class Block<P extends Record<string, unknown> = PropsInt
     const self = this;
 
     return new Proxy(props, {
-      set(target: P, prop:string, val) {
+      set(target: P, prop: string, val) {
         const oldTarget = { ...target };
         // eslint-disable-next-line no-param-reassign
+        // @ts-ignore
         target[prop] = val;
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;

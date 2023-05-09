@@ -7,12 +7,11 @@ export enum StoreEvents {
   Updated = 'updated',
 }
 
-type Indexed<T = unknown> = {
-  [key: string]: T;
+type Indexed = {
   user?: {
     errors: unknown[],
     data: User | undefined;
-    [key: string]: T;
+    [key: string]: unknown;
   };
   chats?: {
     errors: unknown[],
@@ -20,8 +19,9 @@ type Indexed<T = unknown> = {
       list?: Chat[];
       currentChat?: Chat;
     };
-    [key: string]: T;
+    [key: string]: unknown;
   }
+  [key: string]: unknown;
 };
 
 class Store extends EventBus {
@@ -35,4 +35,6 @@ class Store extends EventBus {
   };
 }
 
-export default new Store();
+const store = new Store();
+
+export default store;

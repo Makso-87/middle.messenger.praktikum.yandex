@@ -1,6 +1,7 @@
 import Block from '../utils/block/block';
 import store, { StoreEvents } from '../utils/store/store';
 import { isEqual } from '../utils/mydash/isEqual';
+// import { PropsInterface } from '../utils/block/types';
 
 type Indexed<T = unknown> = {
   [key in string]: T;

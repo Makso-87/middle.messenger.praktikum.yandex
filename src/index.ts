@@ -13,7 +13,6 @@ import router from './utils/router/router';
 import authController from './controllers/AuthController';
 import { NavLink } from './components/navLink';
 
-// (async () => {
 authController.fetchUser();
 
 router.use('/', Auth, authData)
@@ -50,4 +49,3 @@ router.use('/', Auth, authData)
     }),
   })
   .start();
-// })();

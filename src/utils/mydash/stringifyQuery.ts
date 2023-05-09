@@ -1,32 +1,35 @@
 import { isPlainObject, PlainObject } from './isPlainObject';
 import { isArray } from './isArray';
+import { getType } from './getType';
 
-const getAmpersand = (array: PlainObject, index: number) => `${array.length - 1 !== index ? '&' : ''}`;
+const getAmpersand = (array: [key: string, value: unknown][], index: number) => `${array.length - 1 !== index ? '&' : ''}`;
 
 const getKey = (key: string, parentKey: string) => (parentKey ? `${parentKey}[${key}]` : key);
 
-const handleArray = (key: string, arr: PlainObject) => arr.reduce((acc: string, item: PlainObject, index: number) => {
-  if (isArray(item)) {
-    // return `${acc}${handleArray(`${key}[${index.ts}]`, item)}`;
-    return `${acc}${handleArray(getKey(String(index), key), item)}`;
+const handleArray = (key: string, arr: []): string => {
+  if (!arr.length) {
+    return '';
   }
 
-  // return `${acc}${key}[${index.ts}]=${item}${getAmpersand(arr, index.ts)}`;
-  return `${acc}${getKey(String(index), key)}=${item}${getAmpersand(arr, index)}`;
-}, '');
+  return arr.reduce((acc: string, item: PlainObject, index: number) => {
+    if (isArray(item)) {
+      return `${acc}${handleArray(getKey(String(index), key), item)}`;
+    }
+
+    return `${acc}${getKey(String(index), key)}=${item}${getAmpersand(arr, index)}`;
+  }, '');
+};
 
 const handleObject = (key: string, obj: PlainObject): string => Object.entries(obj).reduce((acc: string, [keyItem, value]) => {
   if (isPlainObject(value)) {
-    // return `${acc}${handleObject(`${key}[${keyItem}]`, value)}`;
     return `${acc}${handleObject(getKey(keyItem, key), value)}`;
   }
 
-  // return `${acc}${key}[${keyItem}]=${value}`;
   return `${acc}${getKey(keyItem, key)}=${value}`;
 }, '');
 
-export const queryStringify = (data: PlainObject): string => {
-  if (Object.prototype.toString.call(data).slice(8, -1) !== 'Object') {
+export const queryStringify = (data: Document | XMLHttpRequestBodyInit): string => {
+  if (getType(data) !== 'Object') {
     throw new Error('input must be an object');
   }
 

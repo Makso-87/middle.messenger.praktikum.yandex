@@ -7,10 +7,11 @@ import { observe } from '../../hocs/withStore';
 import { Button } from '../../components/button';
 import authController from '../../controllers/AuthController';
 import { NavLink } from '../../components/navLink';
+import router from '../../utils/router/router';
 
 interface ProfileProps extends PropsInterface {}
 
-class Profile extends Block<ProfileProps> {
+export class Profile extends Block<ProfileProps> {
   constructor(props: ProfileProps) {
     const newProps = {
       ...props,
@@ -65,10 +66,15 @@ export const profileData = {
     link: '/change-password',
     text: 'Изменить пароль',
   }),
-  buttonBack: new NavLink({
+  buttonBack: new Button({
     className: 'button button_type_2',
     text: 'Назад',
-    link: '/messenger',
+    events: {
+      click: (e) => {
+        e.preventDefault();
+        router.back();
+      },
+    },
   }),
   buttonLogout: new Button({
     className: 'button button_type_2',

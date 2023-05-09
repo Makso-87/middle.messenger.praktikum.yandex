@@ -1,7 +1,9 @@
 import { EventBusInterface } from './types';
 
 export default class EventBus implements EventBusInterface {
-  listeners;
+  listeners: {
+    [key: string]: ((...args: unknown[]) => void)[];
+  };
 
   constructor() {
     this.listeners = {
@@ -12,7 +14,7 @@ export default class EventBus implements EventBusInterface {
     };
   }
 
-  on(event, callback) {
+  on(event: string, callback: () => unknown) {
     if (!this.listeners[event]) {
       this.listeners[event] = [];
     }
@@ -20,7 +22,7 @@ export default class EventBus implements EventBusInterface {
     this.listeners[event].push(callback);
   }
 
-  off(event, callback) {
+  off(event:string, callback: () => unknown) {
     if (event in this.listeners) {
       const newListeners = this.listeners[event].filter((listener) => listener !== callback);
       this.listeners[event] = [...newListeners];
@@ -29,7 +31,7 @@ export default class EventBus implements EventBusInterface {
     }
   }
 
-  emit(event, ...args) {
+  emit(event: string, ...args: unknown[]) {
     if (event in this.listeners) {
       this.listeners[event].forEach((listener) => listener(...args));
     } else {

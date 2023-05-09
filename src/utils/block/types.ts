@@ -6,7 +6,7 @@ export type AttributesType = {
     [key: string]: string | unknown;
 }
 
-export type ChildrenType = { [key: string]: Block } | Block;
+export type ChildrenType = { [key: string]: Block };
 
 export type EventsType = {
     [key: string]: (event: InputEvent) => void | Promise<void> | ((...args: unknown[]) => (event: InputEvent) => void);

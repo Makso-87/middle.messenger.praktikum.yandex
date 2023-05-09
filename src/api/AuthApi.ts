@@ -1,28 +1,28 @@
 import { BaseApi } from './BaseApi';
 
-export interface SignupData<T extends Record<string, string> = unknown> {
-  first_name: T,
-  second_name: T,
-  login: T,
-  email: T,
-  password: T,
-  phone: T
+export interface SignupData {
+  first_name: string;
+  second_name: string;
+  login: string;
+  email: string;
+  password: string;
+  phone: string;
 }
 
 export interface SigninData {
-  login: string,
-  password: string
+  login: string;
+  password: string;
 }
 
 export interface UserData {
-  id: number,
-  first_name: string,
-  second_name: string,
-  display_name: string,
-  login: string,
-  email: string,
-  phone: string,
-  avatar: string
+  id: number;
+  first_name: string;
+  second_name: string;
+  display_name: string;
+  login: string;
+  email: string;
+  phone: string;
+  avatar: string;
 }
 
 export class AuthApi extends BaseApi {
@@ -56,12 +56,4 @@ export class AuthApi extends BaseApi {
       credentials: true,
     });
   }
-
-  create = undefined;
-
-  read = undefined;
-
-  update = undefined;
-
-  delete = undefined;
 }
