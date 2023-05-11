@@ -10,7 +10,7 @@ export class ChatItem extends Block<ChatItemProps> {
       ...props,
       className: `chat-item ${props.className ?? ''}`,
     };
-    super('li', newProps);
+    super(newProps, 'li');
   }
 
   render() {

@@ -11,7 +11,7 @@ export class Error extends Block<ErrorProps> {
       className: `error-page ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

@@ -15,7 +15,7 @@ export class ModalPopup extends Block<ModalPopupProps> {
       className: `${props.initialClassName ?? 'modal-popup'} ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   closeModal(event: Event) {

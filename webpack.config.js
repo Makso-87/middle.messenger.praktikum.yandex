@@ -1,5 +1,6 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -10,9 +11,16 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.js', '.json'],
+    fallback: {
+      fs: false,
+    },
+    alias: {
+      handlebars: 'handlebars/dist/handlebars.min.js',
+    },
   },
   devServer: {
     port: '1008',
+    historyApiFallback: true,
   },
   module: {
     rules: [
@@ -24,7 +32,7 @@ module.exports = {
             configFile: path.resolve(__dirname, 'tsconfig.json'),
           },
         }],
-        exclude: /(node_modules)/,
+        exclude: /(node_modules)(\.tmpl\.ts)?$/,
       },
       {
         test: /\.(sc|c)ss?$/,
@@ -42,6 +50,9 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: 'style-[hash].css',
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
     }),
   ],
 };

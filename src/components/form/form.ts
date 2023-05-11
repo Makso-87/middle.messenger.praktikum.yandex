@@ -17,8 +17,8 @@ type FormPropType = string
 
 interface FormProps extends PropsInterface {
   template?: string;
-  errorMessage?: ChildrenType | unknown;
-  inputs?: ChildrenType[];
+  errorMessage?: Block | unknown;
+  inputs?: Block[];
   [key: string]: FormPropType;
 }
 
@@ -29,7 +29,7 @@ export class Form extends Block<FormProps> {
       className: `${props.initialClassName ?? 'form'} ${props.className ?? ''}`,
     };
 
-    super('form', newProps);
+    super(newProps, 'form');
   }
 
   render() {

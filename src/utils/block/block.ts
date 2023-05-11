@@ -5,6 +5,7 @@ import {
   AttributesType, ChildrenType, EventsType, isBlockInterfaceArray, PropsInterface,
 } from './types';
 import { isEqual } from '../mydash/isEqual';
+import { isArray } from '../mydash/isArray';
 
 export default class Block<P extends PropsInterface = PropsInterface> {
   static EVENTS = {
@@ -19,7 +20,7 @@ export default class Block<P extends PropsInterface = PropsInterface> {
 
   _meta: {
     tagName?: string;
-    props?: P;
+    props?: Partial<P>;
   };
 
   settings = {
@@ -34,11 +35,11 @@ export default class Block<P extends PropsInterface = PropsInterface> {
 
   _id;
 
-  props: P;
+  props: Partial<P>;
 
   private _hidden: boolean;
 
-  constructor(tagName: string = 'div', propsAndChildren: P) {
+  constructor(propsAndChildren: Partial<P>, tagName: string = 'div') {
     const { props, children = {} } = this._getChildren(propsAndChildren);
     const eventBus: EventBus = new EventBus();
 
@@ -85,14 +86,14 @@ export default class Block<P extends PropsInterface = PropsInterface> {
   private _componentDidMount() {
     this.componentDidMount();
 
-    const childrenValues: Block[] = Object.values(this.children);
+    const childrenValues: (Block | Block[])[] = Object.values(this.children);
 
-    const dispatchChildren = (children: Block | Block[]) => {
+    const dispatchChildren = (children: Block | (Block | Block[])[]) => {
       if (isBlockInterfaceArray(children)) {
-        children.forEach((child: Block | Block[]) => {
+        children.forEach((child: Block | (Block | Block[])[]) => {
           dispatchChildren(child);
         });
-      } else {
+      } else if (children instanceof Block) {
         children.dispatchComponentDidMount();
       }
     };
@@ -126,10 +127,9 @@ export default class Block<P extends PropsInterface = PropsInterface> {
         };
       }, {} as AttributesType);
 
-      // @ts-ignore
       this.setProps({
         attributes: { ...newAttributes },
-      });
+      } as Partial<P>);
     }
   }
 
@@ -140,7 +140,7 @@ export default class Block<P extends PropsInterface = PropsInterface> {
 
     this.setProps({
       className: newClasses,
-    });
+    } as Partial<P>);
   }
 
   private _setClasses() {
@@ -182,7 +182,7 @@ export default class Block<P extends PropsInterface = PropsInterface> {
     this.eventBus().emit(Block.EVENTS.FLOW_CDU);
   }
 
-  private _componentDidUpdate(oldProps: P, newProps: P) {
+  private _componentDidUpdate(oldProps: Partial<P>, newProps: Partial<P>) {
     this.componentDidUpdate(oldProps, newProps);
 
     if (!isEqual(oldProps, newProps)) {
@@ -190,18 +190,18 @@ export default class Block<P extends PropsInterface = PropsInterface> {
     }
   }
 
-  componentDidUpdate(oldProps?: P, newProps?: P): boolean {
+  componentDidUpdate(oldProps?: Partial<P>, newProps?: Partial<P>): boolean {
     return isEqual(oldProps, newProps);
   }
 
-  setProps = (nextProps: P): void => {
+  setProps = (nextProps: Partial<P>): void => {
     if (!nextProps) {
       return;
     }
 
     const oldProps = this.props;
 
-    const { props = {} as P, children = {} } = this._getChildren(nextProps);
+    const { props = {} as Partial<P>, children = {} } = this._getChildren(nextProps);
 
     Object.assign(this.props, props);
     Object.assign(this.children, children);
@@ -245,7 +245,7 @@ export default class Block<P extends PropsInterface = PropsInterface> {
   private _addEvents() {
     const { events = {} as EventsType } = this.props;
 
-    Object.entries(events).forEach(([event, callback]) => {
+    Object.entries(events).forEach(([event, callback]: [event: string, callback: () => void ]) => {
       this._element.addEventListener(event, callback);
     });
   }
@@ -253,18 +253,17 @@ export default class Block<P extends PropsInterface = PropsInterface> {
   private _removeEvents() {
     const { events = {} as EventsType } = this.props;
 
-    Object.entries(events).forEach(([event, callback]) => {
+    Object.entries(events).forEach(([event, callback]: [event: string, callback: () => void]) => {
       this._element.removeEventListener(event, callback);
     });
   }
 
-  compile(template: string, props: P = {} as P): Node {
+  compile(template: string, props: Partial<P> = {} as Partial<P>): Node {
     const propsAndStubs = { ...props };
 
     Object.entries(this.children).forEach(([key, child]: [string, Block]) => {
       if (child) {
-        // @ts-ignore
-        propsAndStubs[key] = isBlockInterfaceArray(child) ? this._getArrayChildren(child) : `<div data-id="${child._id}"></div>`;
+        (propsAndStubs as Record<string, string>)[key] = isBlockInterfaceArray(child) ? this._getArrayChildren(child) : `<div data-id="${child._id}"></div>`;
       }
     });
 
@@ -289,18 +288,16 @@ export default class Block<P extends PropsInterface = PropsInterface> {
     return fragment.content;
   }
 
-  private _getChildren(propsAndChildren: P) {
+  private _getChildren(propsAndChildren: Partial<P>) {
     const children: ChildrenType | ChildrenType[] = {} as ChildrenType;
-    const props: P = {} as P;
+    const props: Partial<P> = {} as Partial<P>;
     const childrenKeys = Object.keys(this.children || {});
 
     Object.entries(propsAndChildren).forEach(([key, value]: [string, Block | Block[]]) => {
       if (value instanceof Block || this._isChildrenArray(value) || childrenKeys.includes(key)) {
-        // @ts-ignore
         children[key] = value;
       } else {
-        // @ts-ignore
-        props[key] = value;
+        (props as Record<string, unknown>)[key] = value;
       }
     });
 
@@ -313,29 +310,28 @@ export default class Block<P extends PropsInterface = PropsInterface> {
     `, '');
   }
 
-  private _isChildrenArray(array: Block[] | unknown = []) {
-    if (!Array.isArray(array)) {
+  private _isChildrenArray(array: Block[] | unknown = []): boolean {
+    if (!isArray(array)) {
       return false;
     }
 
     let isBlock = false;
 
-    array.forEach((item) => {
+    array.forEach((item: unknown) => {
       isBlock = item instanceof Block;
     });
 
     return isBlock;
   }
 
-  private _makePropsProxy(props: P) {
+  private _makePropsProxy(props: Partial<P>) {
     const self = this;
 
     return new Proxy(props, {
-      set(target: P, prop: string, val) {
+      set(target: Partial<P>, prop: string, val: unknown) {
         const oldTarget = { ...target };
         // eslint-disable-next-line no-param-reassign
-        // @ts-ignore
-        target[prop] = val;
+        (target as Record<string, unknown>)[prop] = val;
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
         return true;
       },

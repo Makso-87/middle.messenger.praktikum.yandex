@@ -21,7 +21,7 @@ describe('NavLink component', () => {
 
     navLink.setProps({
       events: {
-        click: (event) => {
+        click: (event: Event) => {
           event.preventDefault();
           router.go(link);
         },

@@ -1,15 +1,16 @@
 import { BaseApi } from './BaseApi';
+import { FormRequestData } from '../utils/onSubmitForm/onSubmitForm';
 
-export interface AddChatData {
+export interface AddChatData extends FormRequestData {
   title: string;
 }
 
-export interface AddUsersToChatData {
+export interface AddUsersToChatData extends FormRequestData {
   users: number[];
   chatId: number;
 }
 
-export interface ChatManipulationData {
+export interface ChatManipulationData extends FormRequestData {
   chatId: number;
 }
 
@@ -64,17 +65,9 @@ export class ChatsApi extends BaseApi {
     credentials: true,
   });
 
-  setChatAvatar = (data: SetChatAvatarData) => this.fetch.put('/avatar', {
+  setChatAvatar = (data: FormData) => this.fetch.put('/avatar', {
     credentials: true,
     formData: true,
-    data,
+    data: { ...data },
   });
-
-  create = undefined;
-
-  read = undefined;
-
-  update = undefined;
-
-  delete = undefined;
 }

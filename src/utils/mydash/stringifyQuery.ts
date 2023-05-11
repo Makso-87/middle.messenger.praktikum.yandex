@@ -1,6 +1,7 @@
 import { isPlainObject, PlainObject } from './isPlainObject';
 import { isArray } from './isArray';
 import { getType } from './getType';
+import { FormRequestData } from '../onSubmitForm/onSubmitForm';
 
 const getAmpersand = (array: [key: string, value: unknown][], index: number) => `${array.length - 1 !== index ? '&' : ''}`;
 
@@ -28,7 +29,7 @@ const handleObject = (key: string, obj: PlainObject): string => Object.entries(o
   return `${acc}${getKey(keyItem, key)}=${value}`;
 }, '');
 
-export const queryStringify = (data: Document | XMLHttpRequestBodyInit): string => {
+export const queryStringify = (data: FormRequestData): string => {
   if (getType(data) !== 'Object') {
     throw new Error('input must be an object');
   }

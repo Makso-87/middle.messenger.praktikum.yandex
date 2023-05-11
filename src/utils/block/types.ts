@@ -6,10 +6,14 @@ export type AttributesType = {
     [key: string]: string | unknown;
 }
 
-export type ChildrenType = { [key: string]: Block };
+export type ChildrenType = { [key: string]: Block | Block[] };
 
 export type EventsType = {
-    [key: string]: (event: InputEvent) => void | Promise<void> | ((...args: unknown[]) => (event: InputEvent) => void);
+    [key: string]:
+        | ((event: FormDataEvent) => void)
+        | ((event: InputEvent) => void)
+        | Promise<void>
+        | ((...args: unknown[]) => (event: InputEvent) => void);
 };
 
 export type KeyValuePropertyType = {
@@ -24,4 +28,4 @@ export interface PropsInterface {
     [key: string]: Block | unknown;
 }
 
-export const isBlockInterfaceArray = (element: Block | Block[]): element is Block[] => isArray(element as Block[]);
+export const isBlockInterfaceArray = (element: Block | (Block | Block[])[]): element is Block[] => isArray(element as Block[]);

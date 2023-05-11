@@ -15,7 +15,7 @@ export class Avatar extends Block<AvatarProps> {
       className: `${props.initialClassName ?? 'avatar'} ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

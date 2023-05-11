@@ -1,4 +1,5 @@
-import { LastMessageType } from './message';
+import { LastMessageType, MessageType } from './message';
+import { User } from './user';
 
 export type Chat = {
     id: number,
@@ -6,5 +7,7 @@ export type Chat = {
     avatar: string | null,
     unread_count: number,
     last_message: LastMessageType | null;
-    messages?: unknown[]
+    messages?: MessageType[]
+    token?: string;
+    users?: User[];
 };

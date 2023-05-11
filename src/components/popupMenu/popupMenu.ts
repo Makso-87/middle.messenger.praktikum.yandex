@@ -13,7 +13,7 @@ export class PopupMenu extends Block<PopupMenuProps> {
       className: `${props.initialClassName ?? 'popup-menu'} ${props.className ?? ''}`,
     };
 
-    super('ul', newProps);
+    super(newProps, 'ul');
   }
 
   render() {

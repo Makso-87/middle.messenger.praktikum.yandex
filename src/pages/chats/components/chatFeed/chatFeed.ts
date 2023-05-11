@@ -11,7 +11,7 @@ export class ChatFeed extends Block<ChatFeedInterface> {
       ...props,
       className: `chat-feed ${props.className ?? ''}`,
     };
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

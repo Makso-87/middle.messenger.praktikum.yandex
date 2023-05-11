@@ -15,6 +15,8 @@ import { observe } from '../../../../../../../../hocs/withStore';
 import Block from '../../../../../../../../utils/block/block';
 import chatsController from '../../../../../../../../controllers/ChatsController';
 import { User } from '../../../../../../../../models/user';
+import { FindUserData } from '../../../../../../../../api/UserApi';
+import { AddUsersToChatData } from '../../../../../../../../api/ChatsApi';
 
 const addFindUserInput = new InputBlock({
   input: new Input({
@@ -50,7 +52,7 @@ const form = new Form({
   }),
 });
 
-const controller = (data: unknown) => {
+const controller = (data: FindUserData) => {
   userController.findUser(data);
 };
 
@@ -129,10 +131,10 @@ const getUsersToAddList = (list: User[] = []): Block[] | undefined => {
   ));
 };
 
-const FoundUsersList = observe(({ users }) => ({ content: getUsersList(users?.data?.list ?? []) }))(CustomComponent);
+const FoundUsersList = observe(({ users }) => ({ content: getUsersList(users?.data?.list ?? []) }))(CustomComponent as typeof Block);
 const UsersListToAdd = observe(({ users }) => ({
   content: getUsersToAddList(users?.data?.addUsersList ?? []),
-}))(CustomComponent);
+}))(CustomComponent as typeof Block);
 
 export const addUsersModal = new ModalPopup({
   className: 'chat-users-modal',
@@ -181,7 +183,7 @@ addUsersButton.setProps({
 
       if (addUsersList) {
         const usersIds = addUsersList.map((item) => item.id);
-        const addUsersData = {
+        const addUsersData: AddUsersToChatData = {
           users: usersIds,
           chatId: currentChat.id,
         };
@@ -189,7 +191,9 @@ addUsersButton.setProps({
         chatsController.addUsersToChat(addUsersData);
         addUsersModal.hide();
         addUsersButton.hide();
-        form.getContent().reset();
+
+        const formElement = form.getContent() as HTMLFormElement;
+        formElement.reset();
       }
     },
   },

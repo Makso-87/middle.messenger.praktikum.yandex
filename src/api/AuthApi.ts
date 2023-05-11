@@ -1,6 +1,7 @@
 import { BaseApi } from './BaseApi';
+import { FormRequestData } from '../utils/onSubmitForm/onSubmitForm';
 
-export interface SignupData {
+export interface SignupData extends FormRequestData {
   first_name: string;
   second_name: string;
   login: string;
@@ -9,12 +10,12 @@ export interface SignupData {
   phone: string;
 }
 
-export interface SigninData {
+export interface SigninData extends FormRequestData {
   login: string;
   password: string;
 }
 
-export interface UserData {
+export interface UserData extends FormRequestData {
   id: number;
   first_name: string;
   second_name: string;

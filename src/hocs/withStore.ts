@@ -1,14 +1,10 @@
 import Block from '../utils/block/block';
-import store, { StoreEvents } from '../utils/store/store';
+import store, { StateInterface, StoreEvents } from '../utils/store/store';
 import { isEqual } from '../utils/mydash/isEqual';
-// import { PropsInterface } from '../utils/block/types';
+import { PropsInterface } from '../utils/block/types';
 
-type Indexed<T = unknown> = {
-  [key in string]: T;
-};
-
-export const observe = (mapPropsToState: (state: Indexed) => Indexed) => (Component: typeof Block) => class extends Component {
-  constructor(props) {
+export const observe = (mapPropsToState: (state: StateInterface) => StateInterface) => (Component: typeof Block) => class extends Component {
+  constructor(props: PropsInterface) {
     let state = mapPropsToState(store.getState());
     super({ ...props, ...state });
 

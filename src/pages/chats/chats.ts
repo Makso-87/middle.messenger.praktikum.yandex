@@ -26,6 +26,7 @@ import { createWSConnection } from '../../utils/ws/ws';
 import { getTime } from '../../utils/mydash/getTime';
 import { Chat } from '../../models/chat';
 import { NavLink } from '../../components/navLink';
+import { AddChatData } from '../../api/ChatsApi';
 
 interface ChatsProps extends PropsInterface {}
 
@@ -36,7 +37,7 @@ export class Chats extends Block<ChatsProps> {
       className: `chats ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {
@@ -45,7 +46,7 @@ export class Chats extends Block<ChatsProps> {
   }
 }
 
-const getChatsList = (list = []): Block[] | undefined => {
+const getChatsList = (list: Chat[] = []): Block[] | undefined => {
   if (!list.length) {
     return [];
   }
@@ -119,7 +120,7 @@ const modalPopup = new ModalPopup({
 
 modalPopup.hide();
 
-const controller = async (data: unknown) => {
+const controller = async (data: AddChatData) => {
   await chatsController.addChat(data);
   modalPopup.hide();
 };
@@ -150,13 +151,13 @@ const messageFeedContent = {
   chatBottom,
 };
 
-const ChatFeedObserved = observe(({ chats }) => ({ chatsList: getChatsList(chats?.data?.list) }))(ChatFeed);
+const ChatFeedObserved = observe(({ chats }) => ({ chatsList: getChatsList(chats?.data?.list) }))(ChatFeed as typeof Block);
 const MessageFeedObserved = observe(({ chats }) => ({
   currentChat: chats?.data?.currentChat,
   chatTop: chats?.data?.currentChat ? messageFeedContent.chatTop : undefined,
   chatMiddle: chats?.data?.currentChat ? messageFeedContent.chatMiddle : undefined,
   chatBottom: chats?.data?.currentChat ? messageFeedContent.chatBottom : undefined,
-}))(MessageFeed);
+}))(MessageFeed as typeof Block);
 
 export const chatsData = {
   chatFeed: new ChatFeedObserved({

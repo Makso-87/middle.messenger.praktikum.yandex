@@ -1,19 +1,13 @@
 import Block from '../block/block';
 import { render } from '../render/render';
 import { PropsInterface } from '../block/types';
-import { Auth } from '../../pages/auth';
-import { ChangePassword } from '../../pages/changePassword';
-import { Registration } from '../../pages/registration';
-import { EditProfile } from '../../pages/editProfile';
-import { Chats } from '../../pages/chats';
-import { Profile } from '../../pages/profile';
 
 type propsType = {
   rootQuery: string;
   blockProps: PropsInterface;
 };
 
-export type blockClassType = Auth | Registration | Chats | Profile | EditProfile | ChangePassword | Error;
+export type blockClassType = typeof Block;
 
 export class Route {
   private _pathname: string;

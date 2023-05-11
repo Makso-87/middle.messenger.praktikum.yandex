@@ -11,7 +11,7 @@ export class Message extends Block<MessageProps> {
       className: `message ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

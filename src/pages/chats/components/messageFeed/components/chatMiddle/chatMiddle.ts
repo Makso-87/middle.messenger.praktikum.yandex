@@ -19,7 +19,7 @@ export class ChatMiddle extends Block<ChatMiddleProps> {
       className: `chat-middle ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {
@@ -42,7 +42,7 @@ const getMessages = (list: MessageType[] = []) => {
     const [user] = users.filter((usersItem) => usersItem.id === messageItem.user_id);
 
     return new Message({
-      className: `${messageItem.user_id === authUser.data.id ? 'message_self' : ''}`,
+      className: `${messageItem.user_id === authUser?.data.id ? 'message_self' : ''}`,
       avatar: new Avatar({
         className: 'avatar_size_50 avatar_margin_none',
         url: user?.avatar ?? '',
@@ -58,7 +58,7 @@ const getMessages = (list: MessageType[] = []) => {
 
 const ChatMiddleObserved = observe(({ chats }) => ({
   messages: getMessages(chats?.data?.currentChat?.messages),
-}))(ChatMiddle);
+}))(ChatMiddle as typeof Block);
 
 export const chatMiddle = new ChatMiddleObserved({
   events: {
@@ -67,6 +67,7 @@ export const chatMiddle = new ChatMiddleObserved({
 
       if (scrollTop === 0) {
         const { sockets, chats: { data: { currentChat } } } = store.getState();
+
         const webSocket = sockets[currentChat.id];
 
         if (currentChat.messages) {

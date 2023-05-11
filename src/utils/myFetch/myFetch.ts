@@ -1,6 +1,5 @@
 import { queryStringify } from '../mydash/stringifyQuery';
-import { PlainObject } from '../mydash/isPlainObject';
-// import { PlainObject } from '../mydash/isPlainObject';
+import { FormRequestData } from '../onSubmitForm/onSubmitForm';
 
 const METHODS = {
   GET: 'GET',
@@ -12,15 +11,13 @@ const METHODS = {
 interface Options {
   headers?: object;
   method?: string;
-  data?: PlainObject | FormData;
+  data?: FormRequestData | FormData;
   credentials?: boolean;
   formData?: boolean;
   timeout?: number;
 }
 
 type FetchType = (path?: string, options?: Options) => Promise<unknown>;
-
-const isFormData = (value: unknown): value is FormData => typeof value === FormData;
 
 export default class MyFetch {
   static API_URL = 'https://ya-praktikum.tech/api/v2';
@@ -57,7 +54,7 @@ export default class MyFetch {
 
   request = (url: string, options = {}, timeout = 5000) => {
     const {
-      method, data, headers: customHeaders = {}, credentials = false, formData = false,
+      method, data, headers: customHeaders = {}, credentials = false,
     }: Options = options;
 
     const headers = {
@@ -75,7 +72,7 @@ export default class MyFetch {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
-      xhr.open(method, isGet && !!data ? `${url}${queryStringify(data)}` : url);
+      xhr.open(method, isGet && !!data && !(data instanceof FormData) ? `${url}${queryStringify(data)}` : url);
       xhr.timeout = timeout;
 
       Object.entries(headers).forEach(([key, value]: [string, string]) => {
@@ -95,7 +92,7 @@ export default class MyFetch {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(typeof data === FormData ? data : JSON.stringify(data));
+        xhr.send(data instanceof FormData ? data : JSON.stringify(data));
       }
     });
   };
