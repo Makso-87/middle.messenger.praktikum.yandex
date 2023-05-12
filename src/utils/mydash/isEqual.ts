@@ -8,7 +8,7 @@ function isObjectType(value: unknown): value is object {
   return getType(value) === 'Object';
 }
 
-export const isEqual:isEqualGeneric<PlainObject> = (arg1, arg2) => {
+export const isEqual:isEqualGeneric<PlainObject> = (arg1 = {}, arg2 = {}) => {
   if (arg1 !== null && arg2 === null) {
     return false;
   }
@@ -21,8 +21,16 @@ export const isEqual:isEqualGeneric<PlainObject> = (arg1, arg2) => {
     return true;
   }
 
+  if (isArray(arg1) && isArray(arg2) && arg1.length === 0 && arg2.length === 0) {
+    return true;
+  }
+
   const arg1Keys = Object.keys(arg1 as object);
   const arg2Keys = Object.keys(arg2 as object);
+
+  if (arg1Keys.length !== arg2Keys.length) {
+    return false;
+  }
 
   if (arg1Keys.length !== arg2Keys.length) {
     return false;
