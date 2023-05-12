@@ -1,4 +1,4 @@
-FROM node:16.13.0
+FROM node:16-alpine as BildKit
 
 WORKDIR /var/www
 COPY . .
