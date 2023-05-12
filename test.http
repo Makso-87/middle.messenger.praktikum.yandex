@@ -1,0 +1,21 @@
+GRAPHQL http://localhost:8300/
+content-type: application/graphql
+authorization: 2305d5c2-8862-4d96-8136-63b8845ffe8a
+
+query {
+    campaigns {
+        lineItems(adTypeIds: ["IMAGE", "LOADER"]) {
+            id
+            name
+            status
+            creatives {
+                id
+                name
+                creativeType {
+                    code
+                }
+                sasCreativeId
+            }
+        }
+    }
+}

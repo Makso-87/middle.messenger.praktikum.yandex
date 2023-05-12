@@ -12,13 +12,16 @@
   },
   "author": "Maksim Popov",
   "license": "ISC",
-  "engine": {
+  "engines": {
     "node": "v16.12.0"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run test && npm run lint && npm run styleLint "
+    }
+  },
   "devDependencies": {
-    "@anikin/parcel-transformer-handlebars": "^1.0.2",
     "@babel/register": "^7.21.0",
-    "@parcel/transformer-sass": "^2.8.3",
     "@types/chai": "^4.3.5",
     "@types/mocha": "^10.0.1",
     "@types/sinon": "^10.0.14",
@@ -34,8 +37,8 @@
     "eslint-config-airbnb": "^19.0.4",
     "events": "^3.3.0",
     "html-webpack-plugin": "^5.5.1",
+    "husky": "^8.0.3",
     "mini-css-extract-plugin": "^2.7.5",
-    "parcel": "^2.8.3",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "punycode": "^1.4.1",
@@ -60,9 +63,7 @@
     "chai": "^4.3.7",
     "express": "^4.18.2",
     "handlebars": "^4.7.7",
-    "handlebars-loader": "^1.7.3",
     "jsdom": "^22.0.0",
-    "jsdom-global": "^3.0.2",
     "mocha": "^10.2.0",
     "sinon": "^15.0.4",
     "uuid": "^9.0.0"
