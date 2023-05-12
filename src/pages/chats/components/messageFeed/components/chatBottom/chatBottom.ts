@@ -17,7 +17,7 @@ export class ChatBottom extends Block<ChatBottomProps> {
       className: `chat-bottom ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

@@ -1,4 +1,5 @@
 import { Input } from '../../components/input';
+import Block from '../block/block';
 
 export type validationRulesType = {
   [key: string]: RegExp;
@@ -42,10 +43,8 @@ export const validateInput = (inputBlock: Input) => (event: InputEvent) => {
   const result = isValidInputValue(value, name);
 
   if (result) {
-    // inputBlock.setProps({ error: false });
-    inputBlock.children.errorMessage.hide();
+    (inputBlock.children.errorMessage as Block).hide();
   } else {
-    // inputBlock.setProps({ error: true, attributes: { autofocus: 'autofocus' } });
-    inputBlock.children.errorMessage.show();
+    (inputBlock.children.errorMessage as Block).show();
   }
 };

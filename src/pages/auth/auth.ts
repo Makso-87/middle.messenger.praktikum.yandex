@@ -10,8 +10,11 @@ import { ErrorMessage } from '../../components/errorMessage';
 import { PropsInterface } from '../../utils/block/types';
 import { NavLink } from '../../components/navLink';
 import authController from '../../controllers/AuthController';
+import { SigninData } from '../../api/AuthApi';
 
-interface AuthProps extends PropsInterface{}
+interface AuthProps extends PropsInterface {
+  input?: Block;
+}
 
 export class Auth extends Block<AuthProps> {
   constructor(props: AuthProps) {
@@ -20,7 +23,7 @@ export class Auth extends Block<AuthProps> {
       className: `auth ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {
@@ -97,7 +100,7 @@ const form = new Form({
   inputs,
 });
 
-const controller = (data: unknown) => {
+const controller = (data: SigninData) => {
   authController.signin(data);
 };
 

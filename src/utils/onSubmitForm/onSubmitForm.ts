@@ -5,16 +5,16 @@ import { isOneOfAllFalse } from '../mydash/isOneOfAllFalse';
 import { capitalizeString } from '../mydash/capitalizeString';
 import { toCamelCase } from '../mydash/toCamelCase';
 
-export type formRequestData<T extends Record<string, string> = unknown> = {
-  [key: string]: T;
+export interface FormRequestData {
+  [key: string]: unknown;
 }
 
-export const onSubmitForm = (form: Block, inputBlocks: Block[], controller: (data: formRequestData) => void) => (event: FormDataEvent) => {
+export const onSubmitForm = (form: Block, inputBlocks: Block[], controller: (data: FormRequestData) => void) => (event: FormDataEvent) => {
   event.preventDefault();
   const formData: FormData = new FormData(event.target as HTMLFormElement);
 
-  const data: formRequestData = inputBlocks.reduce((acc, inputBlock) => {
-    const { name } = inputBlock.children.input.props.attributes;
+  const data: FormRequestData = inputBlocks.reduce((acc, inputBlock) => {
+    const { name } = (inputBlock.children.input as Block).props.attributes;
 
     return {
       ...acc,
@@ -27,13 +27,13 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[], controller: (dat
   const predicates: {[key: string | never]: boolean } = {};
 
   inputBlocks.forEach((inputBlock) => {
-    const { name } = inputBlock.children.input.props.attributes;
-    const result = isValidInputValue(data[name], name);
+    const { name } = (inputBlock.children.input as Block).props.attributes;
+    const result = isValidInputValue(data[name] as string, name);
 
     if (result) {
-      inputBlock.children.errorMessage.hide();
+      (inputBlock.children.errorMessage as Block).hide();
     } else {
-      inputBlock.children.errorMessage.show();
+      (inputBlock.children.errorMessage as Block).show();
     }
 
     predicates[`is${capitalizeString(toCamelCase(name))}`] = result;
@@ -42,7 +42,7 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[], controller: (dat
   const validationValues = Object.values(predicates).map((value) => value);
 
   if (isAllTrue(validationValues) && (checkPassword ? data?.password === checkPassword : true)) {
-    form.children.errorMessage.hide();
+    (form.children.errorMessage as Block).hide();
 
     controller(data);
     return;
@@ -51,20 +51,20 @@ export const onSubmitForm = (form: Block, inputBlocks: Block[], controller: (dat
   if (
     isOneOfAllFalse(validationValues)
   ) {
-    form.children.errorMessage.setProps({
+    (form.children.errorMessage as Block).setProps({
       errorText: errorsMessages.form,
     });
 
-    form.children.errorMessage.show();
+    (form.children.errorMessage as Block).show();
 
     return;
   }
 
   if (data?.password !== checkPassword && !!checkPassword) {
-    form.children.errorMessage.setProps({
+    (form.children.errorMessage as Block).setProps({
       errorText: errorsMessages.passwordsMatch,
     });
 
-    form.children.errorMessage.show();
+    (form.children.errorMessage as Block).show();
   }
 };

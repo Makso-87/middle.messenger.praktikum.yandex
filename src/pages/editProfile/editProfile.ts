@@ -12,6 +12,7 @@ import { PropsInterface } from '../../utils/block/types';
 import { observe } from '../../hocs/withStore';
 import userController from '../../controllers/UserController';
 import { NavLink } from '../../components/navLink';
+import { UserProfileData } from '../../api/UserApi';
 
 interface EditProfileProps extends PropsInterface {}
 
@@ -22,7 +23,7 @@ export class EditProfile extends Block<EditProfileProps> {
       className: `profile ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {
@@ -30,18 +31,20 @@ export class EditProfile extends Block<EditProfileProps> {
   }
 }
 
-const onInput = (input) => (event) => {
+const onInput = (input: Input) => (event: Event) => {
+  const { value } = event.target as HTMLInputElement;
+
   input.setProps({
     attributes: {
       ...input.props.attributes,
-      value: event.target.value,
+      value,
     },
   });
 };
 
-const FormObserved = observe(({ user }) => ({ firstName: user?.data?.first_name ?? '' }))(Form);
+const FormObserved = observe(({ user }) => ({ firstName: user?.data?.first_name ?? '' }))(Form as typeof Block);
 
-const AvatarObserved = observe(({ user }) => ({ url: user?.data?.avatar ?? '' }))(Avatar);
+const AvatarObserved = observe(({ user }) => ({ url: user?.data?.avatar ?? '' }))(Avatar as typeof Block);
 
 const InputEmailObserved = observe(({ user }) => (
   {
@@ -52,7 +55,7 @@ const InputEmailObserved = observe(({ user }) => (
       placeholder: 'Почта',
       type: 'email',
     },
-  }))(Input);
+  }))(Input as typeof Block);
 
 const InputLoginObserved = observe(({ user }) => (
   {
@@ -63,7 +66,7 @@ const InputLoginObserved = observe(({ user }) => (
       placeholder: 'Логин',
       type: 'text',
     },
-  }))(Input);
+  }))(Input as typeof Block);
 
 const InputFirstNameObserved = observe(({ user }) => (
   {
@@ -74,7 +77,7 @@ const InputFirstNameObserved = observe(({ user }) => (
       placeholder: 'Имя',
       type: 'text',
     },
-  }))(Input);
+  }))(Input as typeof Block);
 
 const InputSecondNameObserved = observe(({ user }) => (
   {
@@ -85,7 +88,7 @@ const InputSecondNameObserved = observe(({ user }) => (
       placeholder: 'Фамилия',
       type: 'text',
     },
-  }))(Input);
+  }))(Input as typeof Block);
 
 const InputDisplayNameObserved = observe(({ user }) => (
   {
@@ -96,7 +99,7 @@ const InputDisplayNameObserved = observe(({ user }) => (
       placeholder: 'Имя в чате',
       type: 'text',
     },
-  }))(Input);
+  }))(Input as typeof Block);
 
 const InputPhoneObserved = observe(({ user }) => (
   {
@@ -107,7 +110,7 @@ const InputPhoneObserved = observe(({ user }) => (
       placeholder: 'Телефон',
       type: 'text',
     },
-  }))(Input);
+  }))(Input as typeof Block);
 
 const inputAvatar = new Input({
   initialClassName: 'avatar__change-button-input',
@@ -252,9 +255,10 @@ const form = new FormObserved({
   inputs,
 });
 
-const onChangeAvatar = (event) => {
+const onChangeAvatar = (event: Event) => {
   event.preventDefault();
-  const formData = new FormData(form.getContent());
+  const formElement = form.getContent() as HTMLFormElement;
+  const formData = new FormData(formElement);
   formData.delete('email');
   formData.delete('login');
   formData.delete('first_name');
@@ -271,7 +275,7 @@ inputAvatar.setProps({
   },
 });
 
-const controller = (data: unknown) => {
+const controller = (data: UserProfileData) => {
   userController.updateUserData(data);
 };
 

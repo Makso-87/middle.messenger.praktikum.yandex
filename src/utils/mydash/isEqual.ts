@@ -1,8 +1,19 @@
-import { isPlainObject } from './isPlainObject';
+import { PlainObject } from './isPlainObject';
 import { isArray } from './isArray';
+import { getType } from './getType';
 
-export const isEqual = (arg1: unknown, arg2: unknown):boolean => {
+type isEqualGeneric <T> = (arg1: T, arg2: T) => boolean;
+
+function isObjectType(value: unknown): value is object {
+  return getType(value) === 'Object';
+}
+
+export const isEqual:isEqualGeneric<PlainObject> = (arg1 = {}, arg2 = {}) => {
   if (arg1 !== null && arg2 === null) {
+    return false;
+  }
+
+  if (arg1 === null && arg2 !== null) {
     return false;
   }
 
@@ -10,8 +21,16 @@ export const isEqual = (arg1: unknown, arg2: unknown):boolean => {
     return true;
   }
 
-  const arg1Keys = Object.keys(arg1);
-  const arg2Keys = Object.keys(arg2);
+  if (isArray(arg1) && isArray(arg2) && arg1.length === 0 && arg2.length === 0) {
+    return true;
+  }
+
+  const arg1Keys = Object.keys(arg1 as object);
+  const arg2Keys = Object.keys(arg2 as object);
+
+  if (arg1Keys.length !== arg2Keys.length) {
+    return false;
+  }
 
   if (arg1Keys.length !== arg2Keys.length) {
     return false;
@@ -22,8 +41,8 @@ export const isEqual = (arg1: unknown, arg2: unknown):boolean => {
       return false;
     }
 
-    if (isPlainObject(arg1[aKey])) {
-      const result = isEqual(arg1[aKey], arg2[aKey]);
+    if (isObjectType(arg1[aKey])) {
+      const result = isEqual(arg1[aKey] as PlainObject, arg2[aKey] as PlainObject);
 
       if (!result) {
         return result;
@@ -33,11 +52,14 @@ export const isEqual = (arg1: unknown, arg2: unknown):boolean => {
         return false;
       }
 
-      if (arg1[aKey].length !== arg2[aKey].length) {
+      const valueArg1 = arg1[aKey] as [];
+      const valueArg2 = arg2[aKey] as [];
+
+      if (valueArg1.length !== valueArg2.length) {
         return false;
       }
 
-      const result = isEqual(arg1[aKey], arg2[aKey]);
+      const result = isEqual(arg1[aKey] as PlainObject, arg2[aKey] as PlainObject);
 
       if (!result) {
         return result;

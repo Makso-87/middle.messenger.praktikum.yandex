@@ -10,14 +10,14 @@ import { NavLink } from '../../components/navLink';
 
 interface ProfileProps extends PropsInterface {}
 
-class Profile extends Block<ProfileProps> {
+export class Profile extends Block<ProfileProps> {
   constructor(props: ProfileProps) {
     const newProps = {
       ...props,
       className: `profile ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {
@@ -25,32 +25,32 @@ class Profile extends Block<ProfileProps> {
   }
 }
 
-const AvatarObserved = observe((state) => ({ url: state?.user?.data?.avatar || '' }))(Avatar);
-export const ProfileObserved = observe((state) => ({ firstName: state?.user?.data?.first_name || '' }))(Profile);
+const AvatarObserved = observe((state) => ({ url: state?.user?.data?.avatar || '' }))(Avatar as typeof Block);
+export const ProfileObserved = observe((state) => ({ firstName: state?.user?.data?.first_name || '' }))(Profile as typeof Block);
 
-const onLogout = (event) => {
+const onLogout = (event: Event) => {
   event.preventDefault();
   authController.logout();
 };
 
-const EmailDataObserved = observe(({ user }) => ({ profileDataValue: user?.data?.email }))(ProfileDataItem);
-const LoginDataObserved = observe(({ user }) => ({ profileDataValue: user?.data?.login }))(ProfileDataItem);
+const EmailDataObserved = observe(({ user }) => ({ profileDataValue: user?.data?.email }))(ProfileDataItem as typeof Block);
+const LoginDataObserved = observe(({ user }) => ({ profileDataValue: user?.data?.login }))(ProfileDataItem as typeof Block);
 
 const FirstNameDataObserved = observe(({ user }) => (
   { profileDataValue: user?.data?.first_name }
-))(ProfileDataItem);
+))(ProfileDataItem as typeof Block);
 
 const SecondNameDataObserved = observe(({ user }) => (
   { profileDataValue: user?.data?.second_name }
-))(ProfileDataItem);
+))(ProfileDataItem as typeof Block);
 
 const DisplayNameDataObserved = observe(({ user }) => (
   { profileDataValue: user?.data?.display_name ?? '' }
-))(ProfileDataItem);
+))(ProfileDataItem as typeof Block);
 
 const PhoneDataObserved = observe(({ user }) => (
   { profileDataValue: user?.data?.phone ?? '' }
-))(ProfileDataItem);
+))(ProfileDataItem as typeof Block);
 
 export const profileData = {
   avatar: new AvatarObserved({ url: '' }),

@@ -24,9 +24,9 @@ export class WS {
   };
 }
 
-export const createWSConnection = (userId: string, chatId: string, token: string) => {
-  const socket = new WS({ userId, chatId, token }).create();
-  let interval: unknown;
+export const createWSConnection = (userId: number, chatId: number, token: string) => {
+  const socket = new WS({ userId: String(userId), chatId: String(chatId), token }).create();
+  let interval: NodeJS.Timer;
 
   socket.addEventListener('open', () => {
     interval = setInterval(() => {

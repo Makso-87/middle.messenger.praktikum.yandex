@@ -18,7 +18,7 @@ export class Link extends Block<LinkProps> {
       },
     };
 
-    super('a', newProps);
+    super(newProps, 'a');
   }
 
   render() {

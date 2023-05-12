@@ -14,7 +14,7 @@ export class Input extends Block<InputProps> {
       },
     };
 
-    super('input', newProps);
+    super(newProps, 'input');
   }
 
   render() {

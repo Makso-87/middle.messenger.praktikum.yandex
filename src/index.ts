@@ -12,17 +12,17 @@ import { ErrorDescription } from './pages/error/components/errorDescription';
 import router from './utils/router/router';
 import authController from './controllers/AuthController';
 import { NavLink } from './components/navLink';
+import Block from './utils/block/block';
 
-// (async () => {
 authController.fetchUser();
 
-router.use('/', Auth, authData)
-  .use('/sign-up', Registration, registrationData)
-  .use('/messenger', Chats, chatsData)
-  .use('/profile', ProfileObserved, profileData)
-  .use('/settings', EditProfile, editProfileData)
-  .use('/change-password', ChangePassword, changePasswordData)
-  .use('/error-404', Error, {
+router.use('/', Auth as typeof Block, authData)
+  .use('/sign-up', Registration as typeof Block, registrationData)
+  .use('/messenger', Chats as typeof Block, chatsData)
+  .use('/profile', ProfileObserved as typeof Block, profileData)
+  .use('/settings', EditProfile as typeof Block, editProfileData)
+  .use('/change-password', ChangePassword as typeof Block, changePasswordData)
+  .use('/error-404', Error as typeof Block, {
     errorCode: '404',
     errorDescription: [new ErrorDescription({ text: 'Кажется, Вы сбились с пути' })],
     errorButton: new NavLink({
@@ -32,7 +32,7 @@ router.use('/', Auth, authData)
       className: 'link button_margin-top-40',
     }),
   })
-  .use('/error-500', Error, {
+  .use('/error-500', Error as typeof Block, {
     errorCode: '500',
     errorDescription: [
       new ErrorDescription({
@@ -50,4 +50,3 @@ router.use('/', Auth, authData)
     }),
   })
   .start();
-// })();

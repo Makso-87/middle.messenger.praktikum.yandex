@@ -16,7 +16,7 @@ export class CustomComponent extends Block<CustomComponentProps> {
       className: `${props.initialClassName ?? 'custom'} ${props.className ?? ''}`,
     };
 
-    super(props.tagName ?? 'div', newProps);
+    super(newProps, props.tagName ?? 'div');
   }
 
   render() {
