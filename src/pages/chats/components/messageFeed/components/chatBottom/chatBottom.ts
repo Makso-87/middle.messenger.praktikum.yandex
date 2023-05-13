@@ -25,6 +25,23 @@ export class ChatBottom extends Block<ChatBottomProps> {
   }
 }
 
+const disableButton = (button: Block) => {
+  button.setProps({
+    className: 'send-message-button_disabled',
+    attributes: {
+      disabled: 'disabled',
+    },
+  });
+};
+
+const sendButton = new Button({
+  initialClassName: 'send-message-button',
+  className: 'send-message-button_disabled',
+  attributes: {
+    disabled: 'disabled',
+  },
+});
+
 const onSubmitForm = (event: FormDataEvent) => {
   event.preventDefault();
   const form: HTMLFormElement = event.target as HTMLFormElement;
@@ -40,15 +57,8 @@ const onSubmitForm = (event: FormDataEvent) => {
 
   socket.send(JSON.stringify({ type: 'message', content: data.message }));
   form.reset();
+  disableButton(sendButton);
 };
-
-const sendButton = new Button({
-  initialClassName: 'send-message-button',
-  className: 'send-message-button_disabled',
-  attributes: {
-    disabled: 'disabled',
-  },
-});
 
 const validateInput = (event: InputEvent) => {
   const { value, name } = event.target as HTMLInputElement;
@@ -58,12 +68,7 @@ const validateInput = (event: InputEvent) => {
     sendButton.removeAttributes(['disabled']);
     sendButton.removeClassNames(['send-message-button_disabled']);
   } else {
-    sendButton.setProps({
-      className: 'send-message-button_disabled',
-      attributes: {
-        disabled: 'disabled',
-      },
-    });
+    disableButton(sendButton);
   }
 };
 

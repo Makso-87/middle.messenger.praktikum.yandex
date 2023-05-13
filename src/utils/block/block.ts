@@ -1,4 +1,5 @@
-import * as handlebars from 'handlebars';
+import * as Handlebars from 'handlebars';
+import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access';
 import { v4 as uuid } from 'uuid';
 import EventBus from '../eventBus/eventBus';
 import {
@@ -6,6 +7,8 @@ import {
 } from './types';
 import { isEqual } from '../mydash/isEqual';
 import { isArray } from '../mydash/isArray';
+
+const handlebars = allowInsecurePrototypeAccess(Handlebars);
 
 export default class Block<P extends PropsInterface = PropsInterface> {
   static EVENTS = {
