@@ -1,9 +1,12 @@
 FROM node:16.12-alpine
 
-WORKDIR /usr/src
+WORKDIR /usr/src/app
 
-COPY . .
+ADD . /usr/src/app
+ADD package.json /usr/src/app/package.json
+
+RUN npm install
 
 EXPOSE 3000
 
-CMD npm install && npm run start
+CMD npm run start
