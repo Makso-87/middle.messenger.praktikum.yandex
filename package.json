@@ -4,11 +4,12 @@
   "description": "This web messenger",
   "scripts": {
     "test": "mocha",
-    "lint": "node_modules/.bin/eslint . --fix",
+    "lint": "node_modules/.bin/eslint . --fix --color",
     "styleLint": "npx stylelint **/*.scss",
     "dev": "webpack serve --hot",
     "build": "webpack",
-    "start": "npm run build && node src/server.js"
+    "start": "npm run build && node src/server.js",
+    "prepare": "husky install"
   },
   "author": "Maksim Popov",
   "license": "ISC",
@@ -17,8 +18,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run test && npm run lint && npm run styleLint "
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*": "npm run test",
+    "*.ts": "npm run lint",
+    "*.scss": "npm run styleLint"
   },
   "devDependencies": {
     "@types/chai": "4.3.5",
@@ -31,7 +37,8 @@
     "eslint": "^8.36.0",
     "eslint-config-airbnb": "19.0.4",
     "html-webpack-plugin": "5.5.1",
-    "husky": "8.0.3",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.2",
     "mini-css-extract-plugin": "2.7.5",
     "sass": "^1.58.3",
     "sass-loader": "13.2.2",
@@ -45,6 +52,7 @@
     "webpack-dev-server": "4.15.0"
   },
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.5",
     "chai": "4.3.7",
     "express": "4.18.2",
     "handlebars": "4.7.7",
