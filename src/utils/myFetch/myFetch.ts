@@ -59,11 +59,6 @@ export default class MyFetch {
 
     const headers = {
       accept: 'application/json',
-      // 'Content-Security-Policy': 'default-src self; img-src self; script-src self; object-src none; style-src self; frame-ancestors self; base-uri self; form-action self; media-src https://ya-praktikum.tech/api/v2/resources;',
-      // 'X-Content-Type-Options': 'nosniff',
-      // 'X-Frame-Options': 'deny',
-      // 'Access-Control-Allow-Origin': 'https://ya-praktikum.tech',
-      // 'X-XSS-Protection': '1; mode=block',
       ...customHeaders,
     };
 
