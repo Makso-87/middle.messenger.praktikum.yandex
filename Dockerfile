@@ -1,6 +1,7 @@
 FROM node:16.12-alpine
 
-WORKDIR /var/www
+WORKDIR /usr/src
+
 COPY . .
 
 EXPOSE 3000
