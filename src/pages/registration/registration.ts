@@ -10,6 +10,7 @@ import { PropsInterface } from '../../utils/block/types';
 import { ErrorMessage } from '../../components/errorMessage';
 import { NavLink } from '../../components/navLink';
 import authController from '../../controllers/AuthController';
+import { SignupData } from '../../api/AuthApi';
 
 interface RegistrationProps extends PropsInterface {}
 
@@ -19,7 +20,7 @@ export class Registration extends Block<RegistrationProps> {
       ...props,
       className: `registration ${props.className ?? ''}`,
     };
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {
@@ -215,7 +216,7 @@ const form = new Form({
   inputs,
 });
 
-const controller = (data: unknown) => {
+const controller = (data: SignupData) => {
   authController.signup(data);
 };
 

@@ -1,3 +1,5 @@
+.idea
+.husky
 dist
 token
 node_modules

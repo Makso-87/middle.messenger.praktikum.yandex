@@ -10,6 +10,7 @@ import { Avatar } from '../../../../../../../../components/avatar';
 import { Button } from '../../../../../../../../components/button';
 import chatsController from '../../../../../../../../controllers/ChatsController';
 import store from '../../../../../../../../utils/store/store';
+import Block from '../../../../../../../../utils/block/block';
 
 const inputAvatar = new Input({
   initialClassName: 'avatar__change-button-input',
@@ -20,7 +21,7 @@ const inputAvatar = new Input({
   },
 });
 
-const AvatarObserved = observe(({ chats }) => ({ url: chats?.data?.currentChat?.avatar ?? '' }))(Avatar);
+const AvatarObserved = observe(({ chats }) => ({ url: chats?.data?.currentChat?.avatar ?? '' }))(Avatar as typeof Block);
 
 const form = new Form({
   className: 'form_chat-avatar',
@@ -42,7 +43,7 @@ const form = new Form({
 const onChangeAvatar = (event: Event) => {
   event.preventDefault();
   const formData = new FormData(form.getContent() as HTMLFormElement);
-  formData.set('chatId', store.getState().chats?.data?.currentChat?.id);
+  formData.set('chatId', String(store.getState().chats?.data?.currentChat?.id));
 
   chatsController.setChatAvatar(formData);
 };

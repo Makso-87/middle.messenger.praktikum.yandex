@@ -11,7 +11,7 @@ export class ProfileDataItem extends Block<ProfileDataItemProps> {
       className: `profile__data-line-item ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

@@ -1,21 +1,22 @@
 import { BaseApi } from './BaseApi';
+import { FormRequestData } from '../utils/onSubmitForm/onSubmitForm';
 
-export interface UserProfileData<T extends Record<string, string> = unknown> {
-  first_name: T,
-  second_name: T,
-  display_name: T,
-  login: T,
-  email: T,
-  phone: T
+export interface UserProfileData extends FormRequestData {
+  first_name: string;
+  second_name: string;
+  display_name: string;
+  login: string;
+  email: string;
+  phone: string;
 }
 
-export interface UserPasswordData<T extends Record<string, string> = unknown> {
-  oldPassword: T;
-  newPassword: T;
+export interface UserPasswordData extends FormRequestData {
+  oldPassword: string;
+  newPassword: string;
 }
 
-export interface FindUserData<T extends Record<string, string> = unknown> {
-  login: T;
+export interface FindUserData extends FormRequestData {
+  login: string;
 }
 
 export class UserApi extends BaseApi {
@@ -31,7 +32,6 @@ export class UserApi extends BaseApi {
 
   updateUserAvatar = (data: FormData) => this.fetch.put('/profile/avatar', {
     credentials: true,
-    formData: true,
     data,
   });
 
@@ -46,12 +46,4 @@ export class UserApi extends BaseApi {
     credentials: true,
     data: { ...data },
   });
-
-  create = undefined;
-
-  read = undefined;
-
-  update = undefined;
-
-  delete = undefined;
 }

@@ -11,7 +11,7 @@ export class ErrorDescription extends Block<ErrorDescriptionProps> {
       className: `error-description ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

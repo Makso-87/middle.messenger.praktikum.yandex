@@ -7,12 +7,14 @@ export enum StoreEvents {
   Updated = 'updated',
 }
 
-type Indexed<T = unknown> = {
-  [key: string]: T;
+export type StateInterface = {
+  auth?: {
+    errors: unknown[],
+  };
   user?: {
     errors: unknown[],
     data: User | undefined;
-    [key: string]: T;
+    [key: string]: unknown;
   };
   chats?: {
     errors: unknown[],
@@ -20,12 +22,23 @@ type Indexed<T = unknown> = {
       list?: Chat[];
       currentChat?: Chat;
     };
-    [key: string]: T;
-  }
+    [key: string]: unknown;
+  };
+  sockets?: {
+    [key: string]: WebSocket;
+  };
+  users?: {
+    data?: {
+      list?: User[];
+      addUsersList?: User[];
+      deleteUsersList?: User[];
+    }
+  };
+  [key: string]: unknown;
 };
 
 class Store extends EventBus {
-  private _state: Indexed = {};
+  private _state: StateInterface = {};
 
   public getState = () => this._state;
 
@@ -35,4 +48,6 @@ class Store extends EventBus {
   };
 }
 
-export default new Store();
+const store = new Store();
+
+export default store;

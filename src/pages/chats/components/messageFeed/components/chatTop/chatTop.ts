@@ -18,7 +18,7 @@ export class ChatTop extends Block<ChatTopProps> {
       className: `chat-top ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {
@@ -26,8 +26,8 @@ export class ChatTop extends Block<ChatTopProps> {
   }
 }
 
-const ObservedCurrentChatAvatar = observe(({ chats }) => ({ url: chats?.data?.currentChat?.avatar }))(Avatar);
-const ObservedCurrentChatTop = observe(({ chats }) => ({ interlocutorName: chats?.data?.currentChat?.title }))(ChatTop);
+const ObservedCurrentChatAvatar = observe(({ chats }) => ({ url: chats?.data?.currentChat?.avatar }))(Avatar as typeof Block);
+const ObservedCurrentChatTop = observe(({ chats }) => ({ interlocutorName: chats?.data?.currentChat?.title }))(ChatTop as typeof Block);
 
 export const chatTop = new ObservedCurrentChatTop({
   avatar: new ObservedCurrentChatAvatar({

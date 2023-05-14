@@ -27,11 +27,12 @@
 
 .chat-top__popup-menu {
   right: 0;
-  left: auto;
+  left: auto!important;
   z-index: 1;
   background: $main-bg;
   padding: 10px 0;
   border-radius: 0 0 5px 5px;
+  width: 270px;
 }
 
 .chat-top__menu_item {

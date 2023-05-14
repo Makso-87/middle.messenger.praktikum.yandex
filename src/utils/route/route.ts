@@ -1,16 +1,24 @@
 import Block from '../block/block';
 import { render } from '../render/render';
+import { PropsInterface } from '../block/types';
 
-export class Route<P extends Record<string, unknown> = unknown> {
-  _pathname: string;
+type propsType = {
+  rootQuery: string;
+  blockProps: PropsInterface;
+};
 
-  _blockClass: InstanceType<unknown>;
+export type blockClassType = typeof Block;
 
-  _block: Block | null;
+export class Route {
+  private _pathname: string;
 
-  _props: P;
+  private readonly _blockClass: blockClassType;
 
-  constructor(pathname: string, view: Block, props: P) {
+  private _block: Block | null;
+
+  private _props: propsType;
+
+  constructor(pathname: string, view: blockClassType, props: propsType) {
     this._pathname = pathname;
     this._blockClass = view;
     this._block = null;

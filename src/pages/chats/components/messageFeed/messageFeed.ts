@@ -11,7 +11,7 @@ export class MessageFeed extends Block<MessageFeedProps> {
       className: `message-feed ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

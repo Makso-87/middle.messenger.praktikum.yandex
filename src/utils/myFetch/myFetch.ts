@@ -1,4 +1,5 @@
 import { queryStringify } from '../mydash/stringifyQuery';
+import { FormRequestData } from '../onSubmitForm/onSubmitForm';
 
 const METHODS = {
   GET: 'GET',
@@ -10,13 +11,13 @@ const METHODS = {
 interface Options {
   headers?: object;
   method?: string;
-  data?: unknown;
+  data?: FormRequestData | FormData;
   credentials?: boolean;
   formData?: boolean;
   timeout?: number;
 }
 
-type FetchType = (path: string, options: Options) => Promise<unknown>;
+type FetchType = (path?: string, options?: Options) => Promise<unknown>;
 
 export default class MyFetch {
   static API_URL = 'https://ya-praktikum.tech/api/v2';
@@ -27,7 +28,7 @@ export default class MyFetch {
     this.endpoint = `${MyFetch.API_URL}${endpoint}`;
   }
 
-  get: FetchType = (path, options = {}) => this.request(`${this.endpoint}${path}`, {
+  get: FetchType = (path = '', options = {}) => this.request(`${this.endpoint}${path}`, {
     ...options,
     method: METHODS.GET,
   }, options.timeout);
@@ -53,7 +54,7 @@ export default class MyFetch {
 
   request = (url: string, options = {}, timeout = 5000) => {
     const {
-      method, data, headers: customHeaders = {}, credentials = false, formData = false,
+      method, data, headers: customHeaders = {}, credentials = false,
     }: Options = options;
 
     const headers = {
@@ -66,7 +67,7 @@ export default class MyFetch {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
 
-      xhr.open(method, isGet && !!data ? `${url}${queryStringify(data)}` : url);
+      xhr.open(method, isGet && !!data && !(data instanceof FormData) ? `${url}${queryStringify(data)}` : url);
       xhr.timeout = timeout;
 
       Object.entries(headers).forEach(([key, value]: [string, string]) => {
@@ -86,7 +87,7 @@ export default class MyFetch {
       if (method === METHODS.GET || !data) {
         xhr.send();
       } else {
-        xhr.send(formData ? data : JSON.stringify(data));
+        xhr.send(data instanceof FormData ? data : JSON.stringify(data));
       }
     });
   };

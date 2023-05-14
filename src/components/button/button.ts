@@ -17,7 +17,7 @@ export class Button extends Block<ButtonProps> {
       },
     };
 
-    super('button', newProps);
+    super(newProps, 'button');
   }
 
   render() {

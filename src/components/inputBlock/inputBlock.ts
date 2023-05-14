@@ -1,12 +1,12 @@
 import Block from '../../utils/block/block';
 import template from './inputBlock.tmpl';
 import './inputBlock.scss';
-import { ChildrenType, PropsInterface } from '../../utils/block/types';
+import { PropsInterface } from '../../utils/block/types';
 
 interface InputBlockProps extends PropsInterface {
   label?: string;
-  input: ChildrenType;
-  errorMessage?: ChildrenType | unknown;
+  input: Block;
+  errorMessage?: Block | unknown;
 }
 
 export class InputBlock extends Block<InputBlockProps> {
@@ -16,7 +16,7 @@ export class InputBlock extends Block<InputBlockProps> {
       className: `${props.initialClassName ?? 'input-item'} ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {

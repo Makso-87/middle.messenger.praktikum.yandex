@@ -1,5 +1,5 @@
 import {
-  AddChatData, AddUsersToChatData, ChatManipulationData, ChatsApi, DeleteUsersFromChatData, SetChatAvatarData,
+  AddChatData, AddUsersToChatData, ChatManipulationData, ChatsApi, DeleteUsersFromChatData,
 } from '../api/ChatsApi';
 import store from '../utils/store/store';
 import { parseJSON } from '../utils/parseJSON/parseJSON';
@@ -19,7 +19,7 @@ class ChatsController {
         this.getChats();
       } else {
         const { chats: { errors = [] } = {} } = store.getState();
-        store.setState('chats.errors', [...errors, response, error]);
+        store.setState('chats.errors', [...errors, response]);
       }
     }).catch((error) => {
       const { chats: { errors = [] } = {} } = store.getState();
@@ -45,7 +45,7 @@ class ChatsController {
 
   addUsersToChat = (data: AddUsersToChatData) => {
     this._api.addUsersToChat(data).then(({ response, status }) => {
-      if (status == 200) {
+      if (status === 200) {
         const { chats: { data: { currentChat } } } = store.getState();
         store.setState('users.data.list', []);
         store.setState('users.data.addUsersList', []);
@@ -92,7 +92,7 @@ class ChatsController {
     });
   };
 
-  setChatAvatar = (data: SetChatAvatarData) => {
+  setChatAvatar = (data: FormData) => {
     this._api.setChatAvatar(data).then(({ response, status }) => {
       const { data: parsedData, error } = parseJSON(response);
 
@@ -127,7 +127,7 @@ class ChatsController {
         this.getChatUsers({ chatId: currentChat.id });
       } else {
         const { chats: { errors = [] } = {} } = store.getState();
-        store.setState('chats.errors', [...errors, response, error]);
+        store.setState('chats.errors', [...errors, response]);
       }
     }).catch((error) => {
       const { chats: { errors = [] } = {} } = store.getState();

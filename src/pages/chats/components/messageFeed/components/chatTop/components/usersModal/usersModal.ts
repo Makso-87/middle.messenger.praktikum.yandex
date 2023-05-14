@@ -5,6 +5,7 @@ import store from '../../../../../../../../utils/store/store';
 import Block from '../../../../../../../../utils/block/block';
 import { Button } from '../../../../../../../../components/button';
 import chatsController from '../../../../../../../../controllers/ChatsController';
+import { User } from '../../../../../../../../models/user';
 
 const deleteUsersButton = new Button({
   text: 'Удалить',
@@ -13,12 +14,12 @@ const deleteUsersButton = new Button({
 
 deleteUsersButton.hide();
 
-const getUsersList = (list = []): Block[] | undefined => {
+const getUsersList = (list: User[] = []): Block[] | undefined => {
   if (!list.length) {
     return [];
   }
 
-  return list.filter((item) => item.id !== store.getState().user?.data?.id).map((user: object) => new CustomComponent(
+  return list.filter((item) => item.id !== store.getState().user?.data?.id).map((user: User) => new CustomComponent(
     {
       tagName: 'li',
       initialClassName: 'chat-users-modal__users-item',
@@ -46,12 +47,12 @@ const getUsersList = (list = []): Block[] | undefined => {
   ));
 };
 
-const getUsersToDeleteList = (list = []): Block[] | undefined => {
+const getUsersToDeleteList = (list: User[] = []): Block[] | undefined => {
   if (!list.length) {
     return [];
   }
 
-  return list.map((user: object) => new CustomComponent(
+  return list.map((user: User) => new CustomComponent(
     {
       tagName: 'li',
       initialClassName: 'chat-users-modal__users-item',
@@ -60,8 +61,8 @@ const getUsersToDeleteList = (list = []): Block[] | undefined => {
       events: {
         click: () => {
           const {
-            users: { data: { deleteUsersList } } = [],
-            chats: { data: { currentChat: { users: chatUsers } } },
+            users: { data: { deleteUsersList = [] } },
+            chats: { data: { currentChat: { users: chatUsers = [] } } },
           } = store.getState();
           const userExistInList = chatUsers.filter((deleteUserItem) => deleteUserItem.id === user.id);
 
@@ -82,11 +83,11 @@ const getUsersToDeleteList = (list = []): Block[] | undefined => {
 
 const ExistingUsersList = observe(({ chats }) => ({
   content: getUsersList(chats?.data?.currentChat?.users ?? []),
-}))(CustomComponent);
+}))(CustomComponent as typeof Block);
 
 const UsersListToDelete = observe(({ users }) => ({
   content: getUsersToDeleteList(users?.data?.deleteUsersList ?? []),
-}))(CustomComponent);
+}))(CustomComponent as typeof Block);
 
 export const usersModal = new ModalPopup({
   className: 'chat-users-modal',

@@ -1,3 +1,5 @@
+import { getType } from './getType';
+
 export type Indexed<T = unknown> = {
   [key in string]: T;
 };
@@ -17,10 +19,10 @@ export const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
 
   rhsKeys.forEach((rhsKey) => {
     if (lhsKeys.includes(rhsKey)) {
-      const type = Object.prototype.toString.call(rhs[rhsKey]).slice(8, -1);
+      const type = getType(rhs[rhsKey]);
 
       if (type === 'Object') {
-        result[rhsKey] = merge(lhs[rhsKey], rhs[rhsKey]);
+        result[rhsKey] = merge(lhs[rhsKey] as Indexed, rhs[rhsKey] as Indexed);
         return;
       }
 

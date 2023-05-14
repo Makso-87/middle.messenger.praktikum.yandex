@@ -1,9 +1,9 @@
-import { Route } from '../route/route';
-import Block from '../block/block';
+import { blockClassType, Route } from '../route/route';
 import { authenticationControl } from '../authenticationControl/authenticationControl';
+import { PropsInterface } from '../block/types';
 
 class Router {
-  static __instance: InstanceType<unknown>;
+  static __instance: Router;
 
   _rootQuery: string;
 
@@ -26,7 +26,7 @@ class Router {
     Router.__instance = this;
   }
 
-  use(pathname: string, block: Block, props: unknown): this {
+  use(pathname: string, block: blockClassType, props: PropsInterface): this {
     const route = new Route(pathname, block, { rootQuery: this._rootQuery, blockProps: props });
     this.routes.push(route);
     return this;
@@ -57,7 +57,7 @@ class Router {
   }
 
   go(pathname: string): void {
-    this.history.pushState({}, '', pathname);
+    this.history.pushState({ pathname }, '', pathname);
     this._onRoute(pathname);
   }
 
@@ -81,4 +81,5 @@ class Router {
 }
 const router = new Router('.app');
 router.onRouteExecute = () => authenticationControl();
+
 export default router;

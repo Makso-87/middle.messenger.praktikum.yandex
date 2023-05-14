@@ -10,6 +10,7 @@ import { ErrorMessage } from '../../components/errorMessage';
 import { PropsInterface } from '../../utils/block/types';
 import { NavLink } from '../../components/navLink';
 import userController from '../../controllers/UserController';
+import { UserPasswordData } from '../../api/UserApi';
 
 interface ChangePasswordProps extends PropsInterface{}
 
@@ -20,7 +21,7 @@ export class ChangePassword extends Block<ChangePasswordProps> {
       className: `profile ${props.className ?? ''}`,
     };
 
-    super('div', newProps);
+    super(newProps, 'div');
   }
 
   render() {
@@ -104,7 +105,7 @@ const form = new Form({
   inputs,
 });
 
-const controller = (data: unknown) => {
+const controller = (data: UserPasswordData) => {
   userController.updateUserPassword(data);
 };
 
